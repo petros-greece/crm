@@ -1,8 +1,3 @@
-/* === Tailwind Directives (MUST come first!) === */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* === Angular Material Custom Theming === */
 @use '@angular/material' as mat;
 
@@ -17,6 +12,12 @@ html {
     density: 0,
   ));
 }
+
+// @tailwind base;
+// @tailwind components;
+// @tailwind utilities;
+
+@import "tailwindcss";
 
 /* === Global Styles === */
 html, body {
