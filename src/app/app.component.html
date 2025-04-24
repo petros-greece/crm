@@ -1,6 +1,33 @@
-<h1 class="bg-red-700 text-right">CRM</h1>
+<mat-sidenav-container class="h-screen">
+  <mat-sidenav #sidenav mode="side" opened class="w-64">
+    <div class="p-4">
+      <h2 class="text-xl font-bold mb-4">Menu</h2>
+      <mat-nav-list>
+        <!-- Loop through filtered routes -->
+        <a mat-list-item 
+           *ngFor="let route of routes"
+           [routerLink]="route.path" 
+           routerLinkActive="active-link"
+          >
+          <div  class="flex flex-row items-center gap-2">
+           <mat-icon>{{ route.data?.['icon'] }}</mat-icon>
+            <div>{{ route.title }}</div>
+          </div>
+        </a>
+      </mat-nav-list>
+    </div>
+  </mat-sidenav>
 
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="ml-2">CRM System</span>
+    </mat-toolbar>
 
-<app-form-builder [config]="formConfig"></app-form-builder>
-
-<router-outlet />
+    <div class="p-4">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

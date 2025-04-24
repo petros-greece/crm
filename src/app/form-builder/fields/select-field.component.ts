@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BaseFieldComponent } from './base-field.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { MatError } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-select-field',
@@ -14,12 +14,17 @@ import { MatError } from '@angular/material/form-field';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatError
+    MatIcon
   ],
   template: `
-    <mat-form-field [appearance]="config.appearance || 'fill'">
-      <mat-label>{{ config.label }}</mat-label>
-      <mat-select [formControl]="control">
+    <mat-form-field [appearance]="config.appearance || 'fill'" class="!w-full">
+      <mat-label>
+      <mat-icon *ngIf="config.icon">
+          {{ config.icon }}
+        </mat-icon>
+        {{ config.label }}
+      </mat-label>
+      <mat-select [formControl]="control" [multiple]="config.multiple" class="!w-full">
         @for (opt of config.options || []; track opt.value) {
           <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
         }

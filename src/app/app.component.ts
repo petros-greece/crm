@@ -1,27 +1,31 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { FormBuilderComponent } from './form-builder/form-builder.component';
-import { FormConfig, FormFieldConfig } from './form-builder/form-builder.model';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { routes } from './app.routes';
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FormBuilderComponent],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
+    MatButtonModule,
+    RouterLink,
+    RouterLinkActive
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  formConfig: FormConfig = {
-    title: 'User Registration',
-    fields: [
-      {
-        type: 'select',
-        name: 'country',
-        label: 'Country',
-        required: true,
-        options: [
-          { label: 'USA', value: 'US' },
-          { label: 'Canada', value: 'CA' }
-        ]
-      }
-    ] 
-  }
+  routes = routes;
+  constructor(private router: Router) {}
 }

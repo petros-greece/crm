@@ -29,3 +29,12 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+
+
+.active-link {
+  background-color: rgba(0, 0, 0, 0.04);
+  font-weight: 500;
+}
+mat-sidenav {
+  border-right: 1px solid #eee;
+}

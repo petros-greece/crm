@@ -1,0 +1,5 @@
+<app-table-builder [config]="tableConfig">
+  <ng-template appColumnTemplate="actions" let-row>
+    <button mat-button (click)="editItem(row)">Edit</button>
+  </ng-template>
+</app-table-builder>
