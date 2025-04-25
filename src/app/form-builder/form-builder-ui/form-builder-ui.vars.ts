@@ -35,7 +35,7 @@ export class FormBuilderUIVars {
       },
       {
         type: 'select',
-        name: 'size',
+        name: 'columns',
         label: 'Width',
         required: false,
         multiple: false,
@@ -52,7 +52,7 @@ export class FormBuilderUIVars {
       },
       {
         type: 'slide-toggle',
-        name: 'isRequired',
+        name: 'required',
         label: 'Is Required',
         columns: 2,
         value: false,
@@ -65,7 +65,7 @@ export class FormBuilderUIVars {
       fields: [
         {
           type: 'select',
-          name: 'fieldType',
+          name: 'type',
           label: 'Field Type',
           required: true,
           multiple: false,
@@ -307,7 +307,7 @@ export class FormBuilderUIVars {
       ]
     };
 
-      /******************************************************************************** */
+    /******************************************************************************** */
 
     // They All can be required, icon, label, machineName, value ?? 
     fieldComponents:FieldFormConfig[] = [
@@ -326,5 +326,14 @@ export class FormBuilderUIVars {
       { field: 'color', text: 'Color Picker Field', config: this.colorFormConfig },
       { field: 'textarea', text: 'Textarea Field', config: this.textareaFormConfig  } //minlength, maxLength, pattern
     ];
+
+
+    outputFormConfig: FormConfig = {
+      title: 'Form Builder Preview',
+      className: 'bg-gray-300 text-gray-100 p-4 rounded-lg shadow-md',
+      fields: [],
+      submitText: 'Test Form',
+    };
+  
   
 }

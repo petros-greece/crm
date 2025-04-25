@@ -65,6 +65,7 @@
       "HR Manager", "Recruiter", "Training Specialist", "Compensation Analyst", "Organizational Psychologist", "Operations Manager", "Logistics Coordinator", "Supply Chain Manager", "Procurement Officer", "Facilities Manager",
       "Customer Support", "Sales Executive", "Business Analyst", "Entrepreneur", "Lawyer", "Doctor", "Nurse", "Pharmacist", "Research Scientist", "Teacher"
     ],
+    "Job Departement": [ "Sales", "Marketing", "Human Resources", "Finance", "Customer Support", "IT", "Engineering", "Product", "Operations", "Legal", "Procurement", "Logistics", "Quality Assurance", "Business Development", "Research and Development", "Administration", "Design", "Security", "Compliance", "Training" ],
     "Music Genre": [
       "Pop", "Rock", "Hip Hop", "Jazz", "Classical", "Blues", "Country", "Reggae", "Electronic", "Folk",
       "R&B", "Metal", "Disco", "Soul", "Funk", "Punk", "Gospel", "Ska", "Techno", "House",

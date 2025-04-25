@@ -174,12 +174,14 @@ export class FormBuilderComponent implements AfterViewInit {
   }
 
   onSubmit() {
-  console.log(this.formGroup.valid);
+    console.log(this.formGroup);
     if (this.formGroup.valid) {
       this.submitHandler.emit(this.formGroup.value);
-      this.formGroup.reset();
-      this.formGroup.markAsUntouched();
-      this.formGroup.markAsPristine();
+      if(this.config.resetOnSubmit){
+        this.formGroup.reset();
+        this.formGroup.markAsUntouched();
+        this.formGroup.markAsPristine();
+      }
     } 
     else {
       this.formGroup.markAllAsTouched();

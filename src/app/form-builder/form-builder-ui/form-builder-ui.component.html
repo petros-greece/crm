@@ -1,7 +1,10 @@
 
 <app-form-builder [config]="outputConfig()"></app-form-builder>
 
-<h2 class="flex flex-row items-center text-lg my-4 gap-2">
+<h2 
+  class="flex flex-row items-center text-lg my-4 gap-2 cursor-pointer"
+  (click)="focusSelect()"
+>
   <mat-icon>add_circle</mat-icon>
   Add Field To Form
 </h2>
@@ -19,10 +22,52 @@
   </mat-select>
 </mat-form-field>
 
+<mat-grid-list 
+  cols="12" 
+  rowHeight="50" 
+  cdkDropList 
+  (cdkDropListDropped)="drop($event)" 
+  cdkDropListOrientation="mixed"
+  class="bg-gray-100 dnd-preview-list"
+>
+  <mat-grid-tile
+    
+    *ngFor="let field of outputConfig().fields; let i = index"
+    [colspan]="12 / (field?.columns || 1)"
+    cdkDrag
+    >
+    <div class="border-2 border-gray-800 flex items-center justify-between px-2 dnd-preview-box w-full h-full">
+      <div class="dnd-placeholder" *cdkDragPlaceholder></div>
+      <span (click)="editField(field, i)" class="cursor-pointer ">{{ field.label }}</span>
+      
+      <div class="flex flex-row gap-2">
+        <button mat-mini-fab>
+          <mat-icon (click)="duplicateField(field, i)">content_copy</mat-icon>
+        </button> 
+
+        <button mat-mini-fab>
+          <mat-icon (click)="removeField(i)">remove_circle</mat-icon>
+        </button>
+           
+        <span class="cursor-move" cdkDragHandle>
+          <mat-icon>drag_indicator</mat-icon>
+        </span>
+      </div>
+    </div>
+
+ 
+  </mat-grid-tile>
+</mat-grid-list>
+
+<div class="flex flex-row">
+
+</div>
+
+
 <ng-template #addFieldToOutputTmpl>
   <app-form-builder [config]="selectedConfig().config" (submitHandler)="addFieldToOutput($event)"></app-form-builder>
 </ng-template>
 
 <ng-template #previewFormTmpl>
-  <app-form-builder [config]="outputConfig()"></app-form-builder>
+  <app-form-builder [config]="outputConfig()" (submitHandler)="addFieldToOutput($event)"></app-form-builder>
 </ng-template>

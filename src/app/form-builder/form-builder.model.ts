@@ -45,6 +45,7 @@ export interface FormFieldConfig{
   minDate?: Date;
   maxDate?: Date;
   step?: number;
+  rows?: number;
   minRows?: number;
   maxRows?: number;
   initialRows?: number;
@@ -71,6 +72,7 @@ export interface FormConfig {
   submitText?: string;
   appearance?: MatFormFieldAppearance;
   className?: string;
+  resetOnSubmit?:boolean;
   fields: FormFieldConfig[];
 }
 

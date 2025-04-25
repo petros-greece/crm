@@ -3,12 +3,20 @@ import { FieldFormConfig, FieldType, FormConfig, FormFieldConfig } from '../form
 import { FormBuilderComponent } from '../form-builder.component';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { DialogComponent } from '../../components/dialog/dialog.component';
 import { FormBuilderUIVars } from './form-builder-ui.vars';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
-
+import {MatGridListModule} from '@angular/material/grid-list';
+import {
+  CdkDragDrop,
+  CdkDrag,
+  CdkDropList,
+  moveItemInArray,
+  CdkDragHandle,
+  CdkDragPlaceholder,
+} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-form-builder-ui',
@@ -18,7 +26,12 @@ import { MatIcon } from '@angular/material/icon';
     MatFormFieldModule, 
     MatSelectModule,
     DialogComponent,
-    MatIcon
+    MatIcon,
+    MatGridListModule,
+    CdkDrag,
+    CdkDragHandle,
+    CdkDropList,
+    CdkDragPlaceholder
   ],
   templateUrl: './form-builder-ui.component.html'
 })
@@ -26,21 +39,14 @@ export class FormBuilderUiComponent extends FormBuilderUIVars{
 
   private dialog = inject(MatDialog);
   @ViewChild('addFieldToOutputTmpl', { static: true }) addFieldToOutputTmpl!: TemplateRef<any>;
+  @ViewChild('fieldSelect') fieldSelect!: MatSelect;
 
-
-  //formBuilderService = inject(FormBuilderService);
-
-  outputFormConfig: FormConfig = {
-    title: 'Form Builder UI',
-    className: 'bg-gray-300 p-4 rounded-lg shadow-md',
-    fields: [],
-    submitText: 'Test Form',
-  };
 
 
   readonly selectedConfig:  WritableSignal<FieldFormConfig> = signal(this.fieldComponents[0]);
   readonly outputConfig:  WritableSignal<FormConfig> = signal(this.outputFormConfig);
-  
+  editingIndex = -1;
+
   /******************************************************************************** */
 
   constructor(private cdr: ChangeDetectorRef) {
@@ -59,59 +65,112 @@ export class FormBuilderUiComponent extends FormBuilderUIVars{
 
   }
 
-  onSelectionChange(FieldFormConfig: FieldFormConfig) {
-    let clone = JSON.parse(JSON.stringify(FieldFormConfig));
+  focusSelect() {
+    this.fieldSelect.focus();
+    this.fieldSelect.open(); // Optional: to open dropdown immediately
+  }
+  /******************************************************************************** */
+
+  removeField(index: number): void {
+    this.outputConfig.update(cfg => ({
+      ...cfg,
+      fields: cfg.fields.filter((_, i) => i !== index)
+    }));
+  }
+
+  private getConfigToFormProp(fieldPropName:string) : string{ 
+    if(fieldPropName === 'list'){
+      return 'listName';
+    }
+    else if(fieldPropName === 'isMulti'){
+      return'multiple';
+    }
+    else if(fieldPropName === 'machineName'){
+      return 'name';
+    }
+    return fieldPropName;
+  }
+
+  private getConfigToFormVal(fieldPropName: string, field: FormFieldConfig){
+    if(fieldPropName === 'min' || fieldPropName === 'max' || fieldPropName === 'minLength' || fieldPropName === 'maxLength'){
+      if(field.validators && fieldPropName === 'min'){
+        return field.validators.minLength || field.validators.min || undefined;
+      }
+      if(field.validators && fieldPropName === 'max'){
+        return field.validators.maxLength || field.validators.max || undefined;
+      }       
+    }
+    else if(fieldPropName === 'acceptedTypes'){
+      return field[fieldPropName as keyof FormFieldConfig].split(', ');
+    }
+    else{
+      return field[fieldPropName as keyof FormFieldConfig];
+    }
+  }
+
+  editField(field:FormFieldConfig, index: number){
+    
+    this.editingIndex = index;
+    const type = field.type === 'number' || field.type === 'password' || field.type === 'email' ? 'text' : field.type;
+    const fieldComponent:FieldFormConfig | undefined = this.fieldComponents.find(fc => fc.field === type)
+    if(!fieldComponent) return;
+    let clone = JSON.parse(JSON.stringify(fieldComponent));
     clone.config.title = '';
-    clone.config.submitText = 'Add Field';
+    clone.config.submitText = 'Update Field';
+
+    clone.config.fields.forEach((cloneField:FormFieldConfig)=>{
+      let fieldPropName = this.getConfigToFormProp(cloneField.name);
+      cloneField.value = this.getConfigToFormVal(fieldPropName, field);
+    })
+
+    //SET THE SELECTED CONFIG!!!
     this.selectedConfig.set(clone);
 
     this.dialog.open(DialogComponent, {
       data: {
         content: this.addFieldToOutputTmpl,
-        header: FieldFormConfig.config.title,
+        header: fieldComponent.config.title,
         cls: ''
       },
       minWidth: '80vw',
       maxWidth: '769px',
     });
+
   }
+
 
   addFieldToOutput(data: any) {
 
     const selected = this.selectedConfig();
 
-    console.log('selected', selected, data);
+    //console.log('selected', selected, data);
 
     let fieldConfig: FormFieldConfig = {
       type: selected.field as FieldType,
       name: this.toCamelCaseMachineName(data.label),
       label: data.label,
-      required: data.isRequired,
-      columns: data.size || 1,
+      required: data.required,
+      columns: data.columns || 1,
       validators: {}
     };
 
+
     if (selected.field === 'text' || selected.field === 'textarea') {
-      fieldConfig.type = selected.field === 'textarea' ? 'textarea' : data.fieldType;
+      fieldConfig.type = selected.field === 'textarea' ? 'textarea' : data.type;
       if(fieldConfig.validators){
         if(data.min){
-          data.fieldType === 'number' ? fieldConfig.validators.min = data.min : fieldConfig.validators.minLength = data.min;
+          data.type === 'number' ? fieldConfig.validators.min = data.min : fieldConfig.validators.minLength = data.min;
         }
         if(data.max){
-          data.fieldType === 'number' ? fieldConfig.validators.max = data.max : fieldConfig.validators.maxLength = data.max;
+          data.type === 'number' ? fieldConfig.validators.max = data.max : fieldConfig.validators.maxLength = data.max;
         }
       }
     }
     else if(selected.field === 'select'){
+      fieldConfig.multiple = data.isMulti;
       data.list ? fieldConfig.listName = data.list : null;
     }
-    else if(selected.field === 'autocomplete'){
-      data.list ? fieldConfig.listName = data.list : null;
-    }
-    else if(selected.field === 'chips'){
-      data.list ? fieldConfig.listName = data.list : null;
-    }
-    else if(selected.field === 'radio'){
+    else if(selected.field === 'autocomplete' || selected.field === 'chips' || selected.field === 'radio'){
       data.list ? fieldConfig.listName = data.list : null;
     }
     else if(selected.field === 'date' || selected.field === 'range-picker'){
@@ -136,19 +195,75 @@ export class FormBuilderUiComponent extends FormBuilderUIVars{
       }
     }
     else if(selected.field === 'file'){
-      console.log('cotten into')
       fieldConfig.acceptedTypes = data.acceptedTypes.join(', ');
     }
-    // immutably update the array so that the signal fires:
-    this.outputConfig.update(cfg => ({
-      ...cfg,
-      fields: [...cfg.fields, fieldConfig]
-    }));
+
+
+
+    if( this.editingIndex > -1 ){
+      const currentConfig = this.outputConfig();
+      currentConfig.fields[this.editingIndex] = fieldConfig; 
+      //moveItemInArray(updatedFields, event.previousIndex, event.currentIndex);
+    
+      this.outputConfig.update(config => ({
+        ...config,
+        fields: currentConfig.fields
+      }))
+
+
+      
+    }
+    else{
+      this.outputConfig.update(cfg => ({
+        ...cfg,
+        fields: [...cfg.fields, fieldConfig]
+      }));
+    }
 
     //console.log('new outputConfig:', this.outputConfig());
 
+    this.dialog.closeAll();
   }
 
+  duplicateField(field:FormFieldConfig, index:number){
+    this.outputConfig.update(cfg => ({
+      ...cfg,
+      fields: [...cfg.fields, field]
+    }));
+  }
+
+  drop(event: CdkDragDrop<any[]>) {
+    const currentConfig = this.outputConfig();
+    const updatedFields = [...currentConfig.fields]; 
+    moveItemInArray(updatedFields, event.previousIndex, event.currentIndex);
+  
+    this.outputConfig.update(config => ({
+      ...config,
+      fields: updatedFields
+    }));
+  }
+
+  onSelectionChange(FieldFormConfig: FieldFormConfig) {
+    this.editingIndex = -1;
+    let clone = JSON.parse(JSON.stringify(FieldFormConfig));
+    clone.config.title = '';
+    clone.config.submitText = 'Add Field';
+    this.selectedConfig.set(clone);
+
+    this.dialog.open(DialogComponent, {
+      data: {
+        content: this.addFieldToOutputTmpl,
+        header: FieldFormConfig.config.title,
+        cls: ''
+      },
+      minWidth: '80vw',
+      maxWidth: '769px',
+    });
+  }
+
+
+
+  /******************************************************************************** */
 
  
  private toCamelCaseMachineName(input: string): string {
@@ -167,9 +282,6 @@ export class FormBuilderUiComponent extends FormBuilderUIVars{
    return machineName || this.generateRandomName();
  }
  
- /**
-  * Generates a random camelCase name with prefix
-  */
  private generateRandomName(): string {
    const prefix = 'random';
    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
