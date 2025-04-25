@@ -5,6 +5,7 @@ import { BaseFieldComponent } from './base-field.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIcon } from '@angular/material/icon';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-select-field',
@@ -25,7 +26,7 @@ import { MatIcon } from '@angular/material/icon';
         {{ config.label }}
       </mat-label>
       <mat-select [formControl]="control" [multiple]="config.multiple" class="!w-full">
-        @for (opt of config.options || []; track opt.value) {
+        @for (opt of availableOptions|| []; track opt.value) {
           <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
         }
       </mat-select>
@@ -53,4 +54,19 @@ import { MatIcon } from '@angular/material/icon';
     </mat-form-field>
   `
 })
-export class SelectFieldComponent extends BaseFieldComponent {}
+export class SelectFieldComponent extends BaseFieldComponent {
+  availableOptions: { label: string; value: any }[] = [];
+  override ngOnInit() {
+    if (this.config.options) {
+      this.availableOptions = this.config.options;
+    }
+  
+    if (this.config.dynamicOptions instanceof Observable) {
+      this.config.dynamicOptions.subscribe(opts => this.availableOptions = opts);
+    }
+    else if (typeof this.config.dynamicOptions === 'function') {
+      this.config.dynamicOptions()
+        .then(opts => this.availableOptions = opts);
+    }
+  }
+}

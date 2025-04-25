@@ -1,1 +1,28 @@
-<app-form-builder [config]="textformConfig"></app-form-builder>
+
+<app-form-builder [config]="outputConfig()"></app-form-builder>
+
+<h2 class="flex flex-row items-center text-lg my-4 gap-2">
+  <mat-icon>add_circle</mat-icon>
+  Add Field To Form
+</h2>
+
+<mat-form-field appearance="fill" class="w-full">
+  <mat-label>Select Field Type</mat-label>
+  <mat-select 
+    #fieldSelect
+    (selectionChange)="onSelectionChange($event.value); fieldSelect.value = null">
+    <mat-option 
+      *ngFor="let fc of fieldComponents" 
+      [value]="fc">
+      {{ fc.text }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<ng-template #addFieldToOutputTmpl>
+  <app-form-builder [config]="selectedConfig().config" (submitHandler)="addFieldToOutput($event)"></app-form-builder>
+</ng-template>
+
+<ng-template #previewFormTmpl>
+  <app-form-builder [config]="outputConfig()"></app-form-builder>
+</ng-template>

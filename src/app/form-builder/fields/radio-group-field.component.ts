@@ -5,6 +5,7 @@ import { BaseFieldComponent } from './base-field.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIcon } from '@angular/material/icon';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-radio-group-field',
@@ -35,7 +36,7 @@ import { MatIcon } from '@angular/material/icon';
         [formControl]="control"
         (change)="markAsTouched()"
       >
-        @for (opt of config.options || []; track opt.value) {
+        @for (opt of availableOptions || []; track opt.value) {
           <mat-radio-button [value]="opt.value" class="radio-button">
             {{ opt.label }}
           </mat-radio-button>
@@ -54,6 +55,23 @@ import { MatIcon } from '@angular/material/icon';
   `
 })
 export class RadioGroupFieldComponent extends BaseFieldComponent {
+
+  availableOptions: { label: string; value: any }[] = [];
+  override ngOnInit() {
+    if (this.config.options) {
+      this.availableOptions = this.config.options;
+    }
+  
+    if (this.config.dynamicOptions instanceof Observable) {
+      this.config.dynamicOptions.subscribe(opts => this.availableOptions = opts);
+    }
+    else if (typeof this.config.dynamicOptions === 'function') {
+      this.config.dynamicOptions()
+        .then(opts => this.availableOptions = opts);
+    }
+  }
+
+
   markAsTouched() {
     if (!this.control.touched) {
       this.control.markAsTouched();

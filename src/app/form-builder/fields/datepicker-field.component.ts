@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { BaseFieldComponent } from './base-field.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -62,11 +62,31 @@ export class DatepickerFieldComponent extends BaseFieldComponent {
   }
   // Add additional date validation if needed
   override ngOnInit() {
+    // Add min/max validators for datepicker
     if (this.config.minDate) {
-      this.control.addValidators(Validators.min(this.config.minDate));
+      this.formControl.addValidators(this.minDateValidator(this.config.minDate));
     }
     if (this.config.maxDate) {
-      this.control.addValidators(Validators.max(this.config.maxDate));
+      this.formControl.addValidators(this.maxDateValidator(this.config.maxDate));
     }
+  }
+
+
+  private minDateValidator(min: Date): ValidatorFn {
+    return (control: AbstractControl) => {
+      const value: Date = control.value;
+      return value && min && value < min
+        ? { matDatepickerMin: { min, actual: value } }
+        : null;
+    };
+  }
+
+  private maxDateValidator(max: Date): ValidatorFn {
+    return (control: AbstractControl) => {
+      const value: Date = control.value;
+      return value && max && value > max
+        ? { matDatepickerMax: { max, actual: value } }
+        : null;
+    };
   }
 }

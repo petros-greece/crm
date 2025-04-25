@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormConfig } from '../../form-builder/form-builder.model';
 import { FormBuilderComponent } from '../../form-builder/form-builder.component';
 import { FormBuilderUiComponent } from '../../form-builder/form-builder-ui/form-builder-ui.component';
+import { FormBuilderService } from '../../form-builder/form-builder.service';
 
 @Component({
   selector: 'app-settings',
@@ -10,9 +11,24 @@ import { FormBuilderUiComponent } from '../../form-builder/form-builder-ui/form-
   styleUrl: './settings.component.scss'
 })
 export class SettingsComponent {
+
+
+  formBuilderService = inject(FormBuilderService);
+
   formConfig: FormConfig = {
     title: 'User Registration',
     fields: [
+
+      {
+        type: 'select',
+        name: 'test',
+        label: 'test',
+        required: true,
+        multiple: false,
+        listName: 'Education Degree',
+        columns: 2,
+  
+      },
       {
         type: 'text',
         name: 'fullName',
@@ -202,7 +218,6 @@ export class SettingsComponent {
     ]
   };
 
-
   values = {
     "fullName": "Petros",
     "email": "petrostsatsaris@hotmail.com",
@@ -235,5 +250,5 @@ export class SettingsComponent {
             "contactType": "work"
         }
     ]
-}
+  }
 }

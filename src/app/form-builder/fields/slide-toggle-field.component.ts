@@ -17,7 +17,7 @@ import { MatIcon } from '@angular/material/icon';
     MatIcon
   ],
   template: `
-<div class="flex flex-col items-center justify-center h-full w-full mt-5">
+<div class="flex flex-col items-center justify-center h-full w-full">
   <mat-slide-toggle
     [formControl]="control"
     [required]="config.required ?? false">

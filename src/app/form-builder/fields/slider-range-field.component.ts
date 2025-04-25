@@ -30,9 +30,10 @@ import { MatIcon } from '@angular/material/icon';
         [max]="config.validators?.max || 100"
         [step]="config.step || 1"
         thumbLabel
+        discrete
         tickInterval="1">
-        <input value="20" matSliderStartThumb [formControl]="getFormControl('start')" >
-        <input value="80" matSliderEndThumb [formControl]="getFormControl('end')" >
+        <input value="0" matSliderStartThumb [formControl]="getFormControl('start')" >
+        <input value="100" matSliderEndThumb [formControl]="getFormControl('end')" >
       </mat-slider>
 
 
@@ -43,7 +44,7 @@ import { MatIcon } from '@angular/material/icon';
 export class SliderRangeFieldComponent extends BaseFieldComponent<FormGroup> implements OnInit {
 
   override ngOnInit(): void {
-    super.ngOnInit();
+  
 
     if (!(this.control instanceof FormGroup)) {
       throw new Error('The control must be a FormGroup for a slider range field');

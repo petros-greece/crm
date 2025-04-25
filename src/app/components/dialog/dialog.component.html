@@ -1,7 +1,7 @@
-<h2 mat-dialog-title class="{{data.cls}}">{{ data.header }}</h2>
+<h2 *ngIf="data.header" mat-dialog-title class="{{data.cls}}">{{ data.header }}</h2>
 
 <mat-dialog-content>
-  <div class="p-2">
+  <div class="p-0 m-0" [ngClass]="data.cls">
     <ng-container *ngTemplateOutlet="data.content"></ng-container>
   </div>
 </mat-dialog-content>

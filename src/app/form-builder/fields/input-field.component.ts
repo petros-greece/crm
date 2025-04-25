@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BaseFieldComponent } from './base-field.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-input-field',
@@ -12,11 +13,17 @@ import { MatInputModule } from '@angular/material/input';
     CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatIcon
   ],
   template: `
     <mat-form-field [appearance]="config.appearance || 'fill'" class="w-full">
-      <mat-label>{{ config.label }}</mat-label>
+      <mat-label>
+        <mat-icon *ngIf="config.icon">
+          {{ config.icon }}
+        </mat-icon>
+        {{ config.label }}
+      </mat-label>
       
       <input
         matInput

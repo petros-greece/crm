@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BaseFieldComponent } from './base-field.component';
@@ -7,10 +7,12 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, Observable, take } from 'rxjs';
 
 @Component({
   selector: 'app-autocomplete-field',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -48,21 +50,6 @@ import { MatIcon } from '@angular/material/icon';
         <ng-container *ngIf="control.hasError('required')">
           <span>{{ config.label }} is required</span>
         </ng-container>
-        <ng-container *ngIf="control.hasError('minlength')">
-          <span>Minimum length is {{ control.getError('minlength').requiredLength }}</span>
-        </ng-container>
-        <ng-container *ngIf="control.hasError('maxlength')">
-          <span>Maximum length is {{ control.getError('maxlength').requiredLength }}</span>
-        </ng-container>
-        <ng-container *ngIf="control.hasError('pattern')">
-          <span>Invalid format</span>
-        </ng-container>
-        <ng-container *ngIf="control.hasError('min')">
-          <span>Minimum value is {{ control.getError('min').min }}</span>
-        </ng-container>
-        <ng-container *ngIf="control.hasError('max')">
-          <span>Maximum value is {{ control.getError('max').max }}</span>
-        </ng-container>
       </mat-error>
     </mat-form-field>
   `
@@ -70,15 +57,38 @@ import { MatIcon } from '@angular/material/icon';
 export class AutocompleteFieldComponent extends BaseFieldComponent {
   filteredOptions: { label: string, value: any }[] = [];
   displayLabel = '';
-
+  private optionsSubject = new BehaviorSubject<any[]>([]); // Add this
   override ngOnInit() {
+    this.initializeOptions();
     this.setupInitialValue();
-    this.setupFiltering(); // Add this line
+    this.setupFiltering();
+  }
+
+  private initializeOptions() {
+    if (this.config.options) {
+      this.optionsSubject.next(this.config.options);
+    }
+
+    if (this.config.dynamicOptions instanceof Observable) {
+      this.config.dynamicOptions.subscribe(opts => {
+        this.optionsSubject.next(opts);
+        this.filterOptions(this.control.value || ''); // Re-filter with new options
+      });
+    }
+    else if (typeof this.config.dynamicOptions === 'function') {
+      this.config.dynamicOptions().then(opts => {
+        this.optionsSubject.next(opts);
+        this.filterOptions(this.control.value || '');
+      });
+    }
   }
 
   // Add this method
   private setupFiltering() {
-    this.control.valueChanges.subscribe(value => {
+    this.control.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(value => {
       if (typeof value === 'string') {
         this.filterOptions(value);
       }
@@ -103,16 +113,23 @@ export class AutocompleteFieldComponent extends BaseFieldComponent {
 
   displayFn = (value: any): string => {
     if (!value) return '';
-    const option = (this.config.options || []).find(opt => opt.value === value);
-    return option?.label || value;
+    let label = '';
+    this.optionsSubject.pipe(take(1)).subscribe(options => {
+      const option = options.find(opt => opt.value === value);
+      label = option?.label || value;
+    });
+    return label;
   };
 
   filterOptions(value: string) {
     const filterValue = value.toLowerCase();
-    this.filteredOptions = (this.config.options || [])
-      .filter(option => 
+    this.optionsSubject.pipe(take(1)).subscribe(options => {
+      this.filteredOptions = options.filter(option => 
         option.label.toLowerCase().includes(filterValue)
       );
+      // Create new array reference to trigger change detection
+      this.filteredOptions = [...this.filteredOptions];
+    });
   }
 
   ngOnChanges() {

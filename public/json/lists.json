@@ -1,64 +1,64 @@
 {
-  "list": {
-    "month": [
+ 
+    "Month": [
       "January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
     ],
-    "hour": [
+    "Hour": [
       "12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM",
       "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM",
       "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM",
       "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"
     ],
-    "gender": [
+    "Gender": [
       "Male", "Female", "Other", "Prefer not to say"
     ],
-    "maritalStatuse": [
+    "Marital Statuse": [
       "Single", "Married", "Divorced", "Widowed", "Separated"
     ],
     "Education Level": [
       "High School", "Associate Degree", "Bachelor's Degree",
       "Master's Degree", "Doctorate", "Other"
     ],
-    "employmentStatuse": [
+    "Employment Status": [
       "Employed", "Self-employed", "Unemployed", "Student", "Retired"
     ],
-    "incomeBracket": [
+    "Income Bracket": [
       "Less than $20,000", "$20,000 - $39,999", "$40,000 - $59,999",
       "$60,000 - $79,999", "$80,000 - $99,999", "$100,000 or more"
     ],
-    "relationshipType": [
+    "relationship Type": [
       "Parent", "Child", "Sibling", "Spouse", "Partner", "Friend", "Other"
     ],
-    "ageRange": [
+    "Age Range": [
       "Under 18", "18-24", "25-34", "35-44", "45-54",
       "55-64", "65 and over"
     ],
-    "currencie": [
+    "Currency": [
       "US Dollar", "Euro", "British Pound", "Japanese Yen", "Australian Dollar", "Canadian Dollar",
       "Swiss Franc", "Chinese Yuan", "Swedish Krona", "New Zealand Dollar"
     ],
-    "timezone": [
+    "Timezone": [
       "Coordinated Universal Time", "Greenwich Mean Time", "Eastern Standard Time (UTC−5)",
       "Pacific Standard Time (UTC−8)", "Central Standard Time (UTC−6)", "Mountain Standard Time (UTC−7)",
       "India Standard Time (UTC+5:30)", "Central European Time (UTC+1)", "Eastern European Time (UTC+2)",
       "Japan Standard Time (UTC+9)"
     ],
-    "tree": [
+    "Tree": [
       "Maple", "Oak", "Pine", "Birch", "Spruce", "Cedar", "Willow", "Ash", "Elm", "Chestnut",
       "Sycamore", "Beech", "Poplar", "Fir", "Redwood", "Sequoia", "Hemlock", "Larch", "Cypress", "Alder",
       "Aspen", "Basswood", "Buckeye", "Dogwood", "Hawthorn", "Hornbeam", "Locust", "Magnolia", "Mulberry", "Palm",
       "Tamarack", "Walnut", "Yew", "Cottonwood", "Juniper", "Laurel", "Eucalyptus", "Baobab", "Olive", "Fig",
       "Mahogany", "Teak", "Ebony", "Sassafras", "Serviceberry", "Hackberry", "Paulownia", "Plane Tree", "Arbutus", "Ironwood"
     ],
-    "flower": [
+    "Flower": [
       "Rose", "Tulip", "Daisy", "Lily", "Sunflower", "Daffodil", "Lavender", "Orchid", "Peony", "Hydrangea",
       "Marigold", "Carnation", "Chrysanthemum", "Pansy", "Zinnia", "Begonia", "Geranium", "Petunia", "Aster", "Iris",
       "Gardenia", "Snapdragon", "Camellia", "Anemone", "Freesia", "Hibiscus", "Gladiolus", "Lilac", "Lotus", "Bluebell",
       "Calla Lily", "Crocus", "Cosmos", "Delphinium", "Foxglove", "Heliconia", "Hyacinth", "Impatiens", "Jasmine", "Magnolia",
       "Morning Glory", "Narcissus", "Passionflower", "Phlox", "Ranunculus", "Salvia", "Scabiosa", "Statice", "Verbena", "Yarrow"
     ],
-    "job": [
+    "Job": [
       "Software Engineer", "Data Scientist", "Web Developer", "UX Designer", "Project Manager", "Product Manager", "DevOps Engineer", "System Administrator", "Database Administrator", "IT Support Specialist",
       "Marketing Manager", "SEO Specialist", "Content Writer", "Copywriter", "Graphic Designer", "UI Designer", "Social Media Manager", "Advertising Executive", "Brand Strategist", "Creative Director",
       "Financial Analyst", "Accountant", "Auditor", "Investment Banker", "Actuary", "Risk Manager", "Bank Teller", "Loan Officer", "Tax Consultant", "Treasury Analyst",
@@ -86,7 +86,7 @@
       "Okra", "Bok Choy", "Swiss Chard", "Fennel", "Parsnip", "Daikon", "Mustard Greens", "Collard Greens", "Endive", "Arugula",
       "Watercress", "Scallion", "Chayote", "Taro", "Jicama", "Horseradish", "Mushroom", "Nopal", "Seaweed", "Cassava"
     ],
-    "schoolsClasse": [
+    "school Class": [
       "Mathematics", "Science", "History", "Geography", "Literature", "Art", "Physical Education",
       "Music", "Biology", "Chemistry", "Physics", "Economics", "Psychology", "Sociology", "Philosophy",
       "English", "Computer Science", "Foreign Language", "Health Education", "Civics", "Business Studies",
@@ -102,7 +102,7 @@
       "Confident", "Embarrassed", "Grief", "Fear", "Lust", "Trust", "Love", "Surprise", "Envious", "Nostalgic",
       "Amazed", "Reluctant", "Sentimental", "Trusting", "Mournful", "Regretful", "Glee", "Sorrowful", "Jovial"
     ],
-    "bodyPart": [
+    "Body Part": [
       "Head", "Arm", "Leg", "Hand", "Foot", "Eye", "Ear", "Nose", "Mouth", "Teeth", "Tongue", "Neck", "Shoulder", 
       "Elbow", "Wrist", "Knee", "Ankle", "Fingers", "Toes", "Chest", "Back", "Spine", "Belly", "Waist", "Hips", 
       "Groin", "Stomach", "Brain", "Lungs", "Heart", "Liver", "Kidneys", "Bladder", "Intestines", "Skin", "Nails",
@@ -210,6 +210,6 @@
     ],
     "Internet Service Provider": [
       "Comcast", "AT&T", "Verizon", "Charter", "Frontier", "Spectrum", "Xfinity", "CenturyLink", "Cox", "Mediacom"
-    ]     
-  }
+    ],
+    "Mime Type": [  "text/plain", "text/html", "text/css", "text/javascript", "application/json", "application/xml", "image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml", "audio/mpeg", "audio/ogg", "audio/wav", "audio/webm", "video/mp4", "video/webm", "video/ogg", "application/pdf", "application/msword", "application/vnd.ms-excel", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/zip", "application/x-tar", "application/gzip", "application/octet-stream", "application/x-www-form-urlencoded"]   
 }

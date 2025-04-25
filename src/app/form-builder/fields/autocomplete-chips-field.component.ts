@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BaseFieldComponent } from './base-field.component';
@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatOptionModule } from '@angular/material/core';
+import { BehaviorSubject, Observable, Subject, from, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-autocomplete-chips',
@@ -38,7 +39,7 @@ import { MatOptionModule } from '@angular/material/core';
       </mat-label>
 
       <mat-chip-grid #chipGrid>
-        <mat-chip-row *ngFor="let item of selectedItems" (removed)="remove(item)">
+        <mat-chip-row *ngFor="let item of selectedItems; trackBy: trackByValue" (removed)="remove(item)">
           {{ getLabel(item) }}
           <button matChipRemove>
             <mat-icon>cancel</mat-icon>
@@ -56,7 +57,7 @@ import { MatOptionModule } from '@angular/material/core';
       </mat-chip-grid>
 
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-        <mat-option *ngFor="let opt of filteredOptions" [value]="opt.value">
+        <mat-option *ngFor="let opt of filteredOptions; trackBy: trackByValue" [value]="opt.value">
           {{ opt.label }}
         </mat-option>
       </mat-autocomplete>
@@ -69,30 +70,58 @@ import { MatOptionModule } from '@angular/material/core';
     </mat-form-field>
   `
 })
-export class AutocompleteChipFieldComponent extends BaseFieldComponent implements OnInit {
+export class AutocompleteChipFieldComponent extends BaseFieldComponent implements OnDestroy {
   searchControl = new FormControl('');
   filteredOptions: { label: string, value: any }[] = [];
   selectedItems: any[] = [];
+  private optionsSubject = new BehaviorSubject<{ label: string, value: any }[]>([]);
+  private destroy$ = new Subject<void>();
 
   override ngOnInit() {
-    super.ngOnInit();
+    this.initializeOptions();
     this.setupFiltering();
     this.syncInitialValues();
     this.setupStateSync();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private initializeOptions() {
+    const staticOptions = this.config.options || [];
+    this.optionsSubject.next(staticOptions);
+
+    if (this.config.dynamicOptions) {
+      const dynamic$ = this.config.dynamicOptions instanceof Observable 
+        ? this.config.dynamicOptions 
+        : from(this.config.dynamicOptions());
+
+      dynamic$.pipe(takeUntil(this.destroy$)).subscribe(opts => {
+        const combined = [...staticOptions, ...opts];
+        this.optionsSubject.next(combined);
+        this.filterOptions(this.searchControl.value || '');
+      });
+    }
+  }
+
   private setupStateSync() {
-    this.searchControl.valueChanges.subscribe(() => {
+    this.searchControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (!this.control.touched) this.control.markAsTouched();
     });
 
-    this.control.valueChanges.subscribe(() => {
+    this.control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (!this.control.dirty) this.control.markAsDirty();
     });
   }
 
   private setupFiltering() {
-    this.searchControl.valueChanges.subscribe(value => {
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$)
+    ).subscribe(value => {
       this.filterOptions(value || '');
     });
   }
@@ -107,47 +136,55 @@ export class AutocompleteChipFieldComponent extends BaseFieldComponent implement
 
   filterOptions(value: string) {
     const filterValue = value.toLowerCase();
-    this.filteredOptions = (this.config.options || []).filter(option =>
+    const options = this.optionsSubject.getValue();
+    
+    this.filteredOptions = options.filter(option =>
       option.label.toLowerCase().includes(filterValue) &&
       !this.selectedItems.includes(option.value)
     );
+    
+    // Trigger change detection
+    this.filteredOptions = [...this.filteredOptions];
   }
 
   getLabel(value: any): string {
-    const option = (this.config.options || []).find(opt => opt.value === value);
+    const options = this.optionsSubject.getValue();
+    const option = options.find(opt => opt.value === value);
     return option?.label || value;
+  }
+
+  trackByValue(index: number, item: any): any {
+    return item.value;
   }
 
   selected(event: any) {
     const value = event.option.value;
     if (!this.selectedItems.includes(value)) {
-      this.selectedItems.push(value);
-      this.control.setValue([...this.selectedItems]);
+      this.selectedItems = [...this.selectedItems, value];
+      this.control.setValue(this.selectedItems);
     }
     this.searchControl.setValue('');
   }
 
   remove(item: any) {
-    const index = this.selectedItems.indexOf(item);
-    if (index >= 0) {
-      this.selectedItems.splice(index, 1);
-      this.control.setValue([...this.selectedItems]);
-    }
+    this.selectedItems = this.selectedItems.filter(i => i !== item);
+    this.control.setValue(this.selectedItems);
   }
 
   add(event: any) {
     const value = (event.value || '').trim();
     if (!value) return;
 
-    const option = (this.config.options || []).find(opt =>
+    const options = this.optionsSubject.getValue();
+    const option = options.find(opt =>
       opt.label === value || opt.value === value
     );
 
     const newValue = option ? option.value : value;
 
     if (!this.selectedItems.includes(newValue)) {
-      this.selectedItems.push(newValue);
-      this.control.setValue([...this.selectedItems]);
+      this.selectedItems = [...this.selectedItems, newValue];
+      this.control.setValue(this.selectedItems);
     }
 
     if (event.input) {
@@ -158,21 +195,19 @@ export class AutocompleteChipFieldComponent extends BaseFieldComponent implement
 
   onEnter(event: Event) {
     event.preventDefault();
-
-    const keyboardEvent = event as KeyboardEvent;
-
     const value = (this.searchControl.value || '').trim();
     if (!value) return;
 
-    const option = (this.config.options || []).find(opt =>
+    const options = this.optionsSubject.getValue();
+    const option = options.find(opt =>
       opt.label === value || opt.value === value
     );
 
     const newValue = option ? option.value : value;
 
     if (!this.selectedItems.includes(newValue)) {
-      this.selectedItems.push(newValue);
-      this.control.setValue([...this.selectedItems]);
+      this.selectedItems = [...this.selectedItems, newValue];
+      this.control.setValue(this.selectedItems);
     }
 
     this.searchControl.setValue('');

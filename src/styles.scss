@@ -5,7 +5,7 @@ html {
   @include mat.theme((
     color: (
       theme-type: light,
-      primary: mat.$azure-palette,
+      primary: mat.$violet-palette,
       tertiary: mat.$blue-palette,
     ),
     typography: Roboto,
@@ -13,6 +13,16 @@ html {
   ));
 }
 
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:root {
+  @include mat.toolbar-overrides((
+    container-background-color: #5f00c0,
+    container-text-color: #fff,
+  ));
+}
+.mat-toolbar .mat-icon {
+  color: #fff;
+}
 // @tailwind base;
 // @tailwind components;
 // @tailwind utilities;

@@ -26,7 +26,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
                hover:bg-blue-50 hover:border-blue-500"
         (click)="fileInput.click()"
       >
-        Click or Drop to Upload {{ config.label }}
+        Click or Drop to Upload {{ config.acceptedTypes }}
       </div>
 
       <!-- Hidden input file -->
@@ -34,7 +34,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         type="file"
         ng2FileSelect
         [uploader]="uploader"
-        [accept]="acceptTypes"
+        [accept]="config.acceptTypes"
         multiple
         #fileInput
         hidden
@@ -58,24 +58,19 @@ export class FileUploadComponent implements OnInit {
   uploader!: FileUploader;
   hasBaseDropZoneOver = false;
   
-  allowedMimeType: string[] =  ['image/png', 'image/jpeg'];
-  acceptTypes: string = 'image/png, image/jpeg';  // Default accept types
-
+  
   ngOnInit() {
     this.initializeUploader();
   }
 
   private initializeUploader() {
-    // Update allowedMimeType from config.accept if available
-    const allowedTypes = this.config.accept 
-      ? this.config.accept.split(',').map((type: string): string => type.trim()) 
-      : this.allowedMimeType;
+  
+    const allowedMimeType = this.config.acceptedTypes ? this.config.acceptedTypes.split(', ') : []  // Default accept types
 
-    this.acceptTypes = allowedTypes.join(', ');  // Set the `accept` for the input file element
     this.uploader = new FileUploader({
       url: this.uploadEndpoint,
       autoUpload: false,
-      allowedMimeType: allowedTypes
+      allowedMimeType: allowedMimeType
     });
 
     // Handle successful file additions
