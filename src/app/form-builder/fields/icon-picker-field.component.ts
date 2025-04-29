@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BaseFieldComponent } from './base-field.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogComponent } from '../../components/dialog/dialog.component';
 import { FormBuilderService } from '../form-builder.service';
 import { MatIcon } from '@angular/material/icon';
@@ -31,6 +31,9 @@ interface IconCategory {
     <div class="flex flex-col items-center justify-center h-full w-full">
       <button mat-button (click)="openSelectIconDialog()">
         {{ config.label || 'Select Icon' }}
+        <mat-icon *ngIf="control.value">
+          {{ control.value }}
+        </mat-icon> 
       </button>
     </div>
 
@@ -60,14 +63,14 @@ export class IconPickerFieldComponent extends BaseFieldComponent {
     public dialog: MatDialog,
     private builderService: FormBuilderService,
   ) { super(); }
-
+  private selectIconDialogRef!: MatDialogRef<DialogComponent>; 
 
   openSelectIconDialog(): void {
 
     this.builderService.getIcons().subscribe((icons) => {
       
       this.icons = icons.categories;
-      this.dialog.open(DialogComponent, {
+      this.selectIconDialogRef =  this.dialog.open(DialogComponent, {
         data: {
           content: this.selectIconTmpl,
           header: 'Select Icon',
@@ -83,7 +86,9 @@ export class IconPickerFieldComponent extends BaseFieldComponent {
 
   selectIcon(icon: string): void {
     this.control.setValue(icon);
-    this.dialog.closeAll();
+    if (this.selectIconDialogRef) {
+      this.selectIconDialogRef.close(); // <-- Close only this dialog
+    }
   }
 
 

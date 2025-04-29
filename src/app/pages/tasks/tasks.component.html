@@ -1,1 +1,58 @@
-<p>tasks works!</p>
+<div class="flex flex-col space-y-4">
+  <div class="flex items-center space-x-2">
+    <mat-form-field appearance="fill" class="flex-1">
+      <input matInput placeholder="New column title" [(ngModel)]="newColumnTitle">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="addColumn()">Add Column</button>
+    <button mat-button color="accent" (click)="addTask()">Add Task</button>
+   
+
+  </div>
+  <div class="flex space-x-4 overflow-x-auto pb-4">
+    <div *ngFor="let col of columns; let i = index" class="flex flex-col bg-gray-200 rounded p-3 min-w-[280px] max-h-[80vh]">
+      <div class="flex items-center justify-between mb-2">
+        <h2>{{ col.title }}</h2>
+        <button mat-icon-button class="!text-red-400" (click)="confirmDeleteColumn(i);">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <div
+        cdkDropList
+        [id]="'list-' + col.id"
+        [cdkDropListData]="col.tasks"
+        [cdkDropListConnectedTo]="connectedListIds"
+        class="bg-white flex-1 min-h-[50px] p-2 pb-10 rounded overflow-y-auto"
+        (cdkDropListDropped)="drop($event)">
+
+        <div *ngFor="let task of col.tasks" cdkDrag class="flex items-center justify-between bg-gray-200 mb-2 p-2 rounded cursor-move">
+          {{ task.type.label }}
+          <button mat-icon-button color="warn" (click)="removeTask(col, task)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<ng-template #addTaskTmpl>
+  <div class="pt-4">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Select a Task Type</mat-label>
+      <mat-select [(ngModel)]="newTaskType" (selectionChange)="onSelectTaskType($event.value)">
+        <mat-option *ngFor="let task of tasks" [value]="task.value">
+          <mat-icon class="mr-2">{{ task.icon }}</mat-icon>
+          {{ task.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <app-form-builder [config]="taskFormConfig" (submitHandler)="addNewTask($event)"></app-form-builder>
+
+  </div>
+
+
+
+</ng-template>

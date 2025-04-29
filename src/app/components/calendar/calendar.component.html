@@ -1,0 +1,34 @@
+<div class="calendar-container">
+  <button mat-button (click)="view = CalendarView.Month">
+    <mat-icon>calendar_view_month</mat-icon>
+    Month
+  </button>
+  <button mat-button (click)="view = CalendarView.Week">
+    <mat-icon>calendar_view_week</mat-icon>
+    Week
+  </button>
+  <button mat-button (click)="view = CalendarView.Day">
+    <mat-icon>calendar_view_day</mat-icon>
+    Day
+  </button>
+
+  <mwl-calendar-month-view 
+    *ngIf="view === CalendarView.Month"
+    [viewDate]="viewDate"
+    [events]="events"
+    (dayClicked)="handleDayClick($event)"
+    >
+  </mwl-calendar-month-view>
+
+  <mwl-calendar-week-view 
+    *ngIf="view === CalendarView.Week"
+    [viewDate]="viewDate"
+    [events]="events">
+  </mwl-calendar-week-view>
+
+  <mwl-calendar-day-view 
+    *ngIf="view === CalendarView.Day"
+    [viewDate]="viewDate"
+    [events]="events">
+  </mwl-calendar-day-view>
+</div>

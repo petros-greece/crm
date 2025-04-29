@@ -7,6 +7,7 @@
     "build": "ng build --prod",
     "watch": "ng build --watch --configuration development",
     "cnotest": "ng generate component --skip-tests",
+    "cinline": "ng generate component --inline-template --inline-style --skip-tests",
     "test": "ng test"
   },
   "private": true,
@@ -31,6 +32,8 @@
     "ng-apexcharts": "^1.15.0",
     "ng2-file-upload": "^8.0.0",
     "ngx-color-picker": "^19.0.0",
+    "ngx-filesaver": "^19.0.0",
+    "ngx-json-viewer": "^3.2.1",
     "postcss": "^8.5.1",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.0.4",

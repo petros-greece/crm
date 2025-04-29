@@ -1,5 +1,22 @@
+<div class="flex flex-row">
+  <button mat-raised-button 
+  (click)="openAddOrEditEmployeeDialog(false, {})">
+    Add
+    <mat-icon>manage_accounts</mat-icon>
+  </button>
+</div>
+
 <app-table-builder [config]="tableConfig">
   <ng-template appColumnTemplate="actions" let-row>
-    <button mat-button (click)="editItem(row)">Edit</button>
+    <button mat-button (click)="openAddOrEditEmployeeDialog(true, row)">Edit</button>
   </ng-template>
 </app-table-builder>
+
+<ng-template #previewEEmployeeTmpl>
+  <app-form-builder 
+    [config]="employeeFormConfig" 
+    [values]="employeeData"
+    (formValuesChange)="checkDepartment($event)"
+    (submitHandler)="addNewEmployee($event)"
+    ></app-form-builder>
+</ng-template>

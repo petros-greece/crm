@@ -1,8 +1,22 @@
 <h2 *ngIf="data.header" mat-dialog-title class="{{data.cls}}">{{ data.header }}</h2>
 
 <mat-dialog-content>
-  <div class="p-0 m-0" [ngClass]="data.cls">
+  <!-- If content is a TemplateRef -->
+  <ng-container *ngIf="isTemplateRef(data.content); else textContent">
     <ng-container *ngTemplateOutlet="data.content"></ng-container>
-  </div>
+  </ng-container>
+
+  <!-- If content is a string -->
+  <ng-template #textContent>
+    <p class="pt-4">{{ data.content }}</p>
+  </ng-template>
 </mat-dialog-content>
+@if(data.showButtons){
+  <mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="false">{{ data.cancelText }}</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>{{ data.confirmText }}</button>
+  </mat-dialog-actions>
+}
+
+
 

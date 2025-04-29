@@ -255,7 +255,6 @@ export class FormBuilderUIVars {
       ]
     };
   
-    
     slideToggleFormConfig: FormConfig  = {
       title: 'Slide Toggle Field',
       fields: [...this.baseFields]

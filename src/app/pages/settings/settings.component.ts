@@ -192,6 +192,35 @@ export class SettingsComponent {
         ]
       },
       {
+        type: 'group',
+        name: 'group-contacts',
+        label: 'Test Group',
+        minRows: 1,
+        maxRows: 3,
+        fields: [
+          {
+            type: 'text',
+            name: 'contactName2',
+            label: 'Contact Name',
+            required: true,
+          },
+          {
+            type: 'text',
+            name: 'contactEmail3',
+            label: 'Contact Email',
+          },
+          {
+            type: 'select',
+            name: 'contactType4',
+            label: 'Contact Type',
+            options: [
+              { label: 'Personal', value: 'personal' },
+              { label: 'Work', value: 'work' }
+            ]
+          }
+        ]
+      },
+      {
         type: 'file',
         name: 'file',
         label: 'Profile Picture',

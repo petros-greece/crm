@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbar } from '@angular/material/toolbar';
-import { FormConfig, FormFieldConfig } from './form-builder.model';
+import { FieldType, FormConfig, FormFieldConfig, Option } from './form-builder.model';
 import { SelectFieldComponent } from './fields/select-field.component';
 import { AutocompleteFieldComponent } from './fields/autocomplete-field.component';
 import { DatepickerFieldComponent } from './fields/datepicker-field.component';
@@ -20,15 +20,19 @@ import { ColorPickerFieldComponent } from './fields/colorpicker-field.component'
 import { TextareaFieldComponent } from './fields/textarea-field.component';
 import { IconPickerFieldComponent } from './fields/icon-picker-field.component';
 import { FormBuilderService } from './form-builder.service';
-
+import { MatIcon } from '@angular/material/icon';
+import { GroupFieldComponent } from './fields/group-field.component';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
 @Component({
   selector: 'app-form-builder',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatButtonModule, MatToolbar],
+  imports: [CommonModule, ReactiveFormsModule, MatButtonModule, MatToolbar, MatIcon],
   template: `
   <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="flex flex-wrap gap-4 p-2" (keydown.enter)="$event.preventDefault()" [ngClass]="config.className"> 
     <mat-toolbar class="flex flex-grow justify-center mt-3" *ngIf="config.title"> 
-      <h2>{{ config.title }}</h2>    
+      <h2>{{ config.title }}</h2>
+      <mat-icon *ngIf="config.icon">{{ config.icon }}</mat-icon>   
     </mat-toolbar>  
     <ng-container #gridItem></ng-container>  
     <div class="flex flex-row justify-center w-full">
@@ -40,7 +44,7 @@ import { FormBuilderService } from './form-builder.service';
 export class FormBuilderComponent implements AfterViewInit {
   /** emit form value on submit */
   @Output() submitHandler = new EventEmitter<any>();
-
+  @Output() formValuesChange = new EventEmitter<Record<string, any>>();
   // inputs as writable signals
   private readonly _config = signal<FormConfig>({ fields: [] });
   @Input() set config(v: FormConfig) { this._config.set(v); }
@@ -52,10 +56,11 @@ export class FormBuilderComponent implements AfterViewInit {
 
   formGroup = new FormGroup({});
   @ViewChild('gridItem', { read: ViewContainerRef }) gridItem!: ViewContainerRef;
-
+  private destroy$ = new Subject<void>();
   private formBuilderService = inject(FormBuilderService);
 
-  constructor() {
+  constructor(private cdr: ChangeDetectorRef) { 
+
     // reactively rebuild form when config or values change
     effect(() => {
       const cfg = this._config();
@@ -66,7 +71,14 @@ export class FormBuilderComponent implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    // this.formGroup.valueChanges
+    // .pipe(debounceTime(200), distinctUntilChanged())
+    // .subscribe(vals => {
+    //   console.log('Form changed:', vals);
+    //   this.formValuesChange.emit(vals);
+    // });
+  }
 
   private applyValuesToFormConfig(
     config: FormConfig,
@@ -81,12 +93,14 @@ export class FormBuilderComponent implements AfterViewInit {
       if (fieldValue !== undefined) {
         if (field.type === 'multi-row' && Array.isArray(fieldValue)) {
           clone.value = fieldValue;
-        } else if (
-          (field.type === 'slider-range' || field.type === 'range-picker') &&
+        } 
+        else if (
+          (field.type === 'slider-range' || field.type === 'range-picker' || field.type === 'group') &&
           typeof fieldValue === 'object'
         ) {
           clone.value = { start: fieldValue.start ?? null, end: fieldValue.end ?? null };
-        } else {
+        } 
+        else {
           clone.value = fieldValue;
         }
       }
@@ -103,13 +117,73 @@ export class FormBuilderComponent implements AfterViewInit {
         const arr = new FormArray<any>([]);
         (Array.isArray(val) ? val : [undefined]).forEach(row => arr.push(this.createRowGroup(field, row)));
         group[field.name] = arr;
-      } else if (field.type === 'range-picker' || field.type === 'slider-range') {
+      }
+      else if (field.type === 'group') {
+        group[field.name] = this.createNestedGroup(field, val);
+      } 
+      else if (field.type === 'range-picker' || field.type === 'slider-range') {
         group[field.name] = new FormGroup({ start: new FormControl(val?.start ?? null), end: new FormControl(val?.end ?? null) });
-      } else {
+      } 
+      else {
         group[field.name] = new FormControl(val, this.getValidators(field));
       }
+      if(field.dependsOn){
+        field.dynamicOptions = of([]);
+      }
+
     });
+
     this.formGroup = new FormGroup(group);
+
+    config.fields.forEach(field => {
+      if (field.dependsOn?.updateOptions) {
+        const parentControl = this.formGroup.get(field.dependsOn.fieldName);
+        if (parentControl) {
+          const optionsSubject = new BehaviorSubject<Option[]>(field.options || []);
+          
+          parentControl.valueChanges.pipe(
+            takeUntil(this.destroy$),
+            startWith(parentControl.value),
+            distinctUntilChanged(),
+            switchMap(value => {
+              try {
+                const result = field.dependsOn!.updateOptions(value);
+                return this.normalizeOptions(result);
+              } catch {
+                return of([]);
+              }
+            })
+          ).subscribe({
+            next: options => {
+              optionsSubject.next(options);
+              this.safeUpdateControlValue(field.name, options);
+            },
+            error: () => optionsSubject.next([])
+          });
+  
+          field.dynamicOptions = optionsSubject.asObservable();
+        }
+      }
+    });
+  }
+
+  private normalizeOptions(result: any): Observable<Option[]> {
+    if (Array.isArray(result)) return of(result);
+    if (result instanceof Observable) return result;
+
+    return of([]);
+  }
+  
+  private safeUpdateControlValue(fieldName: string, options: Option[]) {
+    const control = this.formGroup.get(fieldName);
+    if (!control) return;
+  
+    const currentValue = control.value;
+    const isValid = options.some(o => o.value === currentValue);
+    
+    if (!isValid) {
+      control.reset(null, { emitEvent: false });
+    }
   }
 
   private createRowGroup(field: FormFieldConfig, rowValues?: any) {
@@ -118,6 +192,16 @@ export class FormBuilderComponent implements AfterViewInit {
       group[sub.name] = new FormControl(rowValues?.[sub.name] ?? sub.value ?? '', this.getValidators(sub));
     });
     return new FormGroup(group);
+  }
+
+  private createNestedGroup(field: FormFieldConfig, initialValues: any): FormGroup {
+    const fg: Record<string, FormControl> = {};
+    field.fields?.forEach(sub => {
+      const subVal = initialValues?.[sub.name] ?? sub.value ?? null;
+      fg[sub.name] = new FormControl(subVal, this.getValidators(sub));
+    });
+  
+    return new FormGroup(fg);
   }
 
   private buildFields(config: FormConfig) {
@@ -137,6 +221,9 @@ export class FormBuilderComponent implements AfterViewInit {
       el.style.flex = `0 0 ${basis}`;
       el.style.maxWidth = basis;
     });
+
+
+
   }
 
   private getValidators(field: FormFieldConfig) {
@@ -153,7 +240,7 @@ export class FormBuilderComponent implements AfterViewInit {
     return v;
   }
 
-  private resolveFieldComponent(type: string): Type<any> {
+  private resolveFieldComponent(type: FieldType): Type<any> {
     switch (type) {
       case 'select':       return SelectFieldComponent;
       case 'autocomplete': return AutocompleteFieldComponent;
@@ -169,6 +256,7 @@ export class FormBuilderComponent implements AfterViewInit {
       case 'color':        return ColorPickerFieldComponent;
       case 'textarea':     return TextareaFieldComponent;
       case 'icon':         return IconPickerFieldComponent;
+      case 'group':        return GroupFieldComponent;
       default:             return InputFieldComponent;
     }
   }
@@ -187,4 +275,5 @@ export class FormBuilderComponent implements AfterViewInit {
       this.formGroup.markAllAsTouched();
     }
   }
+
 }

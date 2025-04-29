@@ -17,6 +17,17 @@ import { MatDialogModule } from '@angular/material/dialog';
 export class DialogComponent {
   constructor(
     public dialogRef: MatDialogRef<DialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { cls: string, header: string, content: TemplateRef<any> }
+    @Inject(MAT_DIALOG_DATA) public data: { 
+      cls: string, 
+      header: string, 
+      content: TemplateRef<any> | string, 
+      showButtons?:boolean, 
+      confirmText?: string, 
+      cancelText?: string 
+    }
   ) {}
+
+  isTemplateRef(content: any): content is TemplateRef<any> {
+    return content instanceof TemplateRef;
+  }
 }

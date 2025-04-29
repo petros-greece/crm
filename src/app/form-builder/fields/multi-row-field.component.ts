@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { InputFieldComponent } from './input-field.component';
 import { SelectFieldComponent } from './select-field.component';
+import { DatepickerFieldComponent } from './datepicker-field.component';
 
 @Component({
   selector: 'app-multi-row-field',
@@ -22,7 +23,8 @@ import { SelectFieldComponent } from './select-field.component';
     MatButtonModule,
     MatIconModule,
     InputFieldComponent,
-    SelectFieldComponent
+    SelectFieldComponent,
+    DatepickerFieldComponent
   ],
   template: `
     <div class="multi-row-container">
@@ -34,7 +36,7 @@ import { SelectFieldComponent } from './select-field.component';
                 (click)="addRow()"
                 [disabled]="!canAdd">
           <mat-icon>add</mat-icon>
-          Add Row
+          {{ config.addRow || 'Add Row' }}
         </button>
       </div>
       <div>
@@ -51,6 +53,11 @@ import { SelectFieldComponent } from './select-field.component';
                   [config]="field"
                   [control]="getRowControl(i, field.name)">
                 </app-select-field>
+
+                <app-date-field *ngSwitchCase="'date'"
+                  [config]="field"
+                  [control]="getRowControl(i, field.name)">
+                </app-date-field>
               </ng-container>
             </div>
           </div>

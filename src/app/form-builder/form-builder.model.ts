@@ -29,7 +29,8 @@ export type FieldType = 'text' | //
                         'url' | 
                         'tel' | 
                         'chips' | //
-                        'slider'; //
+                        'slider' |
+                        'group'; //
 
 export interface FormFieldConfig{
   type: FieldType;
@@ -41,7 +42,7 @@ export interface FormFieldConfig{
   placeholder?: string;
   appearance?: MatFormFieldAppearance;
   multiple?: boolean;
-  options?: { label: string; value: any }[];
+  options?: { label: string; value: any; icon?: string  }[];
   minDate?: Date;
   maxDate?: Date;
   step?: number;
@@ -49,6 +50,7 @@ export interface FormFieldConfig{
   minRows?: number;
   maxRows?: number;
   initialRows?: number;
+  addRow?: string;
   formatLabel?: (value: number) => string;
   autocomplete?: string;
   className?: string;
@@ -65,6 +67,7 @@ export interface FormFieldConfig{
   dynamicOptions?: Observable<Option[]> | (() => Promise<Option[]>);
   listName?: string; // For dynamic options
   acceptedTypes?: string,
+  dependsOn?: {fieldName:string, updateOptions: (parentValue: any) =>  Observable<Option[]>;}
 }
 
 export interface FormConfig {
@@ -72,6 +75,7 @@ export interface FormConfig {
   submitText?: string;
   appearance?: MatFormFieldAppearance;
   className?: string;
+  icon?:string;
   resetOnSubmit?:boolean;
   fields: FormFieldConfig[];
 }

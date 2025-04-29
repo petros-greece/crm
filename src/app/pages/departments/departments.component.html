@@ -1,0 +1,33 @@
+<div class="flex mb-4">
+  <button mat-raised-button (click)="openDepartmentDialog(-1)">
+    Add Department
+  </button>
+</div>
+
+
+<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
+  <div *ngFor="let dept of departments; index as i"
+  class="group p-2 relative shadow-sm rounded-lg flex h-32 overflow-hidden 
+  bg-violet-500 cursor-pointer transition-transform transform 
+  hover:scale-105 hover:shadow-lg hover:bg-violet-600"
+  (click)="openDepartmentDialog(i)">
+
+    <!-- Background icon, scaled up -->
+    <mat-icon
+      class="absolute right-1 bottom-1 transform scale-450 opacity-60 pointer-events-none"
+    >
+      {{ dept.icon }}
+    </mat-icon>
+
+    <!-- Label on top -->
+    <span class="relative w-full text-lg font-semibold"
+    [ngClass]="'text-gray-900'"
+    >
+      {{ dept.label }}
+    </span>
+  </div>
+</div>
+
+<ng-template #departementFormTmpl>
+  <app-form-builder [config]="departmentFormConfig" [values]="departmentFormValues"></app-form-builder>
+</ng-template>

@@ -1,4 +1,5 @@
-/* === Angular Material Custom Theming === */
+/** Angular Material Custom Theming **********************************************************************************************/
+
 @use '@angular/material' as mat;
 
 html {
@@ -7,6 +8,7 @@ html {
       theme-type: light,
       primary: mat.$violet-palette,
       tertiary: mat.$blue-palette,
+      
     ),
     typography: Roboto,
     density: 0,
@@ -23,13 +25,38 @@ html {
 .mat-toolbar .mat-icon {
   color: #fff;
 }
-// @tailwind base;
-// @tailwind components;
-// @tailwind utilities;
+
+
+:root {
+  @include mat.sidenav-overrides((
+    container-background-color: #d5baff,
+    // container-text-color: #fff,
+  ));
+}
+
+.responsive-dialog {
+  width: 100%;
+  max-width: 768px !important;
+  margin: 0 16px; /* some padding from edges on small screens */
+}
+
+/** TAILWIND **********************************************************************************************/
 
 @import "tailwindcss";
 
-/* === Global Styles === */
+/** CALENDAR **********************************************************************************************/
+
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+mwl-calendar-month-cell{
+  background: red;
+}
+mwl-calendar-month-cell.cal-has-events{  
+  background: green !important;
+}
+
+/***  Global Styles *********************************************************************************************/
+
 html, body {
   height: 100%;
 }
@@ -40,14 +67,11 @@ body {
 }
 
 
-
 .active-link {
   background-color: rgba(0, 0, 0, 0.04);
   font-weight: 500;
 }
-mat-sidenav {
-  border-right: 1px solid #eee;
-}
+
 
 /** DND *****************************************/
 
@@ -97,7 +121,6 @@ mat-sidenav {
   min-height: 45px;
   transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
 }
-
 
 
 /*******************************************/

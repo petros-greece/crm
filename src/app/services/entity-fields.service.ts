@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormFieldConfig } from '../form-builder/form-builder.model';
 import { TableColumn } from '../table-builder/table-builder.component';
+import { getDepartmentsWithRoles, roles } from '../pages/departments/departments.vars';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +13,18 @@ export class EntityFieldsService {
 
   defaultEntites = [
     'employee', 
-    'customer', 
+    'customer',
+    'departement',
+    'role', 
+    'task',
     'product', 
     'product category',
     'campaign',
-    'company'
   ];
+
+
+
+  /** PERSON ******************************************************************************** */
 
   personBaseFields:FormFieldConfig[] = [
     { type: 'text', name: 'fullName', label: 'Full Name', required: true, validators: { minLength: 3, maxLength: 40, }, columns: 2, },
@@ -31,18 +39,48 @@ export class EntityFieldsService {
   employeeFields:FormFieldConfig[] = [
     ...this.personBaseFields,
     { type: 'date', name: 'hireDate', label: 'Date of Hire', required: true, columns: 2, },
-    { type: 'select', name: 'role', label: 'Role', required: true, multiple: false, listName: 'Jobs', },
-    { type: 'select', name: 'department', label: 'Department', required: true, multiple: false, listName: 'Job Departement', columns: 2, },
-    { type: 'slide-toggle', name: 'isActive', label: 'Active', required: true, columns: 2, },
-
+    { type: 'select', name: 'department', label: 'Department', required: true, multiple: false, options: getDepartmentsWithRoles(), columns: 2, },
+    { type: 'select', name: 'role', label: 'Role', required: true, multiple: false, 
+      dependsOn: {
+        fieldName: 'department',
+        updateOptions: (department: string) => {
+          console.log('update options', roles[department]);
+          if (roles[department]) {
+            const options = roles[department].map(r => ({ label: r, value: r }));
+            return of(options);
+          }
+          return of([]);
+        } 
+      },
+      columns: 2 
+    },
+    { type: 'slide-toggle', name: 'isActive', label: 'Is Active?', required: true, columns: 1, },
+    // { type: 'multi-row', name: 'tasks', label: 'Tasks', addRow: 'Add Task', fields: [
+    //   {
+    //     type: 'select',
+    //     name: 'type',
+    //     label: 'Task Type',
+    //     listName: 'Jobs', 
+    //   },
+    //   { type: 'date', name: 'startDate', label: 'Start Date', required: true },
+    //   { type: 'date', name: 'endDate', label: 'End Date', required: true },
+    //   ]
+    // }
   ];
 
   customerFields:FormFieldConfig[] = [
     ...this.personBaseFields,
+    { type: 'slide-toggle', name: 'isCompany', label: 'Date of Hire', required: true, columns: 2, },
   ];
 
+
+
+  /** METHODS *************************************************************************************** */
+
   buildEntityTableConfigColumns(): TableColumn[] {
-    const cols: TableColumn[] = this.employeeFields.map(field => {
+    const cols: TableColumn[] = this.employeeFields
+    .filter(field => field.type !== 'multi-row')
+    .map(field => {
       // decide column type
       let colType: TableColumn['type'] = 'text';
       switch (field.type) {
