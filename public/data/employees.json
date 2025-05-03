@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "fullName": "Alice Johnson",
+    "email": "alice.johnson@company.com",
+    "phoneNumber": "+15555550123",
+    "birthDate": "1985-07-20",
+    "address": "123 Elm Street",
+    "city": "Metropolis",
+    "zipCode": "12345",
+    "hireDate": "2010-03-15",
+    "role": "Recruiter",
+    "department": "humanResources",
+    "isActive": true,
+    "tasks": []
+  },
+  {
+    "id": "2",
+    "fullName": "Bob Smith",
+    "email": "bob.smith@company.com",
+    "phoneNumber": "+15555550124",
+    "birthDate": "1992-11-02",
+    "address": "456 Oak Avenue",
+    "city": "Gotham",
+    "zipCode": "54321",
+    "hireDate": "2018-07-01",
+    "role": "Software Engineer",
+    "department": "Engineering",
+    "isActive": true,
+    "tasks": []
+  },
+  {
+    "id": "3",
+    "fullName": "Carol Diaz",
+    "email": "carol.diaz@company.com",
+    "phoneNumber": "+15555550125",
+    "birthDate": "1989-02-28",
+    "address": "789 Pine Road",
+    "city": "Star City",
+    "zipCode": "67890",
+    "hireDate": "2015-09-20",
+    "role": "HR Manager",
+    "department": "Human Resources",
+    "isActive": false,
+    "tasks": []
+  }
+]

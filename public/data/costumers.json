@@ -1,0 +1,77 @@
+[
+  {
+    "id": 1,
+    "title": "To Do",
+    "tasks": [
+      {
+        "data": {
+          "id": 1746114176843,
+          "subject": "mpla",
+          "priority": "Low",
+          "dueDate": null,
+          "notes": "sgfds",
+          "assignee": "2",
+          "renewalDate": "2025-05-25T21:00:00.000Z",
+          "amount": "354"
+        },
+        "type": {
+          "label": "Renewal Reminder",
+          "value": "renewalReminder",
+          "icon": "autorenew"
+        }
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "In Progress",
+    "tasks": []
+  },
+  {
+    "id": 3,
+    "title": "Review",
+    "tasks": [
+      {
+        "type": {
+          "label": "Meeting",
+          "value": "meeting",
+          "icon": "event"
+        },
+        "data": {
+          "id": 1746110067416,
+          "subject": "chicks",
+          "priority": "Very High",
+          "dueDate": "2025-05-27T21:00:00.000Z",
+          "notes": null,
+          "assignee": "1",
+          "location": null,
+          "duration": null,
+          "agenda": null
+        }
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Done",
+    "tasks": [
+      {
+        "type": {
+          "label": "Call",
+          "value": "call",
+          "icon": "phone"
+        },
+        "data": {
+          "id": 1746099529116,
+          "subject": "call",
+          "priority": "High",
+          "dueDate": "2025-05-18T21:00:00.000Z",
+          "notes": "khkjh",
+          "assignee": "1",
+          "phoneNumber": "465465465465",
+          "callOutcome": "Voicemail Left"
+        }
+      }
+    ]
+  }
+]
