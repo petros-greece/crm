@@ -1,6 +1,7 @@
 import { FormFieldConfig } from "../../form-builder/form-builder.model";
 import { TaskTypeT, TaskColumnI } from "./tasks.model";
-import { employees } from "../../services/data.service";
+import { DataService } from "../../services/data.service";
+import { inject } from "@angular/core";
 
 export const Tasks: { label: string, value: TaskTypeT, icon: string }[] = [
   { label: "Call", value: "call", icon: "phone" },
@@ -24,6 +25,8 @@ export const Tasks: { label: string, value: TaskTypeT, icon: string }[] = [
 ];
 
 export class TasksVarsComponent {
+
+  dataService = inject(DataService)
   
   tasks: { label: string, value: TaskTypeT, icon: string }[] = Tasks;
 
@@ -36,10 +39,10 @@ export class TasksVarsComponent {
   
   taskBaseFields: FormFieldConfig[] = [
     { type: 'text', name: 'subject', label: 'Subject', required: true, validators: { minLength: 3, maxLength: 100 }, columns: 1 },
-    { type: 'select', name: 'priority', label: 'Priority', required: false, multiple: false, listName: 'Priority', columns: 2 },
+    { type: 'select', name: 'priority', label: 'Priority', required: true, multiple: false, listName: 'Priority', columns: 2 },
     { type: 'date', name: 'dueDate', label: 'Due Date', required: false, columns: 2 },
     { type: 'textarea', name: 'notes', label: 'Notes', required: false, validators: { minLength: 0, maxLength: 500 }, columns: 1 },
-    { type: 'autocomplete', name: 'assignee', label: 'Assignee', required: true, options: employees.map(e=>{return {label: e.fullName, value: e.id}}), columns: 1 },
+    { type: 'autocomplete', name: 'assignee', label: 'Assignee', required: true, dynamicOptions: this.dataService.getEmployeeOptions(), columns: 1 },
   ];
   
   taskTypeFields: Record<TaskTypeT, FormFieldConfig[]> = {

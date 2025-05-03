@@ -25,7 +25,6 @@ export interface TaskItemI {
 }
 
 export interface TaskI {
-  id: number | string;
   type: TaskItemI;
   data?:any
 }
