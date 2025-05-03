@@ -1,6 +1,6 @@
 <div class="flex flex-row">
   <button mat-raised-button 
-  (click)="openAddOrEditEmployeeDialog(false, {})">
+  (click)="openNewEmployeeDialog()">
     Add
     <mat-icon>manage_accounts</mat-icon>
   </button>
@@ -8,15 +8,42 @@
 
 <app-table-builder [config]="tableConfig">
   <ng-template appColumnTemplate="actions" let-row>
-    <button mat-button (click)="openAddOrEditEmployeeDialog(true, row)">Edit</button>
+    <button mat-icon-button (click)="openEditEmployeeDialog(row)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </ng-template>
 </app-table-builder>
 
-<ng-template #previewEEmployeeTmpl>
+<ng-template #previewEmployeeTmpl>
+  <mat-tab-group>
+    <mat-tab label="Tasks">
+
+      <app-table-builder [config]="tasksTableConfig">
+        <!-- <ng-template appColumnTemplate="actions" let-row>
+          <button mat-icon-button (click)="openEditEmployeeDialog(row)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </ng-template> -->
+      </app-table-builder>
+
+    </mat-tab>
+    <mat-tab label="Info">
+      <app-form-builder 
+      [config]="employeeFormConfig" 
+      [values]="employeeData"
+      (formValuesChange)="checkDepartment($event)"
+      (submitHandler)="updateEmployee($event)"
+      ></app-form-builder>
+    </mat-tab>
+  </mat-tab-group>
+
+</ng-template>
+
+<ng-template #addEmployeeTmpl>
   <app-form-builder 
-    [config]="employeeFormConfig" 
-    [values]="employeeData"
-    (formValuesChange)="checkDepartment($event)"
-    (submitHandler)="addNewEmployee($event)"
-    ></app-form-builder>
+  [config]="employeeFormConfig" 
+  [values]="employeeData"
+  (formValuesChange)="checkDepartment($event)"
+  (submitHandler)="addNewEmployee($event)"
+  ></app-form-builder> 
 </ng-template>
