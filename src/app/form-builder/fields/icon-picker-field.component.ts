@@ -29,7 +29,7 @@ interface IconCategory {
   ],
   template: `
     <div class="flex flex-col items-center justify-center h-full w-full">
-      <button mat-button (click)="openSelectIconDialog()">
+      <button mat-stroked-button (click)="openSelectIconDialog()">
         {{ config.label || 'Select Icon' }}
         <mat-icon *ngIf="control.value">
           {{ control.value }}

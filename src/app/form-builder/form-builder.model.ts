@@ -12,6 +12,7 @@ export type FieldType = 'text' | //
                         'number' | //
                         'email' | //
                         'password' | //
+                        'hidden' | //
                         'select' | //
                         'checkbox' | 
                         'radio' | //
@@ -78,6 +79,7 @@ export interface FormConfig {
   icon?:string;
   resetOnSubmit?:boolean;
   fields: FormFieldConfig[];
+  hideSubmit?:boolean;
 }
 
 export interface FieldComponent<T extends AbstractControl = FormControl> {

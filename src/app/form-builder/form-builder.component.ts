@@ -24,6 +24,7 @@ import { MatIcon } from '@angular/material/icon';
 import { GroupFieldComponent } from './fields/group-field.component';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
+import { InputHiddenFieldComponent } from './fields/input-hidden-field.component';
 @Component({
   selector: 'app-form-builder',
   standalone: true,
@@ -35,7 +36,7 @@ import { ChangeDetectorRef } from '@angular/core';
       <mat-icon *ngIf="config.icon">{{ config.icon }}</mat-icon>   
     </mat-toolbar>  
     <ng-container #gridItem></ng-container>  
-    <div class="flex flex-row justify-center w-full">
+    <div class="flex flex-row justify-center w-full" *ngIf="config.hideSubmit === undefined">
       <button mat-raised-button type="submit">{{ config.submitText || 'Submit' }}</button>
     </div>  
   </form>
@@ -44,7 +45,7 @@ import { ChangeDetectorRef } from '@angular/core';
 export class FormBuilderComponent implements AfterViewInit {
   /** emit form value on submit */
   @Output() submitHandler = new EventEmitter<any>();
-  @Output() formValuesChange = new EventEmitter<Record<string, any>>();
+  @Output() formValuesChange = new EventEmitter<Record<string, any> | null>();
   // inputs as writable signals
   private readonly _config = signal<FormConfig>({ fields: [] });
   @Input() set config(v: FormConfig) { this._config.set(v); }
@@ -72,12 +73,14 @@ export class FormBuilderComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // this.formGroup.valueChanges
-    // .pipe(debounceTime(200), distinctUntilChanged())
-    // .subscribe(vals => {
-    //   console.log('Form changed:', vals);
-    //   this.formValuesChange.emit(vals);
-    // });
+    if(this.formValuesChange){
+      this.formGroup.valueChanges
+      .pipe(debounceTime(200), distinctUntilChanged())
+      .subscribe(vals => {
+        console.log('Form changed:', vals);
+        this.formValuesChange.emit(vals);
+      });
+    }
   }
 
   private applyValuesToFormConfig(
@@ -257,6 +260,7 @@ export class FormBuilderComponent implements AfterViewInit {
       case 'textarea':     return TextareaFieldComponent;
       case 'icon':         return IconPickerFieldComponent;
       case 'group':        return GroupFieldComponent;
+      case 'hidden':       return InputHiddenFieldComponent;
       default:             return InputFieldComponent;
     }
   }
