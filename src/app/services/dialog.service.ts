@@ -14,6 +14,7 @@ export interface DialogOptions {
   showButtons?: boolean;
   confirmText?: string;
   cancelText?: string;
+  icon?:string
 }
 
 @Injectable({ providedIn: 'root' })
