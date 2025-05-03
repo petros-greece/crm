@@ -1,5 +1,5 @@
 <div class="flex mb-4">
-  <button mat-raised-button (click)="openDepartmentDialog(-1)">
+  <button mat-raised-button (click)="openAddDepartmentDialog()">
     Add Department
   </button>
 </div>
@@ -10,7 +10,7 @@
   class="group p-2 relative shadow-sm rounded-lg flex h-32 overflow-hidden 
   bg-violet-500 cursor-pointer transition-transform transform 
   hover:scale-105 hover:shadow-lg hover:bg-violet-600"
-  (click)="openDepartmentDialog(i)">
+  (click)="openPreviewDepartmentDialog(i)">
 
     <!-- Background icon, scaled up -->
     <mat-icon
@@ -28,6 +28,38 @@
   </div>
 </div>
 
-<ng-template #departementFormTmpl>
-  <app-form-builder [config]="departmentFormConfig" [values]="departmentFormValues"></app-form-builder>
+<ng-template #departmentPreviewTmpl>
+  <mat-tab-group>
+    <mat-tab label="Info">
+      <div *ngFor="let departmentRole of departmentRoles">
+        <div class="flex flex-row items-center h-16">
+          <b>{{ departmentRole.role }}</b>
+          <button mat-icon-button (click)="toggleForm(departmentRole.role)">
+            <mat-icon>{{ showForm[departmentRole.role] ? 'remove_circle' : 'add_circle' }}</mat-icon>
+          </button>
+          <div class="pt-4" *ngIf="showForm[departmentRole.role]">
+            <app-form-builder 
+              [config]="selectEmployeeFormConfig" 
+              (formValuesChange)="addEmployeeToRole($event, departmentRole.role)">
+            </app-form-builder>
+          </div>
+        </div>
+        <div *ngFor="let employee of departmentRole.employees">
+          {{ employee.fullName }}
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Edit">
+      <div class="overflow-hidden">
+        <ng-container *ngTemplateOutlet="departmentFormTmpl"></ng-container>
+        <div class="mt-30 text-center">
+          <button mat-button class="!bg-red-500 !text-white" (click)="openConfirmDeleteDepartmentDialog()">Delete</button>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</ng-template>
+
+<ng-template #departmentFormTmpl>
+  <app-form-builder [config]="departmentFormConfig" [values]="departmentFormValues" (submitHandler)="addOrUpdateDepartment($event)"></app-form-builder>
 </ng-template>
