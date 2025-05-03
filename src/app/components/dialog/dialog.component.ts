@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';  
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dialog',
@@ -11,7 +12,8 @@ import { MatDialogModule } from '@angular/material/dialog';
   imports: [
     CommonModule,        
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIcon
   ]
 })
 export class DialogComponent {
@@ -23,7 +25,8 @@ export class DialogComponent {
       content: TemplateRef<any> | string, 
       showButtons?:boolean, 
       confirmText?: string, 
-      cancelText?: string 
+      cancelText?: string,
+      icon?:string 
     }
   ) {}
 

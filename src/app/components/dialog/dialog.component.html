@@ -1,4 +1,12 @@
-<h2 *ngIf="data.header" mat-dialog-title class="{{data.cls}}">{{ data.header }}</h2>
+<div *ngIf="data.header" mat-dialog-title [ngClass]="data.cls" class="relative w-full h-full">
+  <span [innerHTML]="data.header"></span>
+  @if(data.icon){
+   <mat-icon class="relative top-1">{{ data.icon }}</mat-icon>
+  }
+  <button mat-icon-button mat-dialog-close class="!absolute right-1 top-1 !bg-white flex items-center juustify-center">
+    <mat-icon class="!font-extrabold">close</mat-icon>
+  </button>
+</div>
 
 <mat-dialog-content>
   <!-- If content is a TemplateRef -->
