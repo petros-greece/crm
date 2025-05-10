@@ -1,0 +1,30 @@
+{
+  "1001": [
+    {
+      "name": "logo.jpg",
+      "isFile": true
+    },
+    {
+      "name": "photos",
+      "isFile": false,
+      "children": [
+        {
+          "name": "photo-1.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-2.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-3.jpg",
+          "isFile": true
+        }
+      ]
+    },
+    {
+      "name": "deals.json",
+      "isFile": true
+    }
+  ]
+}

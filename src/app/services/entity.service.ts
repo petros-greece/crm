@@ -52,4 +52,220 @@ export class EntityService {
     { label: 'Training',                value: 'training',                icon: 'school'                },
   ];
 
+  dealTypes: { id: string; label: string; value: string; icon: string, relations:string[] }[] = [
+    {
+      id: "1",
+      label: "New Business",
+      value: "newBusiness",
+      icon: "business",
+      relations: ["Lead", "Prospect", "Customer"]
+    },
+    {
+      id: "2",
+      label: "Renewal",
+      value: "renewal",
+      icon: "autorenew",
+      relations: ["Customer", "Reseller", "Distributor"]
+    },
+    {
+      id: "3",
+      label: "Upsell",
+      value: "upsell",
+      icon: "trending_up",
+      relations: ["Customer", "Reseller"]
+    },
+    {
+      id: "4",
+      label: "Cross-sell",
+      value: "crossSell",
+      icon: "swap_horiz",
+      relations: ["Customer", "Reseller"]
+    },
+    {
+      id: "5",
+      label: "Expansion",
+      value: "expansion",
+      icon: "open_in_full",
+      relations: ["Customer", "Franchisee", "Franchisor"]
+    },
+    {
+      id: "6",
+      label: "Pilot / Proof of Concept",
+      value: "pilotProofOfConcept",
+      icon: "rocket_launch",
+      relations: ["Prospect", "Lead"]
+    },
+    {
+      id: "7",
+      label: "Subscription",
+      value: "subscription",
+      icon: "subscriptions",
+      relations: ["Customer", "Nonprofit"]
+    },
+    {
+      id: "8",
+      label: "License",
+      value: "license",
+      icon: "verified_user",
+      relations: ["Customer", "Reseller", "Government", "Franchisee"]
+    },
+    {
+      id: "9",
+      label: "Maintenance / Support",
+      value: "maintenanceSupport",
+      icon: "build_circle",
+      relations: ["Customer", "Vendor", "Franchisee", "Internal"]
+    },
+    {
+      id: "10",
+      label: "Implementation",
+      value: "implementation",
+      icon: "settings",
+      relations: ["Customer", "Integrator", "Government", "Internal"]
+    },
+    {
+      id: "11",
+      label: "Integration",
+      value: "integration",
+      icon: "settings_ethernet",
+      relations: ["Integrator", "Customer", "Partner"]
+    },
+    {
+      id: "12",
+      label: "Consulting Engagement",
+      value: "consultingEngagement",
+      icon: "support_agent",
+      relations: ["Consultant", "Customer", "Agency"]
+    },
+    {
+      id: "13",
+      label: "Retainer",
+      value: "retainer",
+      icon: "attach_money",
+      relations: ["Consultant", "Agency"]
+    },
+    {
+      id: "14",
+      label: "Equipment Purchase",
+      value: "equipmentPurchase",
+      icon: "shopping_cart",
+      relations: ["Supplier", "Vendor"]
+    },
+    {
+      id: "15",
+      label: "Channel Sale",
+      value: "channelSale",
+      icon: "share",
+      relations: ["Distributor", "Reseller"]
+    },
+    {
+      id: "16",
+      label: "Referral",
+      value: "referral",
+      icon: "group",
+      relations: ["Affiliate", "Partner"]
+    },
+    {
+      id: "17",
+      label: "Joint Venture",
+      value: "jointVenture",
+      icon: "handshake",
+      relations: ["Partner", "Franchisor", "Investor"]
+    },
+    {
+      id: "18",
+      label: "Strategic Alliance",
+      value: "strategicAlliance",
+      icon: "groups",
+      relations: ["Partner", "Franchisor"]
+    },
+    {
+      id: "19",
+      label: "Procurement",
+      value: "procurement",
+      icon: "inventory",
+      relations: ["Supplier", "Vendor", "Government"]
+    },
+    {
+      id: "20",
+      label: "Co-Marketing",
+      value: "coMarketing",
+      icon: "campaign",
+      relations: ["Partner", "Affiliate"]
+    },
+    {
+      id: "21",
+      label: "Co-Development",
+      value: "coDevelopment",
+      icon: "science",
+      relations: ["Partner"]
+    },
+    {
+      id: "22",
+      label: "Public Sector Contract",
+      value: "publicSectorContract",
+      icon: "gavel",
+      relations: ["Government"]
+    },
+    {
+      id: "23",
+      label: "Internal Project",
+      value: "internalProject",
+      icon: "account_tree",
+      relations: ["Internal"]
+    },
+    {
+      id: "24",
+      label: "Franchise Agreement",
+      value: "franchiseAgreement",
+      icon: "storefront",
+      relations: ["Franchisee", "Franchisor"]
+    },
+    {
+      id: "25",
+      label: "Affiliate Program",
+      value: "affiliateProgram",
+      icon: "link",
+      relations: ["Affiliate"]
+    },
+    {
+      id: "26",
+      label: "Capital Investment",
+      value: "capitalInvestment",
+      icon: "trending_up",
+      relations: ["Investor"]
+    }
+  ];
+  
+
+  // customerDealTypes: { id: string; label: string; value: string; icon: string }[] = [
+  //   { id: "1",  label: "New Business",          value: "newBusiness",         icon: "business" },
+  //   { id: "2",  label: "Renewal",               value: "renewal",             icon: "autorenew" },
+  //   { id: "3",  label: "Upsell",                value: "upsell",              icon: "trending_up" },
+  //   { id: "4",  label: "Cross-sell",            value: "crossSell",           icon: "swap_horiz" },
+  //   { id: "5",  label: "Expansion",             value: "expansion",           icon: "open_in_full" },
+  //   { id: "6",  label: "Pilot / Proof of Concept", value: "pilotProofOfConcept", icon: "rocket_launch" },
+  //   { id: "8",  label: "License",               value: "license",             icon: "verified_user" },
+  //   { id: "9",  label: "Maintenance / Support", value: "maintenanceSupport",  icon: "build_circle" },
+  //   { id: "10", label: "Implementation",        value: "implementation",      icon: "settings" },
+  //   { id: "11", label: "Integration",           value: "integration",         icon: "settings_ethernet" },
+  //   { id: "12", label: "Consulting Engagement", value: "consultingEngagement",icon: "support_agent" },
+  // ];
+
+  // partnerDealTypes: { id: string; label: string; value: string; icon: string }[] = [
+  //   { id: "15", label: "Channel Sale",      value: "channelSale",       icon: "share" },
+  //   { id: "16", label: "Referral",          value: "referral",          icon: "group" },
+  //   { id: "17", label: "Joint Venture",     value: "jointVenture",      icon: "handshake" },
+  //   { id: "18", label: "Strategic Alliance",value: "strategicAlliance", icon: "groups" },
+  // ];
+
+
+
+getDealFields(dealId:string): any{
+  return this.dealTypes.find(deal => deal.id === dealId);
+}
+
+
+  
+
 }

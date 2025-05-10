@@ -1,1 +1,60 @@
-<p>tree works!</p>
+<div class="tree-actions">
+  <button mat-raised-button color="primary" (click)="addRootNode()">
+    Add Folder<mat-icon>add</mat-icon>
+  </button>
+</div>
+
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+  <mat-nested-tree-node *matTreeNodeDef="let node;">
+    <div matTreeNodePadding class="mat-tree-node hover:bg-gray-200">
+      <button mat-icon-button *ngIf="hasChild(0, node)" (click)="toggleNode(node); $event.stopPropagation()"
+        [attr.aria-label]="'Toggle ' + node.name">
+        <mat-icon>
+          {{ node.isExpanded ? 'expand_more' : 'chevron_right' }}
+        </mat-icon>
+      </button>
+
+      <span (click)="onNodeClick(node)">{{ node.name }}</span>
+      <span class="flex flex-grow"></span>
+      
+      <button mat-icon-button [hidden]="node.isFile" color="accent" (click)="openAddFiledDialog(node); $event.stopPropagation()">
+        <mat-icon>upload</mat-icon>
+      </button>     
+      
+      <button mat-icon-button [hidden]="node.isFile" color="accent" (click)="addChildNode(node); $event.stopPropagation()">
+        <mat-icon>add</mat-icon>
+      </button>
+
+      <button mat-icon-button color="warn" (click)="removeNode(node); $event.stopPropagation()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+    <div *ngIf="node.isExpanded">
+      <ng-container matTreeNodeOutlet></ng-container>
+    </div>
+  </mat-nested-tree-node>
+</mat-tree>
+
+
+<ng-template #newFolderTmpl>
+  <mat-form-field appearance="fill" class="p-4">
+    <mat-label>Folder Name</mat-label>
+    <input matInput [(ngModel)]="newFolderName">
+  </mat-form-field>
+</ng-template>
+
+<ng-template #uploadFileTmpl>
+  <div class="flex flex-col gap-2 items-center py-2">
+
+    <app-upload-file-field 
+      [isMultiple]="true"
+      acceptedTypes=".jpg, .png, .doc, .docx, .xls, .xlsx, .pdf, .csv, .txt, .zip"
+      (filesUploaded)="onAddFilesToList($event)"
+    ></app-upload-file-field>
+    <button mat-raised-button [disabled]="files.length===0" (click)="onAddFilesToTree()">Add Files</button>
+  </div>
+</ng-template>
+
+<!-- (filesUploaded)="handleFiles($event)"
+(uploadError)="handleError($event)" -->

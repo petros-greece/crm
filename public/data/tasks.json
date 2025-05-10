@@ -1,1 +1,257 @@
-[]
+[
+  {
+    "id": 1,
+    "title": "To Do",
+    "tasks": [
+      {
+        "type": { "label": "Product Demo", "value": "productDemo", "icon": "computer" },
+        "data": {
+          "id": 1746900001000,
+          "subject": "Demo to new leads",
+          "priority": "High",
+          "dueDate": "2025-06-01T00:00:00Z",
+          "notes": "Present latest irrigation features.",
+          "assignee": "1"
+        }
+      },
+      {
+        "type": { "label": "Proposal/Quote", "value": "proposal", "icon": "description" },
+        "data": {
+          "id": 1746900001001,
+          "subject": "Send pricing quote",
+          "priority": "Medium",
+          "dueDate": "2025-06-03T00:00:00Z",
+          "notes": "Proposal for Canadian Prairie Seeds.",
+          "assignee": "2"
+        }
+      },
+      {
+        "type": { "label": "Follow-up", "value": "followUp", "icon": "repeat" },
+        "data": {
+          "id": 1746900001002,
+          "subject": "Follow up with Outback Livestock",
+          "priority": "Low",
+          "dueDate": "2025-06-05T00:00:00Z",
+          "notes": "Check on delivery status.",
+          "assignee": "3"
+        }
+      },
+      {
+        "type": { "label": "Email", "value": "email", "icon": "email" },
+        "data": {
+          "id": 1746900001003,
+          "subject": "Send case study",
+          "priority": "High",
+          "dueDate": "2025-06-02T00:00:00Z",
+          "notes": "Attach recent results from Nile Valley Irrigation.",
+          "assignee": "1"
+        }
+      },
+      {
+        "type": { "label": "Marketing Task", "value": "marketingTask", "icon": "campaign" },
+        "data": {
+          "id": 1746900001004,
+          "subject": "Plan June campaign",
+          "priority": "Medium",
+          "dueDate": "2025-06-10T00:00:00Z",
+          "notes": "Focus on new orange tree variety.",
+          "assignee": "2"
+        }
+      },
+      {
+        "type": { "label": "Support Request", "value": "supportRequest", "icon": "build" },
+        "data": {
+          "id": 1746900001005,
+          "subject": "System setup issue",
+          "priority": "High",
+          "dueDate": "2025-06-04T00:00:00Z",
+          "notes": "Resolve install problem in Sao Paulo.",
+          "assignee": "1"
+        }
+      },
+      {
+        "type": { "label": "Training Session", "value": "trainingSession", "icon": "school" },
+        "data": {
+          "id": 1746900001006,
+          "subject": "Train agents",
+          "priority": "Medium",
+          "dueDate": "2025-06-06T00:00:00Z",
+          "notes": "Training for affiliate partners.",
+          "assignee": "3"
+        }
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "In Progress",
+    "tasks": [
+      {
+        "type": { "label": "Call", "value": "call", "icon": "phone" },
+        "data": {
+          "id": 1746900002000,
+          "subject": "Check availability",
+          "priority": "Low",
+          "dueDate": "2025-06-02T00:00:00Z",
+          "notes": "Confirm inventory with distributor.",
+          "assignee": "2"
+        }
+      },
+      {
+        "type": { "label": "Lead Qualification", "value": "leadQualification", "icon": "track_changes" },
+        "data": {
+          "id": 1746900002001,
+          "subject": "Qualify Ukraine lead",
+          "priority": "High",
+          "dueDate": "2025-06-01T00:00:00Z",
+          "notes": "Determine budget and timeline.",
+          "assignee": "1"
+        }
+      },
+      {
+        "type": { "label": "Onboarding", "value": "onboarding", "icon": "rocket_launch" },
+        "data": {
+          "id": 1746900002002,
+          "subject": "Start onboarding Bayer Farm",
+          "priority": "Medium",
+          "dueDate": "2025-06-03T00:00:00Z",
+          "notes": "Walkthrough platform and support.",
+          "assignee": "3"
+        }
+      },
+      {
+        "type": { "label": "Contract Signing", "value": "contractSigning", "icon": "edit_document" },
+        "data": {
+          "id": 1746900002003,
+          "subject": "Sign with Yangtze Equipment",
+          "priority": "High",
+          "dueDate": "2025-06-05T00:00:00Z",
+          "notes": "Finalize and collect signatures.",
+          "assignee": "1"
+        }
+      },
+      {
+        "type": { "label": "Birthday/Anniversary Reminder", "value": "birthdayReminder", "icon": "cake" },
+        "data": {
+          "id": 1746900002004,
+          "subject": "Anniversary gift for long-term client",
+          "priority": "Low",
+          "dueDate": "2025-06-09T00:00:00Z",
+          "notes": "Send thank-you basket.",
+          "assignee": "2"
+        }
+      },
+      {
+        "type": { "label": "Account Review", "value": "accountReview", "icon": "insights" },
+        "data": {
+          "id": 1746900002005,
+          "subject": "Quarterly review - Nile",
+          "priority": "High",
+          "dueDate": "2025-06-11T00:00:00Z",
+          "notes": "Assess past quarter's performance.",
+          "assignee": "3"
+        }
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Review",
+    "tasks": [
+      {
+        "type": { "label": "Meeting", "value": "meeting", "icon": "event" },
+        "data": {
+          "id": 1746900003000,
+          "subject": "Review partner leads",
+          "priority": "Medium",
+          "dueDate": "2025-06-02T00:00:00Z",
+          "notes": "Evaluate leads from recent expo.",
+          "assignee": "2"
+        }
+      },
+      {
+        "type": { "label": "Survey Request", "value": "surveyRequest", "icon": "poll" },
+        "data": {
+          "id": 1746900003001,
+          "subject": "Post-training feedback",
+          "priority": "Low",
+          "dueDate": "2025-06-03T00:00:00Z",
+          "notes": "Send survey to trainees.",
+          "assignee": "3"
+        }
+      },
+      {
+        "type": { "label": "Payment Follow-up", "value": "paymentFollowUp", "icon": "payment" },
+        "data": {
+          "id": 1746900003002,
+          "subject": "Outstanding invoice",
+          "priority": "High",
+          "dueDate": "2025-06-04T00:00:00Z",
+          "notes": "Reminder for overdue payment.",
+          "assignee": "1"
+        }
+      },
+      {
+        "type": { "label": "Internal Note", "value": "internalNote", "icon": "note" },
+        "data": {
+          "id": 1746900003003,
+          "subject": "Summarize crop yield report",
+          "priority": "Medium",
+          "dueDate": "2025-06-06T00:00:00Z",
+          "notes": "For internal planning.",
+          "assignee": "2"
+        }
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Done",
+    "tasks": [
+      {
+        "type": { "label": "Email", "value": "email", "icon": "email" },
+        "data": {
+          "id": 1746900004000,
+          "subject": "Intro mail to partner",
+          "priority": "Low",
+          "dueDate": "2025-05-25T00:00:00Z",
+          "notes": "Initial email to Punjab Agri Supply.",
+          "assignee": "1"
+        }
+      },
+      {
+        "type": { "label": "Call", "value": "call", "icon": "phone" },
+        "data": {
+          "id": 1746900004001,
+          "subject": "Follow-up call completed",
+          "priority": "Medium",
+          "dueDate": "2025-05-28T00:00:00Z",
+          "notes": "Call completed with distributor.",
+          "assignee": "3"
+        }
+      },
+      {
+        "type": { "label": "Support Request", "value": "supportRequest", "icon": "build" },
+        "data": {
+          "id": 1746900004002,
+          "subject": "Resolved access issue",
+          "priority": "High",
+          "dueDate": "2025-05-29T00:00:00Z",
+          "notes": "Login issue fixed.",
+          "assignee": "2"
+        }
+      },
+      {
+        "type": { "label": "Training Session", "value": "trainingSession", "icon": "school" },
+        "data": {
+          "id": 1746900004003,
+          "subject": "Completed training for agents",
+          "priority": "High",
+          "dueDate": "2025-05-30T00:00:00Z",
+          "notes": "Successful session completed.",
+          "assignee": "1"
+        }
+      }
+    ]
+  }
+]

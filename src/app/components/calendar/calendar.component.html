@@ -17,6 +17,8 @@
     [viewDate]="viewDate"
     [events]="events"
     (dayClicked)="handleDayClick($event)"
+    (eventClicked)="eventClicked($event)"
+    (eventTimesChanged)="eventTimesChanged($event)"
     >
   </mwl-calendar-month-view>
 

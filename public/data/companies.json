@@ -1,0 +1,259 @@
+[
+  {
+    "id": "1001",
+    "companyName": "Kenya Agro Producers",
+    "relations": ["Customer", "Partner"],
+    "email": "sales@kenyaagro.co.ke",
+    "phoneNumber": "+254720123456",
+    "website": "www.kenyaagro.co.ke",
+    "industry": "Agriculture",
+    "employeeCount": "201-500",
+    "address": "Mombasa Road, Industrial Area",
+    "city": "Nairobi",
+    "zipCode": "00515",
+    "country": "Kenya",
+    "customerType": "client",
+    "isActive": true,
+    "contacts": [
+      {
+        "name": "John Mwangi",
+        "communication-type": "email",
+        "email": "j.mwangi@kenyaagro.co.ke",
+        "phone": "+254701234567",
+        "socialLink": "linkedin.com/in/john-mwangi-agro"
+      }
+    ]
+  },
+  {
+    "id": "1002",
+    "companyName": "Midwest Grain Co-op",
+    "relations": ["Supplier", "Distributor"],
+    "email": "procurement@midwestgrain.com",
+    "phoneNumber": "+16175551234",
+    "website": "www.midwestgrain.com",
+    "industry": "Agriculture",
+    "employeeCount": "1,001-5,000",
+    "address": "1500 Agricultural Drive",
+    "city": "Des Moines",
+    "zipCode": "50317",
+    "country": "United States",
+    "customerType": "client",
+    "isActive": true,
+    "contacts": [
+      {
+        "name": "Emily Johnson",
+        "communication-type": "phone",
+        "email": "e.johnson@midwestgrain.com",
+        "phone": "+16175559876",
+        "socialLink": "linkedin.com/in/emily-johnson-ag"
+      },
+      {
+        "name": "Michael Brown",
+        "communication-type": "email",
+        "email": "m.brown@midwestgrain.com",
+        "phone": "+16175554321",
+        "socialLink": "linkedin.com/in/michaelbrown-agprocurement"
+      }
+    ]
+  },
+  {
+    "id": "1003",
+    "companyName": "Bayer Farm Solutions",
+    "relations": ["Partner", "Vendor"],
+    "email": "support@bayerfarms.de",
+    "phoneNumber": "+4989123456789",
+    "website": "www.bayerfarms.de",
+    "industry": "Manufacturing",
+    "employeeCount": "5,001-10,000",
+    "address": "Agricolastrasse 24",
+    "city": "Frankfurt",
+    "zipCode": "60325",
+    "country": "Germany",
+    "customerType": "client",
+    "isActive": true,
+    "contacts": [
+      {
+        "name": "Hans Müller",
+        "communication-type": "email",
+        "email": "h.mueller@bayerfarms.de",
+        "phone": "+4989123456700",
+        "socialLink": "linkedin.com/in/hans-mueller-agtech"
+      }
+    ]
+  },
+  {
+    "id": "1004",
+    "companyName": "Outback Livestock",
+    "relations": ["Distributor"],
+    "email": "orders@outbacklivestock.au",
+    "phoneNumber": "+61298765432",
+    "website": "www.outbacklivestock.com.au",
+    "industry": "Agriculture",
+    "employeeCount": "51-200",
+    "address": "12 Station Street",
+    "city": "Brisbane",
+    "zipCode": "4000",
+    "country": "Australia",
+    "customerType": "client",
+    "isActive": true,
+    "contacts": [
+      {
+        "name": "Sarah Thompson",
+        "communication-type": "phone",
+        "email": "s.thompson@outbacklivestock.au",
+        "phone": "+61400123456",
+        "socialLink": "linkedin.com/in/sarah-thompson-livestock"
+      }
+    ]
+  },
+  {
+    "id": "1005",
+    "companyName": "Sao Paulo Fertilizers",
+    "relations": ["Vendor", "Supplier"],
+    "email": "contato@spfertilizers.com.br",
+    "phoneNumber": "+551130401234",
+    "website": "www.spfertilizers.com.br",
+    "industry": "Manufacturing",
+    "employeeCount": "501-1,000",
+    "address": "Av. das Nações Unidas 12555",
+    "city": "São Paulo",
+    "zipCode": "04578-000",
+    "country": "Brazil",
+    "customerType": "client",
+    "isActive": true,
+    "contacts": [
+      {
+        "name": "Carlos Silva",
+        "communication-type": "email",
+        "email": "c.silva@spfertilizers.com.br",
+        "phone": "+5511998765432",
+        "socialLink": "linkedin.com/in/carlos-silva-fertilizers"
+      }
+    ]
+  },
+  {
+    "id": "1006",
+    "companyName": "Punjab Agri Supply",
+    "relations": ["Reseller", "Customer"],
+    "email": "info@punjagrisupply.in",
+    "phoneNumber": "+919876543210",
+    "website": "www.punjagrisupply.in",
+    "industry": "Retail",
+    "employeeCount": "11-50",
+    "address": "G.T. Road, Khanna",
+    "city": "Ludhiana",
+    "zipCode": "141401",
+    "country": "India",
+    "customerType": "client",
+    "isActive": true,
+    "contacts": [
+      {
+        "name": "Rajesh Patel",
+        "communication-type": "phone",
+        "email": "r.patel@punjagrisupply.in",
+        "phone": "+919712345678",
+        "socialLink": "linkedin.com/in/rajesh-patel-agrisupply"
+      }
+    ]
+  },
+  {
+    "id": "1007",
+    "companyName": "Yangtze Farm Equipment",
+    "relations": ["Integrator", "Partner"],
+    "email": "export@yangtzeag.cn",
+    "phoneNumber": "+862189654321",
+    "website": "www.yangtzeag.cn",
+    "industry": "Manufacturing",
+    "employeeCount": "1,001-5,000",
+    "address": "18 Dongfang Road",
+    "city": "Shanghai",
+    "zipCode": "200120",
+    "country": "China",
+    "customerType": "client",
+    "isActive": true,
+    "contacts": [
+      {
+        "name": "Wei Li",
+        "communication-type": "email",
+        "email": "w.li@yangtzeag.cn",
+        "phone": "+8613912345678",
+        "socialLink": "linkedin.com/in/wei-li-agmachinery"
+      }
+    ]
+  },
+  {
+    "id": "1008",
+    "companyName": "Ukraine Grain Collective",
+    "relations": ["Lead"],
+    "email": "trade@ugc.ua",
+    "phoneNumber": "+380442345678",
+    "website": "www.ugc.ua",
+    "industry": "Agriculture",
+    "employeeCount": "5,001-10,000",
+    "address": "Velyka Vasylkivska 15",
+    "city": "Kyiv",
+    "zipCode": "01004",
+    "country": "Ukraine",
+    "customerType": "client",
+    "isActive": true,
+    "contacts": [
+      {
+        "name": "Oleksiy Ivanenko",
+        "communication-type": "phone",
+        "email": "o.ivanenko@ugc.ua",
+        "phone": "+380671234567",
+        "socialLink": "linkedin.com/in/oleksiy-ivanenko-grain"
+      }
+    ]
+  },
+  {
+    "id": "1009",
+    "companyName": "Canadian Prairie Seeds",
+    "relations": ["Affiliate", "Supplier"],
+    "email": "contact@prairieseeds.ca",
+    "phoneNumber": "+13065551234",
+    "website": "www.prairieseeds.ca",
+    "industry": "Agriculture",
+    "employeeCount": "201-500",
+    "address": "201 Portage Avenue",
+    "city": "Winnipeg",
+    "zipCode": "R3B 3L3",
+    "country": "Canada",
+    "customerType": "client",
+    "isActive": true,
+    "contacts": [
+      {
+        "name": "Marie Dubois",
+        "communication-type": "email",
+        "email": "m.dubois@prairieseeds.ca",
+        "phone": "+13065559876",
+        "socialLink": "linkedin.com/in/marie-dubois-seeds"
+      }
+    ]
+  },
+  {
+    "id": "1010",
+    "companyName": "Nile Valley Irrigation",
+    "relations": ["Prospect"],
+    "email": "info@nilevalleyirrigation.eg",
+    "phoneNumber": "+20224567890",
+    "website": "www.nilevalleyirrigation.com.eg",
+    "industry": "Technology",
+    "employeeCount": "51-200",
+    "address": "Corniche El Nil Street",
+    "city": "Cairo",
+    "zipCode": "11511",
+    "country": "Egypt",
+    "customerType": "client",
+    "isActive": true,
+    "contacts": [
+      {
+        "name": "Ahmed Hassan",
+        "communication-type": "email",
+        "email": "a.hassan@nilevalleyirrigation.eg",
+        "phone": "+201002345678",
+        "socialLink": "linkedin.com/in/ahmed-hassan-irrigation"
+      }
+    ]
+  }
+]

@@ -34,10 +34,27 @@ html {
   ));
 }
 
+/** DIALOG **********************************************************************************************/
+
+
+.close-dialog-btn {
+  width: 48px;
+  height: 48px;
+}
+.close-dialog-btn .mat-icon {
+  font-size: 30px;
+  width: 30px;
+  height: 30px;  
+}
 .responsive-dialog {
   width: 100%;
   max-width: 768px !important;
-  margin: 0 16px; /* some padding from edges on small screens */
+  margin: 0 16px;
+}
+.big-dialog {
+  width: 100%;
+  max-width: 1024px !important;
+  margin: 0 16px;
 }
 
 /** TAILWIND **********************************************************************************************/
@@ -124,3 +141,4 @@ body {
 
 
 /*******************************************/
+

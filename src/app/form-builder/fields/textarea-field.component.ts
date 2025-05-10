@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-input-field',
+  selector: 'app-textarea-field',
   standalone: true,
   imports: [
     CommonModule,

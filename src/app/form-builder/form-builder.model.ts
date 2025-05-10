@@ -37,6 +37,7 @@ export interface FormFieldConfig{
   type: FieldType;
   name: string;
   label: string;
+  defaultValue?: any;
   value?: any;
   required?: boolean;
   disabled?: boolean;
@@ -69,6 +70,7 @@ export interface FormFieldConfig{
   listName?: string; // For dynamic options
   acceptedTypes?: string,
   dependsOn?: {fieldName:string, updateOptions: (parentValue: any) =>  Observable<Option[]>;}
+  helperText?:string;
 }
 
 export interface FormConfig {

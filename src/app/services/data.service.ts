@@ -17,7 +17,7 @@ export class DataService {
   getEmployees(): Observable<any[]> {
     // Try to get from localStorage first
     const storedEmployees = localStorage.getItem(this.employeesStorageKey);
-    
+
     if (storedEmployees) {
       // Parse and return as observable
       try {
@@ -54,7 +54,7 @@ export class DataService {
   // New method to get employee options
   getEmployeeOptions(): Observable<Option[]> {
     return this.getEmployees().pipe(
-      map(employees => 
+      map(employees =>
         employees.map(employee => ({
           label: employee.fullName,
           value: employee.id
@@ -82,7 +82,7 @@ export class DataService {
     );
   }
 
-  updateEmployeeRole(id: string, departmentId:string, role:string): Observable<any> {
+  updateEmployeeRole(id: string, departmentId: string, role: string): Observable<any> {
     return this.getEmployees().pipe(
       switchMap(employees => {
         const employeeIndex = employees.findIndex(emp => emp.id === id);
@@ -154,10 +154,10 @@ export class DataService {
   }
 
 
-  /************************************************************************************************ */
+  /** TASKS ********************************************************************************************** */
 
   private readonly tasksStorageKey = 'crm-tasks';
-  private readonly tasksJsonFile = 'assets/data/tasks.json'; 
+  private readonly tasksJsonFile = 'assets/data/tasks.json';
 
   getTasks(): Observable<any[]> {
     // Try to get from localStorage first
@@ -196,7 +196,7 @@ export class DataService {
     );
   }
 
-  updateTaskColumns(columnData:any):Observable<any> {
+  updateTaskColumns(columnData: any): Observable<any> {
     return this.getTasks().pipe(
       switchMap(tasks => {
         localStorage.setItem(this.tasksStorageKey, JSON.stringify(columnData));
@@ -223,12 +223,12 @@ export class DataService {
       })
     );
   }
-  
 
-  /************************************************************************************8***** */
+
+  /** DEPARTMENT**********************************************************************************8***** */
 
   private readonly departmentsStorageKey = 'crm-departments';
-  private readonly departmentsJsonFile = 'assets/data/departments.json'; 
+  private readonly departmentsJsonFile = 'assets/data/departments.json';
 
   getEmployeesForDepartment(departmentId: string): Observable<any[]> {
     return this.getEmployees().pipe(
@@ -243,7 +243,7 @@ export class DataService {
   getDepartments(): Observable<any[]> {
     // Try to get from localStorage first
     const storedEmployees = localStorage.getItem(this.departmentsStorageKey);
-    
+
     if (storedEmployees) {
       // Parse and return as observable
       try {
@@ -262,7 +262,7 @@ export class DataService {
 
   getDepartmentOptions(): Observable<any[]> {
     const storedEmployees = localStorage.getItem(this.departmentsStorageKey);
-  
+
     if (storedEmployees) {
       try {
         const departments = JSON.parse(storedEmployees);
@@ -321,7 +321,7 @@ export class DataService {
       })
     );
   }
-  
+
   updateDepartment(updatedDepartment: any): Observable<any[]> {
     return this.getDepartments().pipe(
       take(1),
@@ -342,7 +342,7 @@ export class DataService {
       })
     );
   }
-  
+
   deleteDepartment(departmentId: string): Observable<any[]> {
     return this.getDepartments().pipe(
       take(1),
@@ -358,6 +358,264 @@ export class DataService {
     );
   }
 
+  /** COMPANY ******************************************************************************** */
+
+  private readonly companiesStorageKey = 'crm-companies';
+  private readonly companiesJsonFile = 'assets/data/companies.json';
+
+
+  getCompanies(): Observable<any[]> {
+    // Try to get from localStorage first
+    const storedCompanies = localStorage.getItem(this.companiesStorageKey);
+
+    if (storedCompanies) {
+      // Parse and return as observable
+      try {
+        const companies = JSON.parse(storedCompanies);
+        return of(companies);
+      } catch (error) {
+        console.error('Error parsing stored companies', error);
+        // If parsing fails, proceed to get from file
+        return this.getCompaniesFromFile();
+      }
+    } else {
+      // Not found in localStorage, get from file
+      return this.getCompaniesFromFile();
+    }
+  }
+
+  private getCompaniesFromFile(): Observable<any[]> {
+    return this.http.get<any[]>(this.companiesJsonFile).pipe(
+      catchError(error => {
+        console.error('Error loading companies file', error);
+        // Return empty array if file not found or other error
+        return of([]);
+      }),
+      switchMap(companies => {
+        console.log('companies', companies)
+        // Save to localStorage for next time
+        if (companies && companies.length > 0) {
+          localStorage.setItem(this.companiesStorageKey, JSON.stringify(companies));
+        }
+        return of(companies);
+      })
+    );
+  }
+
+  addCompany(newCompany: any): Observable<any[]> {
+    return this.getCompanies().pipe(
+      map((companies: any[]) => {
+        // Generate a unique ID if not provided
+        if (!newCompany.id) {
+          newCompany.id = Date.now().toString();
+        }
+
+        const updatedCompanies = [...companies, newCompany];
+        localStorage.setItem(this.companiesStorageKey, JSON.stringify(updatedCompanies));
+        return updatedCompanies;
+      })
+    );
+  }
+
+  updateCompany(updatedCompany: any): Observable<any[]> {
+    return this.getCompanies().pipe(
+      map((companies: any[]) => {
+        const updatedCompanies = companies.map(company =>
+          company.id === updatedCompany.id ? { ...company, ...updatedCompany } : company
+        );
+
+        localStorage.setItem(this.companiesStorageKey, JSON.stringify(updatedCompanies));
+        return updatedCompanies;
+      })
+    );
+  }
+
+  updateCompanyContacts(companyId: string | number, newContacts: any[]): Observable<any[]> {
+    return this.getCompanies().pipe(
+      map((companies: any[]) => {
+        const updatedCompanies = companies.map(company => {
+          if (company.id === companyId) {
+            return { ...company, contacts: newContacts };
+          }
+          return company;
+        });
+
+        localStorage.setItem(this.companiesStorageKey, JSON.stringify(updatedCompanies));
+        return updatedCompanies;
+      })
+    );
+  }
+
+  deleteCompany(companyId: string | number): Observable<any[]> {
+    return this.getCompanies().pipe(
+      map((companies: any[]) => {
+        const updatedCompanies = companies.filter(company => company.id !== companyId);
+        localStorage.setItem(this.companiesStorageKey, JSON.stringify(updatedCompanies));
+        return updatedCompanies;
+      })
+    );
+  }
+
+  /** DEAL ******************************************************************************** */
+
+  private readonly dealsStorageKey = 'crm-deals';
+  private readonly dealsJsonFile = 'assets/data/deals.json';
+
+  getDeals() {
+    // Try to get from localStorage first
+    const storedDeals = localStorage.getItem(this.dealsStorageKey);
+
+    if (storedDeals) {
+      try {
+        const deals = JSON.parse(storedDeals);
+        return of(deals);
+      } catch (error) {
+        console.error('Error parsing stored deals', error);
+        return this.getDealsFromFile();
+      }
+    } else {
+      return this.getDealsFromFile();
+    }
+  }
+
+  private getDealsFromFile(): Observable<any[]> {
+    return this.http.get<any[]>(this.dealsJsonFile).pipe(
+      catchError(error => {
+        console.error('Error loading companys file', error);
+        return of([]);
+      }),
+      switchMap(deals => {
+        if (deals && deals.length > 0) {
+          localStorage.setItem(this.dealsStorageKey, JSON.stringify(deals));
+        }
+        return of(deals);
+      })
+    );
+  }
+
+  getDealsForCompany(companyId: string): Observable<any[]> {
+    return this.getDeals().pipe(
+      map((dealsMap: { [key: string]: any[] }) => {
+        return dealsMap[companyId] || [];
+      })
+    );
+  }
+
+  addDeal(companyId: string, newDeal: any): Observable<any> {
+    return this.getDeals().pipe(
+      map((dealsMap: { [key: string]: any[] }) => {
+        const companyDeals = dealsMap[companyId] || [];
+
+        // Optionally generate a unique ID if not provided
+        if (!newDeal.id) {
+          newDeal.id = Date.now().toString(); // or use UUID if preferred
+        }
+
+        companyDeals.push(newDeal);
+        dealsMap[companyId] = companyDeals;
+
+        localStorage.setItem(this.dealsStorageKey, JSON.stringify(dealsMap));
+        return companyDeals;
+      })
+    );
+  }
+
+  updateDeal(companyId: string, updatedDeal: any): Observable<any> {
+    return this.getDeals().pipe(
+      map((dealsMap: { [key: string]: any[] }) => {
+        const companyDeals = dealsMap[companyId] || [];
+
+        const index = companyDeals.findIndex((d: any) => d.id === updatedDeal.id);
+
+        if (index !== -1) {
+          companyDeals[index] = updatedDeal;
+        } else {
+          companyDeals.push(updatedDeal); // If it doesn't exist, add it
+        }
+
+        dealsMap[companyId] = companyDeals;
+        localStorage.setItem(this.dealsStorageKey, JSON.stringify(dealsMap));
+        return companyDeals;
+      })
+    );
+  }
+
+  deleteDeal(companyId: string, dealId: string | number): Observable<any> {
+    return this.getDeals().pipe(
+      map((dealsMap: { [key: string]: any[] }) => {
+        const companyDeals = dealsMap[companyId] || [];
+        console.log('companyDeals', companyDeals);
+        dealsMap[companyId] = companyDeals.filter(deal => deal.id !== dealId);
+        localStorage.setItem(this.dealsStorageKey, JSON.stringify(dealsMap));
+        return dealsMap[companyId];
+      })
+    );
+  }
+
+  /** COMPANY ASSETS ******************************************************************************** */
+
+  private readonly companyAssetsStorageKey = 'crm-company-assets';
+  private readonly companyAssetsJsonFile = 'assets/data/company-assets.json';
+
+  getCompanyAssets() {
+    // Try to get from localStorage first
+    const storedCompanyAssets = localStorage.getItem(this.companyAssetsStorageKey);
+
+    if (storedCompanyAssets) {
+      try {
+        const companyAssets = JSON.parse(storedCompanyAssets);
+        return of(companyAssets);
+      } catch (error) {
+        console.error('Error parsing stored company assets', error);
+        return this.getCompanyAssetsFromFile();
+      }
+    } else {
+      return this.getCompanyAssetsFromFile();
+    }
+  }
+
+  private getCompanyAssetsFromFile(): Observable<any[]> {
+    return this.http.get<any[]>(this.companyAssetsJsonFile).pipe(
+      catchError(error => {
+        console.error('Error loading company assets file', error);
+        return of([]);
+      }),
+      switchMap(companyAssets => {
+        if (companyAssets && companyAssets.length > 0) {
+          localStorage.setItem(this.companyAssetsStorageKey, JSON.stringify(companyAssets));
+        }
+        return of(companyAssets);
+      })
+    );
+  }
+
+  getAssetsForCompany(companyId: string): Observable<any[]> {
+    return this.getCompanyAssets().pipe(
+      map((companyAssetsMap: { [key: string]: any[] }) => {
+        return companyAssetsMap[companyId] || [];
+      })
+    );
+  }
+
+  updateCompanyAsset(companyId: string, updatedCompanyAsset: any): Observable<any> {
+    return this.getCompanyAssets().pipe(
+      map((companyAssetsMap: { [key: string]: any[] }) => {
+        const companyAssets = companyAssetsMap[companyId] || [];
+
+        const index = companyAssets.findIndex((a: any) => a.id === updatedCompanyAsset.id);
+
+        if (index !== -1) {
+          companyAssets[index] = updatedCompanyAsset; // Update existing
+        } else {
+          companyAssets.push(updatedCompanyAsset); // If it doesn't exist, add it
+        }
+
+        companyAssetsMap[companyId] = companyAssets;
+        localStorage.setItem(this.companyAssetsStorageKey, JSON.stringify(companyAssetsMap));
+        return companyAssets;
+      })
+    );
+  }
 
 
 }

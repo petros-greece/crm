@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { 
   CalendarModule, 
@@ -8,17 +8,19 @@ import {
   DateAdapter, 
   CalendarA11y, 
   CalendarEventTitleFormatter, 
-  CalendarMonthViewDay
+  CalendarMonthViewDay,
+  CalendarEventTimesChangedEvent
 } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarDateFormatter, CalendarNativeDateFormatter } from 'angular-calendar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, CalendarModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, CalendarModule, MatButtonModule, MatIconModule, DragDropModule],
   providers: [
     CalendarUtils,
     { provide: DateAdapter, useFactory: adapterFactory }, 
@@ -30,10 +32,8 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent {
-  
-  view: CalendarView = CalendarView.Month;
-  viewDate: Date = new Date();
-  events: CalendarEvent[] = [
+
+  @Input() events: CalendarEvent[] = [
     {
       start: new Date(),
       end: new Date(new Date().getTime()+10*99),
@@ -47,6 +47,11 @@ export class CalendarComponent {
       color: { primary: '#ff4081', secondary: '#F8BBD0' }
     }
   ];
+  
+  view: CalendarView = CalendarView.Month;
+  viewDate: Date = new Date();
+  CalendarView = CalendarView;
+
 
   handleDayClick(event: { day: CalendarMonthViewDay<any>; sourceEvent: MouseEvent | KeyboardEvent }) {
     console.log(event)
@@ -54,6 +59,31 @@ export class CalendarComponent {
     // handle the day click event with date and events
   }
 
-  CalendarView = CalendarView;
+  eventClicked({ event }: { event: CalendarEvent }): void {
+    console.log('Event clicked:', event);
+  }
+
+  eventTimesChanged({
+    event,
+    newStart,
+    newEnd,
+  }: CalendarEventTimesChangedEvent): void {
+    console.log('Event dragged', event, newStart, newEnd);
+    
+    this.events = this.events.map((iEvent) => {
+      if (iEvent.id === event.id) {
+        return {
+          ...event,
+          start: newStart,
+          end: newEnd,
+        };
+      }
+      return iEvent;
+    });
+    
+    // Here you would typically update your backend
+    // this.saveEventsToBackend();
+  }
+
 
 }

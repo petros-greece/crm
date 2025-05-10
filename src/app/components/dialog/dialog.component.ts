@@ -26,7 +26,8 @@ export class DialogComponent {
       showButtons?:boolean, 
       confirmText?: string, 
       cancelText?: string,
-      icon?:string 
+      icon?:string,
+      id?:string 
     }
   ) {}
 

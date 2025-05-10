@@ -1,0 +1,154 @@
+
+<div class="flex flex-row items-center gap-2">
+  <h2>
+    Companies
+  </h2>
+  <mat-icon>business</mat-icon>
+  <button mat-raised-button class="ml-4" (click)="openNewCompanyTmpl()">
+    Add Company
+  </button>
+</div>
+
+
+<app-table-builder [config]="companiesTableConfig" *ngIf="companiesTableConfig">
+  <ng-template appColumnTemplate="actions" let-row>
+    <button mat-icon-button (click)="openEditCompanyDialog(row)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </ng-template>
+</app-table-builder>
+
+<!-- TEMPATES ---------------------------------------->
+
+<ng-template #previewCompanyTmpl>
+  
+
+  <mat-tab-group class="min-h-[80vh]" [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="selectedTabChange($event)" 
+  animationDuration="0">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">info</mat-icon>
+        Info
+      </ng-template>
+      <div class="overflow-hidden">
+        <app-form-builder [config]="companyInfoFormConfig" [values]="companyInfoValues"
+          (submitHandler)="updateCompany($event)"></app-form-builder>
+        <div class="text-center mt-10">
+
+          <button mat-raised-button class="!bg-red-500 !text-white" (click)="deleteCompany()">
+            Delete
+          </button>
+        </div>
+
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">phone</mat-icon>
+        Contacts
+      </ng-template>
+      <app-form-builder [config]="companyContactsFormConfig" [values]="companyContactsValues"
+        (submitHandler)="updateCompanyContacts($event)"></app-form-builder>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">folder</mat-icon>
+        Assets
+      </ng-template>
+      <div *ngIf="companyAssets.length">
+        <app-folder-structure [dataSourceInput]="companyAssets" [pathPrefix]="'assets/' + companyInfoValues.id + '/'"></app-folder-structure>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">handshake</mat-icon>
+        Deals
+      </ng-template>
+      <div class="p-4 text-center">
+        <button mat-raised-button (click)="openNewDealDialog()">
+          <mat-icon>add</mat-icon>
+          Add New Deal
+        </button>
+        <app-table-builder [config]="dealsTableConfig" *ngIf="dealsTableConfig">
+          <ng-template appColumnTemplate="actions" let-row>
+            <button mat-icon-button (click)="openEditDealDialog(row)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </ng-template>
+        </app-table-builder>
+      </div>
+
+
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">credit_card</mat-icon>
+        Billing
+      </ng-template>
+      <div class="overflow-hidden p-4">
+  
+        
+  
+        <ng-container *ngIf="selectedTabIndex === 4 && (chartData?.categories?.length ?? 0) > 0">          
+          <app-chart [data]="chartData" [config]="chartConfig"></app-chart>
+        </ng-container>
+ 
+  
+      
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+</ng-template>
+
+<ng-template #newDealTmpl>
+  <div class="pt-4">
+    <div>
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Select a Deal Type</mat-label>
+        <mat-select [(ngModel)]="selectedDealType" (selectionChange)="onSelectDealType($event.value)">
+          <mat-option *ngFor="let deal of dealTypes" [value]="deal.id">
+            <mat-icon class="mr-2">{{ deal.icon }}</mat-icon>
+            {{ deal.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <small *ngIf="!selectedDealType">
+        Available deal types depend on the relationship with the selected company
+        ({{ companyInfoValues.relations }})
+      </small>
+    </div>
+
+    <app-form-builder *ngIf="selectedDealType" [config]="dealFormConfig" [values]="dealFormValues"
+      (submitHandler)="addNewDeal($event)">
+    </app-form-builder>
+
+  </div>
+</ng-template>
+
+<ng-template #updateDealTmpl>
+  <div class="pt-4">
+    
+    <app-form-builder *ngIf="selectedDealType" [config]="dealFormConfig" [values]="dealFormValues"
+      (submitHandler)="updateDeal($event)">
+    </app-form-builder>
+  
+    <div class="text-center mt-64">
+      <button mat-raised-button class="!bg-red-500 !text-white"
+        (click)="deleteDeal(companyInfoValues.id, dealFormValues.id)">
+        Delete Deal
+      </button>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template #newCompanyTmpl>
+  <app-form-builder [config]="companyInfoFormConfig" (submitHandler)="addNewCompany($event)"></app-form-builder>
+</ng-template>
+

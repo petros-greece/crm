@@ -4,12 +4,14 @@ import { AssetsVars } from './assets.vars';
 import { DialogService } from '../../services/dialog.service';
 import { CommonModule } from '@angular/common';
 import { PreviewAssetComponent } from '../../components/preview-asset.component';
+import { FolderStructureComponent } from '../../components/folder-structure/folder-structure.component';
 
 @Component({
   selector: 'app-assets',
-  imports: [CommonModule, TreeComponent, PreviewAssetComponent],
+  imports: [CommonModule, TreeComponent, PreviewAssetComponent, FolderStructureComponent],
   template: `
-  <app-tree [dataSource]="assetsTree" (nodeClicked)="previewAsset($event)"></app-tree>
+  <app-folder-structure [dataSourceInput]="assetsTree"></app-folder-structure>
+  <!-- <app-tree [dataSourceInput]="assetsTree" (nodeClicked)="previewAsset($event)"></app-tree> -->
   <ng-template #previewAssetTmpl>
     <app-preview-asset [assetPath]="assetPath"></app-preview-asset>
   </ng-template>

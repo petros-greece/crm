@@ -1,0 +1,100 @@
+[
+  {
+    "id": "1746795467056",
+    "dealType": "1",
+    "dealTypeName": "New Business",
+    "dealName": "1000 large apple trees",
+    "dealStage": "Closed Lost",
+    "dealValue": "25000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2020-06-15T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "budgetApproval": null,
+    "leadSource": "trade_show",
+    "notes": [
+      {
+        "date": "2020-11-17T22:00:00.000Z",
+        "note": "Meet for future Alliance"
+      }
+    ]
+  },
+  {
+    "id": "1746795545720",
+    "dealType": "2",
+    "dealTypeName": "Renewal",
+    "dealName": "1000 apple trees",
+    "dealStage": "Closed Lost",
+    "dealValue": "26000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2024-01-17T22:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "currentContractEndDate": "2022-06-20T21:00:00.000Z",
+    "renewalTerm": "1",
+    "notes": []
+  },
+  {
+    "id": "1746795940944",
+    "dealType": "3",
+    "dealTypeName": "Upsell",
+    "dealName": "Organic Fertilizer 20tones",
+    "dealStage": "Closed Lost",
+    "dealValue": "12000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2024-01-15T22:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "existingProduct": "Anorganic Fertilizer",
+    "upsellProduct": "Organic Fertilizer",
+    "additionalValue": "2000",
+    "notes": []
+  },
+  {
+    "id": "1746796111397",
+    "dealType": "4",
+    "dealTypeName": "Cross-sell",
+    "dealName": "4000 Tree pots each year",
+    "dealStage": "Closed Lost",
+    "dealValue": "47000",
+    "paymentMethod": null,
+    "paymentType": "Installments",
+    "numberOfInstallements": "12",
+    "installementFrequency": "monthly",
+    "closeDate": "2022-12-31T22:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "baseProduct": "Trees",
+    "crossSellProduct": "Tree Pots",
+    "notes": []
+  },
+  {
+    "id": "1746796274084",
+    "dealType": "9",
+    "dealTypeName": "Maintenance / Support",
+    "dealName": "Αutomatic irrigation installation",
+    "dealStage": "Closed Lost",
+    "dealValue": "16450",
+    "paymentMethod": null,
+    "paymentType": "One Time",
+    "closeDate": "2018-05-16T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "supportLevel": "basic",
+    "notes": []
+  },
+  {
+    "id": "1746796388526",
+    "dealType": "8",
+    "dealTypeName": "License",
+    "dealName": "Brand Name Usage",
+    "dealStage": "Closed Won",
+    "dealValue": "50000",
+    "paymentMethod": null,
+    "paymentType": "Installments",
+    "numberOfInstallements": "12",
+    "installementFrequency": "quarterly",
+    "closeDate": "2025-04-30T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "licenseType": "term",
+    "notes": []
+  }
+]

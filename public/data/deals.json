@@ -1,0 +1,1198 @@
+{
+"1001": [
+    {
+        "id": "1746795467056",
+        "dealType": "1",
+        "dealTypeName": "New Business",
+        "dealName": "1000 large apple trees",
+        "dealStage": "Closed Lost",
+        "dealValue": "25000",
+        "paymentMethod": "Bank Transfer",
+        "paymentType": "One Time",
+        "closeDate": "2020-06-15T21:00:00.000Z",
+        "revenueOrCost": "revenue",
+        "budgetApproval": null,
+        "leadSource": "trade_show",
+        "notes": [
+            {
+                "date": "2020-11-17T22:00:00.000Z",
+                "note": "Meet for future Alliance"
+            }
+        ]
+    },
+    {
+        "id": "1746795545720",
+        "dealType": "2",
+        "dealTypeName": "Renewal",
+        "dealName": "1000 apple trees",
+        "dealStage": "Closed Lost",
+        "dealValue": "26000",
+        "paymentMethod": "Bank Transfer",
+        "paymentType": "One Time",
+        "closeDate": "2024-01-17T22:00:00.000Z",
+        "revenueOrCost": "revenue",
+        "currentContractEndDate": "2022-06-20T21:00:00.000Z",
+        "renewalTerm": "1",
+        "notes": []
+    },
+    {
+        "id": "1746795940944",
+        "dealType": "3",
+        "dealTypeName": "Upsell",
+        "dealName": "Organic Fertilizer 20tones",
+        "dealStage": "Closed Lost",
+        "dealValue": "12000",
+        "paymentMethod": "Bank Transfer",
+        "paymentType": "One Time",
+        "closeDate": "2024-01-15T22:00:00.000Z",
+        "revenueOrCost": "revenue",
+        "existingProduct": "Anorganic Fertilizer",
+        "upsellProduct": "Organic Fertilizer",
+        "additionalValue": "2000",
+        "notes": []
+    },
+    {
+        "id": "1746796111397",
+        "dealType": "4",
+        "dealTypeName": "Cross-sell",
+        "dealName": "4000 Tree pots each year",
+        "dealStage": "Closed Lost",
+        "dealValue": "47000",
+        "paymentMethod": null,
+        "paymentType": "Installments",
+        "numberOfInstallements": "12",
+        "installementFrequency": "monthly",
+        "closeDate": "2022-12-31T22:00:00.000Z",
+        "revenueOrCost": "revenue",
+        "baseProduct": "Trees",
+        "crossSellProduct": "Tree Pots",
+        "notes": []
+    },
+    {
+        "id": "1746796274084",
+        "dealType": "9",
+        "dealTypeName": "Maintenance / Support",
+        "dealName": "Αutomatic irrigation installation",
+        "dealStage": "Closed Lost",
+        "dealValue": "16450",
+        "paymentMethod": null,
+        "paymentType": "One Time",
+        "closeDate": "2018-05-16T21:00:00.000Z",
+        "revenueOrCost": "revenue",
+        "supportLevel": "basic",
+        "notes": []
+    },
+    {
+        "id": "1746796388526",
+        "dealType": "8",
+        "dealTypeName": "License",
+        "dealName": "Brand Name Usage",
+        "dealStage": "Closed Won",
+        "dealValue": "50000",
+        "paymentMethod": null,
+        "paymentType": "Installments",
+        "numberOfInstallements": "12",
+        "installementFrequency": "quarterly",
+        "closeDate": "2025-04-30T21:00:00.000Z",
+        "revenueOrCost": "revenue",
+        "licenseType": "term",
+        "notes": []
+    }
+],
+"1002": [
+  {
+    "id": "1746798000001",
+    "dealType": "14",
+    "dealTypeName": "Equipment Purchase",
+    "dealName": "Purchase of two John Deere tractors",
+    "dealStage": "Closed Won",
+    "dealValue": "150000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2024-10-10T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "vendor": "AgroMachines Ltd.",
+    "notes": [
+      {
+        "date": "2024-09-15T21:00:00.000Z",
+        "note": "Negotiated price reduction due to end-of-year sale"
+      }
+    ]
+  },
+  {
+    "id": "1746798000002",
+    "dealType": "6",
+    "dealTypeName": "Pilot / Proof of Concept",
+    "dealName": "Soil sensor pilot on 50 acres",
+    "dealStage": "In Progress",
+    "dealValue": "5000",
+    "paymentMethod": "Credit Card",
+    "paymentType": "One Time",
+    "closeDate": "2025-08-01T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "pilotScope": "Precision irrigation monitoring",
+    "notes": [
+      {
+        "date": "2025-04-12T21:00:00.000Z",
+        "note": "Initial soil sensor installation and calibration"
+      }
+    ]
+  },
+  {
+    "id": "1746798000003",
+    "dealType": "12",
+    "dealTypeName": "Consulting Engagement",
+    "dealName": "Crop rotation consulting for 2025 season",
+    "dealStage": "Closed Won",
+    "dealValue": "12000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-02-01T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "consultant": "GreenAgro Advisory",
+    "notes": [
+      {
+        "date": "2025-01-10T21:00:00.000Z",
+        "note": "Initial soil analysis complete"
+      }
+    ]
+  },
+  {
+    "id": "1746798000004",
+    "dealType": "5",
+    "dealTypeName": "Expansion",
+    "dealName": "Adding 100 hectares to tomato farm",
+    "dealStage": "Negotiation",
+    "dealValue": "220000",
+    "paymentMethod": null,
+    "paymentType": "Installments",
+    "numberOfInstallements": "4",
+    "installementFrequency": "quarterly",
+    "closeDate": "2025-07-01T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "expansionType": "Land lease and irrigation setup",
+    "notes": []
+  },
+  {
+    "id": "1746798000005",
+    "dealType": "17",
+    "dealTypeName": "Joint Venture",
+    "dealName": "Joint venture with AgriSolar for hybrid greenhouse tech",
+    "dealStage": "Closed Won",
+    "dealValue": "500000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "Installments",
+    "numberOfInstallements": "5",
+    "installementFrequency": "yearly",
+    "closeDate": "2024-12-31T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "partnerCompany": "AgriSolar Ltd.",
+    "ventureFocus": "Hybrid solar-powered greenhouses",
+    "notes": [
+      {
+        "date": "2024-11-01T21:00:00.000Z",
+        "note": "Joint R&D team established"
+      }
+    ]
+  },
+  {
+    "id": "1746798000006",
+    "dealType": "19",
+    "dealTypeName": "Procurement",
+    "dealName": "Annual procurement of pesticides and fungicides",
+    "dealStage": "Closed Won",
+    "dealValue": "48000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "Installments",
+    "numberOfInstallements": "2",
+    "installementFrequency": "semiannually",
+    "closeDate": "2025-03-31T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "supplier": "CropGuard Co.",
+    "notes": []
+  }
+],
+"1003":[
+  {
+    "id": "1746799000001",
+    "dealType": "1",
+    "dealTypeName": "New Business",
+    "dealName": "Initial supply of hybrid corn seeds",
+    "dealStage": "Proposal Sent",
+    "dealValue": "32000",
+    "paymentMethod": "Credit Card",
+    "paymentType": "One Time",
+    "closeDate": "2025-06-15T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "leadSource": "industry_event",
+    "notes": [
+      {
+        "date": "2025-05-01T21:00:00.000Z",
+        "note": "Met procurement head at AgriFuture 2025"
+      }
+    ]
+  },
+  {
+    "id": "1746799000002",
+    "dealType": "3",
+    "dealTypeName": "Upsell",
+    "dealName": "Add-on order: Organic pesticide",
+    "dealStage": "Closed Won",
+    "dealValue": "8000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2024-12-01T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "existingProduct": "Seed treatment chemicals",
+    "upsellProduct": "Organic pesticide",
+    "additionalValue": "1500",
+    "notes": []
+  },
+  {
+    "id": "1746799000003",
+    "dealType": "4",
+    "dealTypeName": "Cross-sell",
+    "dealName": "Annual contract for farm drone imaging",
+    "dealStage": "Negotiation",
+    "dealValue": "45000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "Installments",
+    "numberOfInstallements": "12",
+    "installementFrequency": "monthly",
+    "closeDate": "2025-07-01T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "baseProduct": "Seed supply",
+    "crossSellProduct": "Aerial imaging service",
+    "notes": []
+  },
+  {
+    "id": "1746799000004",
+    "dealType": "10",
+    "dealTypeName": "Implementation",
+    "dealName": "Implementing new greenhouse climate control",
+    "dealStage": "In Progress",
+    "dealValue": "67000",
+    "paymentMethod": null,
+    "paymentType": "Installments",
+    "numberOfInstallements": "4",
+    "installementFrequency": "quarterly",
+    "closeDate": "2025-10-15T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "notes": [
+      {
+        "date": "2025-04-28T21:00:00.000Z",
+        "note": "First phase of HVAC installation started"
+      }
+    ]
+  },
+  {
+    "id": "1746799000005",
+    "dealType": "7",
+    "dealTypeName": "Subscription",
+    "dealName": "Annual subscription to crop monitoring platform",
+    "dealStage": "Closed Won",
+    "dealValue": "12000",
+    "paymentMethod": "Credit Card",
+    "paymentType": "Recurring",
+    "closeDate": "2025-05-01T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "subscriptionDuration": "12 months",
+    "notes": []
+  },
+  {
+    "id": "1746799000006",
+    "dealType": "2",
+    "dealTypeName": "Renewal",
+    "dealName": "Renewal of seed treatment product contract",
+    "dealStage": "Proposal Sent",
+    "dealValue": "24000",
+    "paymentMethod": null,
+    "paymentType": "One Time",
+    "closeDate": "2025-06-30T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "currentContractEndDate": "2024-06-30T21:00:00.000Z",
+    "renewalTerm": "1",
+    "notes": []
+  },
+  {
+    "id": "1746799000007",
+    "dealType": "8",
+    "dealTypeName": "License",
+    "dealName": "License for genetically modified soybean seed",
+    "dealStage": "Closed Won",
+    "dealValue": "85000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-04-10T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "licenseType": "perpetual",
+    "notes": [
+      {
+        "date": "2025-03-01T21:00:00.000Z",
+        "note": "Legal review completed"
+      }
+    ]
+  },
+  {
+    "id": "1746799000008",
+    "dealType": "16",
+    "dealTypeName": "Referral",
+    "dealName": "Referred contract from AgriTech Connect",
+    "dealStage": "Closed Won",
+    "dealValue": "18000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-05-05T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "referralSource": "AgriTech Connect",
+    "notes": []
+  }
+],
+"1004": [
+  {
+    "id": "1746800001001",
+    "dealType": "2",
+    "dealTypeName": "Renewal",
+    "dealName": "Annual distribution contract renewal - veterinary supplements",
+    "dealStage": "Closed Won",
+    "dealValue": "52000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-04-01T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "currentContractEndDate": "2024-03-30T21:00:00.000Z",
+    "renewalTerm": "1",
+    "notes": []
+  },
+  {
+    "id": "1746800001002",
+    "dealType": "4",
+    "dealTypeName": "Cross-sell",
+    "dealName": "Cross-sell: Livestock tagging equipment",
+    "dealStage": "Negotiation",
+    "dealValue": "34000",
+    "paymentMethod": null,
+    "paymentType": "Installments",
+    "numberOfInstallements": "6",
+    "installementFrequency": "bi-monthly",
+    "closeDate": "2025-07-10T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "baseProduct": "Animal feed",
+    "crossSellProduct": "Tagging equipment",
+    "notes": []
+  },
+  {
+    "id": "1746800001003",
+    "dealType": "8",
+    "dealTypeName": "License",
+    "dealName": "Regional distribution license - cattle vaccines",
+    "dealStage": "Closed Won",
+    "dealValue": "78000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "Installments",
+    "numberOfInstallements": "4",
+    "installementFrequency": "quarterly",
+    "closeDate": "2025-05-01T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "licenseType": "term",
+    "notes": [
+      {
+        "date": "2025-04-10T21:00:00.000Z",
+        "note": "Negotiated with regional compliance board"
+      }
+    ]
+  },
+  {
+    "id": "1746800001004",
+    "dealType": "15",
+    "dealTypeName": "Channel Sale",
+    "dealName": "Channel Sale - cattle nutrition kits",
+    "dealStage": "Proposal Sent",
+    "dealValue": "65000",
+    "paymentMethod": "Credit Card",
+    "paymentType": "One Time",
+    "closeDate": "2025-08-01T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746800001005",
+    "dealType": "1",
+    "dealTypeName": "New Business",
+    "dealName": "First-time distributor agreement - Outback region",
+    "dealStage": "Closed Won",
+    "dealValue": "47000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-03-20T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "leadSource": "website_form",
+    "notes": [
+      {
+        "date": "2025-03-01T21:00:00.000Z",
+        "note": "Reached out via contact form for distributorship"
+      }
+    ]
+  }
+],
+"1005": [
+  {
+    "id": "1746805001001",
+    "dealType": "14",
+    "dealTypeName": "Equipment Purchase",
+    "dealName": "Granular fertilizer mixer (Model MX-300)",
+    "dealStage": "Closed Won",
+    "dealValue": "18000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-05-01T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "notes": [
+      {
+        "date": "2025-04-15T21:00:00.000Z",
+        "note": "Equipment expected to improve batch output by 20%"
+      }
+    ]
+  },
+  {
+    "id": "1746805001002",
+    "dealType": "19",
+    "dealTypeName": "Procurement",
+    "dealName": "Annual procurement contract for raw phosphate",
+    "dealStage": "Closed Won",
+    "dealValue": "125000",
+    "paymentMethod": "Wire Transfer",
+    "paymentType": "Installments",
+    "numberOfInstallements": "4",
+    "installementFrequency": "quarterly",
+    "closeDate": "2025-04-10T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "notes": []
+  },
+  {
+    "id": "1746805001003",
+    "dealType": "9",
+    "dealTypeName": "Maintenance / Support",
+    "dealName": "Maintenance for fertilizer blending line",
+    "dealStage": "Closed Won",
+    "dealValue": "14000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-02-18T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "supportLevel": "extended",
+    "notes": []
+  },
+  {
+    "id": "1746805001004",
+    "dealType": "10",
+    "dealTypeName": "Implementation",
+    "dealName": "Automated packaging line installation",
+    "dealStage": "Closed Lost",
+    "dealValue": "60000",
+    "paymentMethod": null,
+    "paymentType": "Installments",
+    "numberOfInstallements": "3",
+    "installementFrequency": "monthly",
+    "closeDate": "2025-01-30T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "notes": []
+  },
+  {
+    "id": "1746805001005",
+    "dealType": "1",
+    "dealTypeName": "New Business",
+    "dealName": "New supply partnership – potassium nitrate",
+    "dealStage": "Closed Won",
+    "dealValue": "52000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-03-15T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "leadSource": "industry_referral",
+    "notes": []
+  },
+  {
+    "id": "1746805001006",
+    "dealType": "9",
+    "dealTypeName": "Maintenance / Support",
+    "dealName": "Technical support – drying kilns",
+    "dealStage": "Closed Won",
+    "dealValue": "8500",
+    "paymentMethod": "Credit Card",
+    "paymentType": "One Time",
+    "closeDate": "2025-04-05T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "supportLevel": "basic",
+    "notes": []
+  },
+  {
+    "id": "1746805001007",
+    "dealType": "19",
+    "dealTypeName": "Procurement",
+    "dealName": "Supply agreement – magnesium sulfate",
+    "dealStage": "Negotiation",
+    "dealValue": "33000",
+    "paymentMethod": null,
+    "paymentType": "Installments",
+    "numberOfInstallements": "6",
+    "installementFrequency": "monthly",
+    "closeDate": "2025-06-10T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "notes": [
+      {
+        "date": "2025-04-28T21:00:00.000Z",
+        "note": "Negotiating bulk discounts for second half of year"
+      }
+    ]
+  },
+  {
+    "id": "1746805001008",
+    "dealType": "14",
+    "dealTypeName": "Equipment Purchase",
+    "dealName": "Bulk fertilizer storage silos (4 units)",
+    "dealStage": "Closed Won",
+    "dealValue": "44000",
+    "paymentMethod": "Wire Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-03-22T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "notes": []
+  }
+],
+"1006":[
+  {
+    "id": "1746806002001",
+    "dealType": "3",
+    "dealTypeName": "Upsell",
+    "dealName": "Upgrade from standard to premium irrigation kits",
+    "dealStage": "Closed Won",
+    "dealValue": "16000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-03-01T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "existingProduct": "Standard Irrigation Kit",
+    "upsellProduct": "Premium Irrigation Kit",
+    "additionalValue": "4000",
+    "notes": []
+  },
+  {
+    "id": "1746806002002",
+    "dealType": "2",
+    "dealTypeName": "Renewal",
+    "dealName": "Annual subscription – crop monitoring software",
+    "dealStage": "Closed Won",
+    "dealValue": "3600",
+    "paymentMethod": "Credit Card",
+    "paymentType": "Recurring",
+    "closeDate": "2025-04-10T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "currentContractEndDate": "2024-04-10T21:00:00.000Z",
+    "renewalTerm": "1",
+    "notes": []
+  },
+  {
+    "id": "1746806002003",
+    "dealType": "6",
+    "dealTypeName": "Pilot / Proof of Concept",
+    "dealName": "Precision drone spraying pilot",
+    "dealStage": "Closed Lost",
+    "dealValue": "7500",
+    "paymentMethod": null,
+    "paymentType": "One Time",
+    "closeDate": "2025-01-25T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "leadSource": "field_demo",
+    "notes": [
+      {
+        "date": "2025-01-15T21:00:00.000Z",
+        "note": "Pilot failed due to unstable connectivity in rural zone"
+      }
+    ]
+  },
+  {
+    "id": "1746806002004",
+    "dealType": "4",
+    "dealTypeName": "Cross-sell",
+    "dealName": "Bundled seed treatment chemicals",
+    "dealStage": "Closed Won",
+    "dealValue": "9800",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "Installments",
+    "numberOfInstallements": "2",
+    "installementFrequency": "monthly",
+    "closeDate": "2025-02-15T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "baseProduct": "Paddy Seeds",
+    "crossSellProduct": "Seed Treatment Pack",
+    "notes": []
+  }
+],
+"1007": [
+  {
+    "id": "1746807003001",
+    "dealType": "11",
+    "dealTypeName": "Integration",
+    "dealName": "IoT integration with existing greenhouse systems",
+    "dealStage": "Closed Won",
+    "dealValue": "22000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-02-20T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": [
+      {
+        "date": "2025-01-10T21:00:00.000Z",
+        "note": "Required compatibility with legacy Siemens controllers"
+      }
+    ]
+  },
+  {
+    "id": "1746807003002",
+    "dealType": "21",
+    "dealTypeName": "Co-Development",
+    "dealName": "Joint development of precision spraying module",
+    "dealStage": "Closed Won",
+    "dealValue": "40000",
+    "paymentMethod": "Installments",
+    "paymentType": "Installments",
+    "numberOfInstallements": "4",
+    "installementFrequency": "quarterly",
+    "closeDate": "2025-03-05T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746807003003",
+    "dealType": "11",
+    "dealTypeName": "Integration",
+    "dealName": "Soil moisture sensor integration into central platform",
+    "dealStage": "Closed Lost",
+    "dealValue": "12500",
+    "paymentMethod": null,
+    "paymentType": "One Time",
+    "closeDate": "2024-12-10T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": [
+      {
+        "date": "2024-11-01T21:00:00.000Z",
+        "note": "Integration paused due to partner's firmware incompatibility"
+      }
+    ]
+  },
+  {
+    "id": "1746807003004",
+    "dealType": "18",
+    "dealTypeName": "Strategic Alliance",
+    "dealName": "Co-branded smart ploughing units for South Asia market",
+    "dealStage": "Closed Won",
+    "dealValue": "67000",
+    "paymentMethod": "Wire Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-01-15T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746807003005",
+    "dealType": "11",
+    "dealTypeName": "Integration",
+    "dealName": "Weather station sync with AI dashboard",
+    "dealStage": "Closed Won",
+    "dealValue": "19500",
+    "paymentMethod": "Credit Card",
+    "paymentType": "One Time",
+    "closeDate": "2025-04-02T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746807003006",
+    "dealType": "17",
+    "dealTypeName": "Joint Venture",
+    "dealName": "Joint assembly plant for combine harvesters",
+    "dealStage": "Closed Won",
+    "dealValue": "150000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "Installments",
+    "numberOfInstallements": "6",
+    "installementFrequency": "bimonthly",
+    "closeDate": "2025-03-18T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": [
+      {
+        "date": "2025-02-01T21:00:00.000Z",
+        "note": "Factory lease signed and permits approved"
+      }
+    ]
+  },
+  {
+    "id": "1746807003007",
+    "dealType": "20",
+    "dealTypeName": "Co-Marketing",
+    "dealName": "Regional expo sponsorship and brand booth setup",
+    "dealStage": "Closed Won",
+    "dealValue": "18000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-01-05T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "notes": []
+  },
+  {
+    "id": "1746807003008",
+    "dealType": "11",
+    "dealTypeName": "Integration",
+    "dealName": "Fleet GPS tracker module sync",
+    "dealStage": "Closed Lost",
+    "dealValue": "9300",
+    "paymentMethod": null,
+    "paymentType": "One Time",
+    "closeDate": "2024-10-22T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": [
+      {
+        "date": "2024-10-01T21:00:00.000Z",
+        "note": "Customer shifted to competitor system mid-cycle"
+      }
+    ]
+  },
+  {
+    "id": "1746807003009",
+    "dealType": "18",
+    "dealTypeName": "Strategic Alliance",
+    "dealName": "Co-operation on digital yield tracking tools",
+    "dealStage": "Closed Won",
+    "dealValue": "31000",
+    "paymentMethod": "Installments",
+    "paymentType": "Installments",
+    "numberOfInstallements": "3",
+    "installementFrequency": "monthly",
+    "closeDate": "2025-04-01T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746807003010",
+    "dealType": "21",
+    "dealTypeName": "Co-Development",
+    "dealName": "Prototype autonomous tractor project",
+    "dealStage": "Closed Won",
+    "dealValue": "88000",
+    "paymentMethod": "Wire Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-02-28T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": [
+      {
+        "date": "2025-02-01T21:00:00.000Z",
+        "note": "Prototype beta testing begins in May"
+      }
+    ]
+  }
+],
+"1008": [
+  {
+    "id": "1746808004001",
+    "dealType": "1",
+    "dealTypeName": "New Business",
+    "dealName": "Bulk wheat grain order - 500 tons",
+    "dealStage": "Closed Won",
+    "dealValue": "150000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-03-25T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746808004002",
+    "dealType": "6",
+    "dealTypeName": "Pilot / Proof of Concept",
+    "dealName": "Pilot program for grain drying technology",
+    "dealStage": "Closed Lost",
+    "dealValue": "30000",
+    "paymentMethod": null,
+    "paymentType": "One Time",
+    "closeDate": "2025-01-15T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": [
+      {
+        "date": "2025-01-05T21:00:00.000Z",
+        "note": "Pilot was unsuccessful due to inconsistent humidity levels"
+      }
+    ]
+  },
+  {
+    "id": "1746808004003",
+    "dealType": "4",
+    "dealTypeName": "Cross-sell",
+    "dealName": "500 tons of fertilizer for wheat farming",
+    "dealStage": "Closed Won",
+    "dealValue": "120000",
+    "paymentMethod": "Installments",
+    "paymentType": "Installments",
+    "numberOfInstallements": "4",
+    "installementFrequency": "quarterly",
+    "closeDate": "2025-02-10T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "baseProduct": "Wheat",
+    "crossSellProduct": "Fertilizer",
+    "notes": []
+  },
+  {
+    "id": "1746808004004",
+    "dealType": "9",
+    "dealTypeName": "Maintenance / Support",
+    "dealName": "Grain storage facility maintenance contract",
+    "dealStage": "Closed Won",
+    "dealValue": "18000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-03-10T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "supportLevel": "standard",
+    "notes": []
+  }
+],
+"1009": [
+  {
+    "id": "1746809005001",
+    "dealType": "1",
+    "dealTypeName": "New Business",
+    "dealName": "Bulk order of certified canola seeds - 200 tons",
+    "dealStage": "Closed Won",
+    "dealValue": "100000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-02-28T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746809005002",
+    "dealType": "16",
+    "dealTypeName": "Referral",
+    "dealName": "Referral of new seed distributor in Alberta",
+    "dealStage": "Closed Won",
+    "dealValue": "15000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-03-15T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746809005003",
+    "dealType": "7",
+    "dealTypeName": "Subscription",
+    "dealName": "Annual seed supply contract for prairie farms",
+    "dealStage": "Closed Lost",
+    "dealValue": "50000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "Installments",
+    "numberOfInstallements": "4",
+    "installementFrequency": "quarterly",
+    "closeDate": "2025-01-10T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": [
+      {
+        "date": "2024-12-15T21:00:00.000Z",
+        "note": "Customer opted for competitor's organic seed option"
+      }
+    ]
+  },
+  {
+    "id": "1746809005004",
+    "dealType": "14",
+    "dealTypeName": "Equipment Purchase",
+    "dealName": "Seed planting machinery purchase - 3 units",
+    "dealStage": "Closed Won",
+    "dealValue": "120000",
+    "paymentMethod": "Credit Card",
+    "paymentType": "One Time",
+    "closeDate": "2025-02-22T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "notes": []
+  },
+  {
+    "id": "1746809005005",
+    "dealType": "3",
+    "dealTypeName": "Upsell",
+    "dealName": "Organic seed upgrade - 100 tons",
+    "dealStage": "Closed Won",
+    "dealValue": "25000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-03-10T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "existingProduct": "Conventional Canola Seeds",
+    "upsellProduct": "Organic Canola Seeds",
+    "additionalValue": "5000",
+    "notes": []
+  },
+  {
+    "id": "1746809005006",
+    "dealType": "19",
+    "dealTypeName": "Procurement",
+    "dealName": "Procurement of seed cleaning and sorting equipment",
+    "dealStage": "Closed Lost",
+    "dealValue": "45000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-01-05T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "notes": [
+      {
+        "date": "2024-12-01T21:00:00.000Z",
+        "note": "Customer canceled order due to budget cuts"
+      }
+    ]
+  },
+  {
+    "id": "1746809005007",
+    "dealType": "4",
+    "dealTypeName": "Cross-sell",
+    "dealName": "Fertilizer and seed bundle offer - 200 tons",
+    "dealStage": "Closed Won",
+    "dealValue": "85000",
+    "paymentMethod": "Installments",
+    "paymentType": "Installments",
+    "numberOfInstallements": "6",
+    "installementFrequency": "monthly",
+    "closeDate": "2025-02-18T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "baseProduct": "Canola Seeds",
+    "crossSellProduct": "Fertilizer",
+    "notes": []
+  }
+],
+"1010": [
+  {
+    "id": "1746809006001",
+    "dealType": "1",
+    "dealTypeName": "New Business",
+    "dealName": "Irrigation system installation - 50 hectares",
+    "dealStage": "Closed Won",
+    "dealValue": "200000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-04-15T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746809006002",
+    "dealType": "9",
+    "dealTypeName": "Maintenance / Support",
+    "dealName": "Annual irrigation system maintenance contract",
+    "dealStage": "Closed Won",
+    "dealValue": "25000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "Installments",
+    "numberOfInstallements": "4",
+    "installementFrequency": "quarterly",
+    "closeDate": "2025-03-20T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "supportLevel": "standard",
+    "notes": []
+  },
+  {
+    "id": "1746809006003",
+    "dealType": "2",
+    "dealTypeName": "Renewal",
+    "dealName": "Irrigation system maintenance - Renewal for 3 years",
+    "dealStage": "Closed Won",
+    "dealValue": "45000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "Installments",
+    "numberOfInstallements": "12",
+    "installementFrequency": "monthly",
+    "closeDate": "2025-02-15T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "currentContractEndDate": "2024-12-31T21:00:00.000Z",
+    "renewalTerm": "3",
+    "notes": []
+  },
+  {
+    "id": "1746809006004",
+    "dealType": "8",
+    "dealTypeName": "License",
+    "dealName": "Irrigation control software license",
+    "dealStage": "Closed Won",
+    "dealValue": "60000",
+    "paymentMethod": "Credit Card",
+    "paymentType": "One Time",
+    "closeDate": "2025-03-10T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "licenseType": "perpetual",
+    "notes": []
+  },
+  {
+    "id": "1746809006005",
+    "dealType": "3",
+    "dealTypeName": "Upsell",
+    "dealName": "Upgraded irrigation control system for expanded farm",
+    "dealStage": "Closed Won",
+    "dealValue": "35000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-04-05T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "existingProduct": "Basic Irrigation System",
+    "upsellProduct": "Advanced Irrigation Control System",
+    "additionalValue": "10000",
+    "notes": []
+  },
+  {
+    "id": "1746809006006",
+    "dealType": "4",
+    "dealTypeName": "Cross-sell",
+    "dealName": "Water filtration system for irrigation",
+    "dealStage": "Closed Won",
+    "dealValue": "25000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "Installments",
+    "numberOfInstallements": "4",
+    "installementFrequency": "quarterly",
+    "closeDate": "2025-03-30T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "baseProduct": "Irrigation System",
+    "crossSellProduct": "Water Filtration System",
+    "notes": []
+  },
+  {
+    "id": "1746809006007",
+    "dealType": "5",
+    "dealTypeName": "Expansion",
+    "dealName": "Expansion of irrigation system for new 100-acre farm",
+    "dealStage": "Closed Won",
+    "dealValue": "180000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-05-10T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746809006008",
+    "dealType": "10",
+    "dealTypeName": "Implementation",
+    "dealName": "Irrigation system installation for cotton farm",
+    "dealStage": "Closed Won",
+    "dealValue": "75000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-04-20T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746809006009",
+    "dealType": "14",
+    "dealTypeName": "Equipment Purchase",
+    "dealName": "Purchase of irrigation pumps for expansion",
+    "dealStage": "Closed Won",
+    "dealValue": "40000",
+    "paymentMethod": "Credit Card",
+    "paymentType": "One Time",
+    "closeDate": "2025-02-28T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "notes": []
+  },
+  {
+    "id": "1746809006010",
+    "dealType": "19",
+    "dealTypeName": "Procurement",
+    "dealName": "Procurement of water reservoir for irrigation system",
+    "dealStage": "Closed Won",
+    "dealValue": "150000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-03-05T21:00:00.000Z",
+    "revenueOrCost": "cost",
+    "notes": []
+  },
+  {
+    "id": "1746809006011",
+    "dealType": "7",
+    "dealTypeName": "Subscription",
+    "dealName": "Annual irrigation system monitoring subscription",
+    "dealStage": "Closed Won",
+    "dealValue": "12000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "Installments",
+    "numberOfInstallements": "12",
+    "installementFrequency": "monthly",
+    "closeDate": "2025-01-10T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746809006012",
+    "dealType": "16",
+    "dealTypeName": "Referral",
+    "dealName": "Referral of irrigation system client in Sudan",
+    "dealStage": "Closed Won",
+    "dealValue": "8000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-02-25T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746809006013",
+    "dealType": "6",
+    "dealTypeName": "Pilot / Proof of Concept",
+    "dealName": "Pilot project for solar-powered irrigation",
+    "dealStage": "Closed Lost",
+    "dealValue": "20000",
+    "paymentMethod": null,
+    "paymentType": "One Time",
+    "closeDate": "2025-01-25T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": [
+      {
+        "date": "2025-01-15T21:00:00.000Z",
+        "note": "Pilot project canceled due to technical limitations"
+      }
+    ]
+  },
+  {
+    "id": "1746809006014",
+    "dealType": "13",
+    "dealTypeName": "Retainer",
+    "dealName": "Irrigation system design consultancy retainer",
+    "dealStage": "Closed Won",
+    "dealValue": "15000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-02-18T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  },
+  {
+    "id": "1746809006015",
+    "dealType": "12",
+    "dealTypeName": "Consulting Engagement",
+    "dealName": "Irrigation system optimization consulting",
+    "dealStage": "Closed Won",
+    "dealValue": "25000",
+    "paymentMethod": "Bank Transfer",
+    "paymentType": "One Time",
+    "closeDate": "2025-03-12T21:00:00.000Z",
+    "revenueOrCost": "revenue",
+    "notes": []
+  }
+]
+
+
+
+
+
+
+
+
+}

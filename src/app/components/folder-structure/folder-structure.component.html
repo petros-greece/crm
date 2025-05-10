@@ -1,0 +1,66 @@
+<mat-toolbar color="primary" class="toolbar">
+  <!-- Breadcrumb Navigation -->
+  <ng-container *ngFor="let crumb of path; let i = index">
+    <button mat-button (click)="navigateTo(i)">{{ crumb.label }}</button>
+    <mat-icon *ngIf="i < path.length - 1">chevron_right</mat-icon>
+  </ng-container>
+</mat-toolbar>
+
+<div class="flex flex-col lg:flex-row gap-4 w-full">
+  <!-- File Tree Pane (1/3 width on large screens, full width on small) -->
+  <div class="w-full lg:w-1/3">
+    <mat-list>
+      <mat-list-item *ngFor="let node of currentNodes" 
+        class="!cursor-pointer"
+        (click)="node.isFile ? onFileClick(node) : onFolderClick(node)">
+        <mat-icon matListItemIcon>
+          {{ node.isFile ? 'insert_drive_file' : 'folder' }}
+        </mat-icon>       
+        <div matListItemTitle>{{ node.name }}</div>
+      </mat-list-item>
+    </mat-list>
+    <button mat-button [matMenuTriggerFor]="menu" class="ml-2">
+      Add
+      <mat-icon matListItemIcon>add</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="openAddFolderDialog()">
+        <mat-icon>folder</mat-icon>
+        <span>Folder</span>
+      </button>
+      <button mat-menu-item (click)="openAddFileDialog()">
+        <mat-icon>description</mat-icon>
+        <span>File</span>
+      </button>
+    </mat-menu>
+  </div>
+
+  <!-- Content Preview Pane (2/3 width on large screens, full width on small) -->
+  <div class="w-full lg:w-2/3 content-pane" *ngIf="selectedFileName">
+    <app-preview-asset [assetPath]="pathPrefix+selectedFileName"></app-preview-asset>
+  </div>
+</div>
+
+<!-- ADD FILE/FOLDER ------------------------------------------------------------------>
+
+<ng-template #addFolderTmpl>
+  <div class="p-4 text-center">
+    <mat-form-field class="example-full-width">
+      <mat-label>Folder Name</mat-label>
+      <input matInput [(ngModel)]="newFolderName">
+    </mat-form-field>
+  </div>
+
+</ng-template>
+
+<ng-template #addFileTmpl>
+  <app-upload-file-field 
+  [isMultiple]="true"
+  acceptedTypes=".jpg, .png, .doc, .docx, .xls, .xlsx, .pdf, .csv, .txt, .zip"
+  (filesUploaded)="files = $event"
+></app-upload-file-field>
+</ng-template>
+
+<ng-template #previewTmpl>
+  
+</ng-template>

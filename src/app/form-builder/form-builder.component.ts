@@ -37,7 +37,7 @@ import { InputHiddenFieldComponent } from './fields/input-hidden-field.component
     </mat-toolbar>  
     <ng-container #gridItem></ng-container>  
     <div class="flex flex-row justify-center w-full" *ngIf="config.hideSubmit === undefined">
-      <button mat-raised-button type="submit">{{ config.submitText || 'Submit' }}</button>
+      <button mat-raised-button type="submit" [disabled]="formGroup.pristine">{{ config.submitText || 'Submit' }}</button>
     </div>  
   </form>
   `
@@ -92,7 +92,7 @@ export class FormBuilderComponent implements AfterViewInit {
       if (field.listName) {
         clone.dynamicOptions = this.formBuilderService.getListOptions(field.listName);
       }
-      const fieldValue = values[field.name];
+      const fieldValue = values[field.name] || field.defaultValue;
       if (fieldValue !== undefined) {
         if (field.type === 'multi-row' && Array.isArray(fieldValue)) {
           clone.value = fieldValue;

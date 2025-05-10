@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { InputFieldComponent } from './input-field.component';
 import { SelectFieldComponent } from './select-field.component';
 import { DatepickerFieldComponent } from './datepicker-field.component';
+import { TextareaFieldComponent } from './textarea-field.component';
 
 @Component({
   selector: 'app-multi-row-field',
@@ -24,7 +25,8 @@ import { DatepickerFieldComponent } from './datepicker-field.component';
     MatIconModule,
     InputFieldComponent,
     SelectFieldComponent,
-    DatepickerFieldComponent
+    DatepickerFieldComponent,
+    TextareaFieldComponent
   ],
   template: `
     <div class="multi-row-container">
@@ -40,27 +42,34 @@ import { DatepickerFieldComponent } from './datepicker-field.component';
         </button>
       </div>
       <div>
-        <div class="row-container " *ngFor="let row of rows.controls; index as i">
-          <div class="fields-container">
-            <div *ngFor="let field of config.fields" class="field-wrapper">
-              <ng-container [ngSwitch]="field.type">
-                <app-input-field *ngSwitchCase="'text'"
-                  [config]="field"
-                  [control]="getRowControl(i, field.name)">
-                </app-input-field>
+        <div class="row-container" *ngFor="let row of rows.controls; index as i">
+        <div class="fields-container">
+  <div *ngFor="let field of config.fields" 
+       class="field-wrapper"
+       [style.grid-column]="'span ' + (field.columns || 1)">
+    <ng-container [ngSwitch]="field.type">
+      <app-input-field *ngSwitchCase="'text'"
+        [config]="field"
+        [control]="getRowControl(i, field.name)">
+      </app-input-field>
 
-                <app-select-field *ngSwitchCase="'select'"
-                  [config]="field"
-                  [control]="getRowControl(i, field.name)">
-                </app-select-field>
+      <app-select-field *ngSwitchCase="'select'"
+        [config]="field"
+        [control]="getRowControl(i, field.name)">
+      </app-select-field>
 
-                <app-date-field *ngSwitchCase="'date'"
-                  [config]="field"
-                  [control]="getRowControl(i, field.name)">
-                </app-date-field>
-              </ng-container>
-            </div>
-          </div>
+      <app-date-field *ngSwitchCase="'date'"
+        [config]="field"
+        [control]="getRowControl(i, field.name)">
+      </app-date-field>
+
+      <app-textarea-field *ngSwitchCase="'textarea'"
+        [config]="field"
+        [control]="getRowControl(i, field.name)">
+      </app-textarea-field>
+    </ng-container>
+  </div>
+</div>
 
           <button mat-icon-button 
                   color="warn" 
@@ -105,7 +114,7 @@ import { DatepickerFieldComponent } from './datepicker-field.component';
     }
 
     .field-wrapper {
-      min-width: 200px;
+      //min-width: 200px;
     }
   `],
   providers: [{
@@ -146,7 +155,8 @@ export class MultiRowFieldComponent extends BaseFieldComponent<FormArray> implem
     this.config.fields?.forEach(field => {
       group[field.name] = new FormControl(field.value || '');
     });
-    this.rows.push(new FormGroup(group));
+    //this.rows.push(new FormGroup(group));
+    this.rows.insert(0, new FormGroup(group));
   }
 
   removeRow(index: number) {

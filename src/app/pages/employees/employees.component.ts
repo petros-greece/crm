@@ -56,7 +56,7 @@ export class EmployeesComponent {
   ngOnInit(){
     this.dataService.getEmployees().subscribe(employees=>{
       this.tableConfig = {
-        columns: this.entityFieldsService.buildEntityTableConfigColumns(),
+        columns: this.entityFieldsService.buildEntityTableConfigColumns('employee'),
         data: employees,
         pagination: true,
         pageSizeOptions: [5, 10]
@@ -132,7 +132,7 @@ export class EmployeesComponent {
     formData.id = `${this.tableConfig.data.length+1}`
     this.dataService.addEmployee(formData).subscribe(res=>{
       this.tableConfig = {
-        columns: this.entityFieldsService.buildEntityTableConfigColumns(),
+        columns: this.entityFieldsService.buildEntityTableConfigColumns('employee'),
         data: res,
         pagination: true,
         pageSizeOptions: [5, 10]
@@ -144,7 +144,7 @@ export class EmployeesComponent {
     
     this.dataService.updateEmployee(formData).subscribe(res=>{
       this.tableConfig = {
-        columns: this.entityFieldsService.buildEntityTableConfigColumns(),
+        columns: this.entityFieldsService.buildEntityTableConfigColumns('employee'),
         data: res,
         pagination: true,
         pageSizeOptions: [5, 10]

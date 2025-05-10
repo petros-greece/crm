@@ -1,1 +1,109 @@
-<p>customers works!</p>
+<!-- 
+<div class="pt-4">
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Select a Deal Type</mat-label>
+    <mat-select [(ngModel)]="selectedDealType" (selectionChange)="onSelectDealType($event.value)">
+      <mat-option *ngFor="let deal of dealTypes" [value]="deal.id">
+        <mat-icon class="mr-2">{{ deal.icon }}</mat-icon>
+        {{ deal.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <app-form-builder *ngIf="selectedDealType" [config]="dealFormConfig" (submitHandler)="submitDeal($event)"></app-form-builder>
+</div> -->
+
+
+
+<app-table-builder [config]="customersTableConfig" *ngIf="customersTableConfig">
+  <ng-template appColumnTemplate="actions" let-row>
+    <button mat-icon-button (click)="openEditCustomerDialog(row)">
+      <mat-icon>edit</mat-icon>
+    </button>  
+  </ng-template>
+</app-table-builder>
+
+
+<ng-template #previewCustomerTmpl>
+
+  <mat-tab-group class="min-h-[80vh]" (selectedTabChange)="selectedTabChange($event)">
+  
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">info</mat-icon>
+        Info
+      </ng-template>
+      <div>
+        <app-form-builder [config]="customerInfoFormConfig" [values]="customerInfoValues"></app-form-builder>
+      </div>
+    </mat-tab>
+  
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">phone</mat-icon>
+        Contacts
+      </ng-template>
+      <app-form-builder [config]="customerContactsFormConfig" [values]="customerContactsValues"></app-form-builder>
+    </mat-tab>
+  
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">folder</mat-icon>
+        Assets
+      </ng-template>
+      <!-- <app-form-builder [config]="{fields: entityFieldsService.customerTabFields['contacts']}"></app-form-builder> -->
+    </mat-tab>
+  
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">handshake</mat-icon>
+        Deals
+      </ng-template>
+      <div class="p-4 text-center">
+        <app-table-builder [config]="dealsTableConfig" *ngIf="dealsTableConfig">
+          <ng-template appColumnTemplate="actions" let-row>
+            <!-- <button mat-icon-button (click)="openEditCustomerDialog(row)">
+              <mat-icon>edit</mat-icon>
+            </button>   -->
+          </ng-template>
+        </app-table-builder>       
+        <button mat-raised-button (click)="openNewDealDialog()" class="!absolute left-1 top-1">
+          <mat-icon>handshake</mat-icon>
+          Add New Deal
+        </button> 
+      </div>
+
+
+    </mat-tab>
+  
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">credit_card</mat-icon>
+        Billing
+      </ng-template>
+      <!-- <app-form-builder [config]="{fields: entityFieldsService.customerTabFields['contacts']}"></app-form-builder> -->
+    </mat-tab>
+  
+  </mat-tab-group>
+</ng-template>
+
+<ng-template #dealTmpl>
+  <div class="pt-4">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Select a Deal Type</mat-label>
+      <mat-select [(ngModel)]="selectedDealType" (selectionChange)="onSelectDealType($event.value)">
+        <mat-option *ngFor="let deal of dealTypes" [value]="deal.id">
+          <mat-icon class="mr-2">{{ deal.icon }}</mat-icon>
+          {{ deal.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <app-form-builder *ngIf="selectedDealType" [config]="dealFormConfig" (submitHandler)="submitDeal($event)"></app-form-builder>
+  </div>
+</ng-template>
+
+
+
+
+
