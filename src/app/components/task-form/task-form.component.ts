@@ -8,6 +8,8 @@ import { FormBuilderComponent } from '../../form-builder/form-builder.component'
 import { FormConfig } from '../../form-builder/form-builder.model';
 import { EntityFieldsService } from '../../services/entity-fields.service';
 import { EntityService } from '../../services/entity.service';
+import { DataService } from '../../services/data.service';
+import { SnackbarService } from '../../services/snackbar.service';
 
 
 @Component({
@@ -17,7 +19,7 @@ import { EntityService } from '../../services/entity.service';
     <div class="pt-4">
     <mat-form-field appearance="fill" class="w-full" *ngIf="!this.taskData">
       <mat-label>Select a Task Type</mat-label>
-      <mat-select [(ngModel)]="newTaskType" (selectionChange)="onSelectTaskType($event.value)">
+      <mat-select [(ngModel)]="taskType" (selectionChange)="onSelectTaskType($event.value)">
         <mat-option *ngFor="let task of tasks" [value]="task.value">
           <mat-icon class="mr-2">{{ task.icon }}</mat-icon>
           {{ task.label }}
@@ -25,18 +27,22 @@ import { EntityService } from '../../services/entity.service';
       </mat-select>
     </mat-form-field>
 
-    <app-form-builder *ngIf="newTaskType" [config]="taskFormConfig" (submitHandler)="submit($event)" [values]="values"></app-form-builder>
+    <app-form-builder *ngIf="taskType" [config]="taskFormConfig" (submitHandler)="submit($event)" [values]="values"></app-form-builder>
 </div>
   `
 })
 export class TaskFormComponent implements OnInit{
+
+  dataService = inject(DataService)
+  snackbarService = inject(SnackbarService);
+
   @Input() taskData:any = null;
-  @Output() onSubmit = new EventEmitter<any>();
+  @Output() onAfterSubmit = new EventEmitter<any>();
   entityService = inject(EntityService);
   fieldsService = inject(EntityFieldsService);
 
   values:any = {};
-  newTaskType:TaskTypeT | null = null;
+  taskType:TaskTypeT | null = null;
   taskFormConfig:FormConfig = {
     fields: [],
   }
@@ -55,7 +61,7 @@ export class TaskFormComponent implements OnInit{
 
   onSelectTaskType(taskType:TaskTypeT){
     const task = this.getTaskFields(taskType);
-    this.newTaskType = taskType;
+    this.taskType = taskType;
     this.taskFormConfig = {
       title: !this.taskData ? task?.label : '',
       icon: !this.taskData ? task?.icon : '',
@@ -65,12 +71,36 @@ export class TaskFormComponent implements OnInit{
    //console.log(this.taskTypeFields[taskType]);
   }
 
-  submit(taskData:any){   
-    this.onSubmit.emit({
-      type: this.getTaskFields(this.newTaskType),
-      data: taskData
+  submit(formData:any){  
+    
+    let task:any = {}
+
+    if(formData.id){
+      task = {
+        data: { ...formData },
+        type: this.taskData.type
+      }; 
+    }
+    else{
+      task = {
+        data: { ...formData },
+        type: this.getTaskFields(this.taskType)
+      };
+    }
+
+
+    console.log('Task submitted:', task);
+
+    // console.log('Task submitted:', task);
+    // return
+    this.dataService.addOrUpdateTask(task).subscribe((res) => {
+      //console.log('Task added:', res);
+      this.snackbarService.showSnackbar(task.data.id ? 'Task updates successfully' : 'Task added successfully');
+      this.onAfterSubmit.emit(res);
     });
+
   }
+  
 
 
 }

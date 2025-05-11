@@ -126,30 +126,9 @@ export class TasksComponent extends TasksVarsComponent implements OnInit{
     });
   }
 
-  addOrUpdateTask(taskData:any){
-    console.log('taskData', taskData);
-    if(!taskData.data.id){
-      const task = {
-        data: { ...taskData.data, id: new Date().getTime() },
-        type: taskData.type
-      };
-      this.columns[0].tasks.push(task);
-      this.dataService.updateTaskColumns(this.columns).subscribe(t=>{
-        console.log('Tasks Updated')
-      })
-    }
-    else{
-      //this.dataService.updateTask(taskData).subscribe(t=>{
-       // debugger
-       // const info = this.selectedTaskIndex;
-       const p = this.selectedTaskPosition;
-       this.columns[p.column].tasks[p.row] = taskData; 
-       this.dataService.updateTaskColumns(this.columns).subscribe(t=>{
-        console.log('Tasks Updated')
-      })    
-     // })     
-    }
-    
+  onAfterSubmitTask(taskCols:any){
+    console.log('taskCols', taskCols);
+    this.columns = taskCols;
   }
 
   removeTask(col: TaskColumnI, task: TaskI) {
@@ -159,6 +138,7 @@ export class TasksComponent extends TasksVarsComponent implements OnInit{
 
   openEditTaskDialog(task:any, selectedTaskPosition:any){
     this.selectedTaskData = task;
+    console.log(task);
     this.selectedTaskPosition = selectedTaskPosition;
     this.openTaskDialog(task);
   }

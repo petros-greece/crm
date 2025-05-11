@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, from } from 'rxjs';
+import { Observable, of, from, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { catchError, filter, map, switchMap, take } from 'rxjs/operators';
 import { Option } from '../form-builder/form-builder.model';
@@ -224,6 +224,70 @@ export class DataService {
     );
   }
 
+  addTask(taskData: any): Observable<any> {
+    taskData.data.id = Date.now().toString();
+    return this.getTasks().pipe(
+      switchMap((taskColumns: any[]) => {
+        // Clone the array to avoid mutation issues
+        const updatedColumns = [...taskColumns];
+        
+        // If no columns exist, create a new column with the task
+        if (updatedColumns.length === 0) {
+          updatedColumns.push({
+            id: 'todo',
+            title: 'To Do',
+            tasks: [taskData]
+          });
+        } 
+        else {
+          // Add to first column (assuming it's the "To Do" column)
+          updatedColumns[0].tasks.unshift(taskData); // unshift adds to beginning
+        }
+  
+        // Save to localStorage
+        localStorage.setItem(this.tasksStorageKey, JSON.stringify(updatedColumns));
+        
+        return of(updatedColumns);
+      }),
+      catchError(error => {
+        console.error('Error adding task', error);
+        return throwError(() => new Error('Failed to add task'));
+      })
+    );
+  }
+  
+  updateTask(updatedTaskData: any): Observable<any> {
+    return this.getTasks().pipe(
+      switchMap((taskColumns: any[]) => {
+        let taskFound = false;
+        const updatedColumns = taskColumns.map(column => {
+          const updatedTasks = column.tasks.map((task: any) => {
+            if (task.data.id === updatedTaskData.data.id) {
+              taskFound = true;
+              return { ...task, ...updatedTaskData };
+            }
+            return task;
+          });
+          return { ...column, tasks: updatedTasks };
+        });
+  
+        if (!taskFound) {
+          return throwError(() => new Error('Task not found'));
+        }
+  
+        localStorage.setItem(this.tasksStorageKey, JSON.stringify(updatedColumns));
+        return of(updatedColumns);
+      }),
+      catchError(error => {
+        console.error('Error updating task', error);
+        return throwError(() => new Error('Failed to update task'));
+      })
+    );
+  }
+
+  addOrUpdateTask(taskData: any): Observable<any> {
+    return taskData.data.id ? this.updateTask(taskData) : this.addTask(taskData);
+  }
 
   /** DEPARTMENT**********************************************************************************8***** */
 

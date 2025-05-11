@@ -77,7 +77,7 @@ export class FormBuilderComponent implements AfterViewInit {
       this.formGroup.valueChanges
       .pipe(debounceTime(200), distinctUntilChanged())
       .subscribe(vals => {
-        console.log('Form changed:', vals);
+        //console.log('Form changed:', vals);
         this.formValuesChange.emit(vals);
       });
     }

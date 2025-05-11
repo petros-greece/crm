@@ -1,1 +1,21 @@
-<app-calendar></app-calendar>
+<!-- <div *ngIf="calendarEvents.length > 0"> -->
+ 
+  <app-calendar 
+    [events]="calendarEvents" 
+    (onDayClicked)="onDayClicked($event)"
+    (onEventClicked)="onEventClicked($event)"
+    (onEventTimesChanged)="onEventTimesChanged($event)">
+  </app-calendar>
+<!-- </div> -->
+
+
+<!--TMPL ------------------------------------------------------------------------------------------>
+
+<ng-template #dayTmpl>
+  Hello Day
+</ng-template>
+
+<ng-template #eventTmpl>
+  <!-- <app-task-form (onSubmit)="addOrUpdateTask($event)" [taskData]="selectedTaskData"></app-task-form> -->
+  <app-task-form [taskData]="selectedTaskMeta"></app-task-form>
+</ng-template>

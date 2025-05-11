@@ -1,22 +1,40 @@
 <div class="calendar-container">
-  <button mat-button (click)="view = CalendarView.Month">
-    <mat-icon>calendar_view_month</mat-icon>
-    Month
-  </button>
-  <button mat-button (click)="view = CalendarView.Week">
-    <mat-icon>calendar_view_week</mat-icon>
-    Week
-  </button>
-  <button mat-button (click)="view = CalendarView.Day">
-    <mat-icon>calendar_view_day</mat-icon>
-    Day
-  </button>
+
+
+    <div class="flex flex-row items-center">
+
+      <!-- <button mat-icon-button (click)="previous()"> -->
+        <mat-icon class="cursor-pointer" (click)="previous()">chevron_left</mat-icon>
+      <!-- </button> -->
+      
+      <span class="header-title">{{ viewDate | date:'MMMM y' }}</span>
+      
+      <!-- <button mat-icon-button (click)="next()"> -->
+        <mat-icon class="cursor-pointer" (click)="next()">chevron_right</mat-icon>
+      <!-- </button> -->
+
+
+
+      <button mat-button (click)="view = CalendarView.Month">
+        <mat-icon>calendar_view_month</mat-icon>
+        Month
+      </button>
+      <button mat-button (click)="view = CalendarView.Week">
+        <mat-icon>calendar_view_week</mat-icon>
+        Week
+      </button>
+      <button mat-button (click)="view = CalendarView.Day">
+        <mat-icon>calendar_view_day</mat-icon>
+        Day
+      </button>
+    </div>
+
 
   <mwl-calendar-month-view 
     *ngIf="view === CalendarView.Month"
     [viewDate]="viewDate"
     [events]="events"
-    (dayClicked)="handleDayClick($event)"
+    (dayClicked)="dayClicked($event)"
     (eventClicked)="eventClicked($event)"
     (eventTimesChanged)="eventTimesChanged($event)"
     >
