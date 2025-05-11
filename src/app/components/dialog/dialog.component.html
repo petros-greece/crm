@@ -1,7 +1,7 @@
-<div *ngIf="data.header" mat-dialog-title [ngClass]="data.cls" class="!flex items-center !p-4 relative w-full h-full">
+<div *ngIf="data.header" mat-dialog-title [ngClass]="data.cls" class="!flex items-center gap-2 !p-4 relative w-full h-full">
   <span [innerHTML]="data.header"></span>
   @if(data.icon){
-   <mat-icon class="relative top-1">{{ data.icon }}</mat-icon>
+   <mat-icon>{{ data.icon }}</mat-icon>
   }
   <button mat-icon-button mat-dialog-close class="!absolute right-2 top-2 !bg-white flex items-center justify-center text-transparent">
     <mat-icon class="!font-extrabold">close</mat-icon>
