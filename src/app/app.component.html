@@ -8,6 +8,8 @@
            *ngFor="let route of routes"
            [routerLink]="route.path" 
            routerLinkActive="active-link"
+           #rla="routerLinkActive"
+           [disabled]="rla.isActive"
           >
           <div  class="flex flex-row items-center gap-2">
            <mat-icon>{{ route.data?.['icon'] }}</mat-icon>
