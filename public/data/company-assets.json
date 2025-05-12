@@ -1,10 +1,6 @@
 {
   "1001": [
     {
-      "name": "logo.jpg",
-      "isFile": true
-    },
-    {
       "name": "photos",
       "isFile": false,
       "children": [
@@ -25,6 +21,150 @@
     {
       "name": "deals.json",
       "isFile": true
+    },
+    {
+      "name": "deals.xlsx",
+      "isFile": true
+    },
+    {
+      "name": "logo.jpg",
+      "isFile": true
+    }
+  ],
+  "1002": [
+    {
+      "name": "photos",
+      "isFile": false,
+      "children": [
+        {
+          "name": "logo.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-1.jpg",
+          "isFile": true
+        }
+      ]
+    }
+  ],
+  "1003": [
+    {
+      "name": "photos",
+      "isFile": false,
+      "children": [
+        {
+          "name": "logo.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-1.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-2.jpg",
+          "isFile": true
+        }
+      ]
+    }
+  ],
+  "1004": [
+    {
+      "name": "photos",
+      "isFile": false,
+      "children": [
+        {
+          "name": "logo.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-1.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-2.jpg",
+          "isFile": true
+        }
+      ]
+    }
+  ],
+  "1005": [
+    {
+      "name": "photos",
+      "isFile": false,
+      "children": [
+        {
+          "name": "logo.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-1.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-2.jpg",
+          "isFile": true
+        }
+      ]
+    }
+  ],
+  "1007": [
+    {
+      "name": "photos",
+      "isFile": false,
+      "children": [
+        {
+          "name": "logo.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-1.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-2.jpg",
+          "isFile": true
+        }
+      ]
+    }
+  ],
+  "1009": [
+    {
+      "name": "photos",
+      "isFile": false,
+      "children": [
+        {
+          "name": "logo.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-1.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-2.jpg",
+          "isFile": true
+        }
+      ]
+    }
+  ],
+  "1010": [
+    {
+      "name": "photos",
+      "isFile": false,
+      "children": [
+        {
+          "name": "logo.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-1.jpg",
+          "isFile": true
+        },
+        {
+          "name": "photo-2.jpg",
+          "isFile": true
+        }
+      ]
     }
   ]
 }

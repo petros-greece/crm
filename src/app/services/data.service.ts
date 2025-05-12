@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, from, throwError } from 'rxjs';
+import { Observable, of, from, throwError, forkJoin } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { catchError, filter, map, switchMap, take } from 'rxjs/operators';
 import { Option } from '../form-builder/form-builder.model';
+import { TreeNodeI } from '../components/folder-structure/folder-structure.component';
 
 @Injectable({
   providedIn: 'root'
@@ -645,9 +646,9 @@ export class DataService {
         return of([]);
       }),
       switchMap(companyAssets => {
-        if (companyAssets && companyAssets.length > 0) {
+        //if (companyAssets && companyAssets.length > 0) {
           localStorage.setItem(this.companyAssetsStorageKey, JSON.stringify(companyAssets));
-        }
+        //}
         return of(companyAssets);
       })
     );
@@ -680,6 +681,62 @@ export class DataService {
       })
     );
   }
+
+  getCompaniesWithAssets(): Observable<any[]> {
+    return forkJoin({
+      companies: this.getCompanies(),
+      assets: this.getCompanyAssets()
+    }).pipe(
+      map(({ companies, assets }) => {
+        return companies.map(company => {
+          const companyId = company.id?.toString(); 
+          return {
+            ...company,
+            assets: assets[companyId] || []
+          };
+        });
+      })
+    );
+  }
+
+  getCompaniesWithAssetsTree(): Observable<TreeNodeI[]> {
+    return forkJoin({
+      companies: this.getCompanies(),
+      assets: this.getCompanyAssets()
+    }).pipe(
+      map(({ companies, assets }) => {
+        return companies.map(company => {
+          const companyId = company.id?.toString();
+          const companyAssets = assets[companyId] || [];
+  
+          return <TreeNodeI>{
+            name: company.companyName,
+            isFile: false,
+            children: this.mapAssetsToTree(companyAssets, companyId)
+          };
+        });
+      })
+    );
+  }
+  
+  private mapAssetsToTree(assets: any[], companyId:string): TreeNodeI[] {
+    return assets.map(asset => {
+      const node: TreeNodeI = {
+        name: asset.name,
+        isFile: asset.isFile
+      };
+  
+      if (!asset.isFile && Array.isArray(asset.children)) {
+        node.children = this.mapAssetsToTree(asset.children, companyId);
+      }
+      else if(asset.isFile){
+        node.name = `${asset.name}`;
+        node.path = companyId;
+      }
+  
+      return node;
+    });
+  }  
 
 
 }

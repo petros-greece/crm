@@ -1,5 +1,5 @@
 /* folder-structure.component.ts */
-import { Component, inject, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnChanges, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +17,7 @@ export interface TreeNodeI {
   name: string;
   isFile: boolean;
   children?: TreeNodeI[];
+  path?: string;
 }
 
 @Component({
@@ -38,7 +39,7 @@ export interface TreeNodeI {
   templateUrl: './folder-structure.component.html',
   styleUrls: ['./folder-structure.component.scss']
 })
-export class FolderStructureComponent {
+export class FolderStructureComponent implements OnChanges{
   @Input() dataSourceInput: TreeNodeI[] = [];
   @Input() pathPrefix: string = '';
   @ViewChild('addFolderTmpl', { static: true }) addFolderTmpl!: TemplateRef<any>;
@@ -49,13 +50,18 @@ export class FolderStructureComponent {
   // Breadcrumb path: list of nodes from root to current
   path: { nodes: TreeNodeI[]; label: string }[] = [];
   currentNodes: TreeNodeI[] = [];
-  selectedFileContent: string | ArrayBuffer | null = null;
   selectedFileName: string | null = null;
   newFolderName = '';
   files:File[] = [];
 
   ngOnInit() {
     this.reset();
+  }
+
+  ngOnChanges() {
+    if (this.dataSourceInput) {
+      this.reset();
+    }
   }
 
   private reset() {
@@ -79,28 +85,15 @@ export class FolderStructureComponent {
   }
 
   onFileClick(node: TreeNodeI) {
-    this.selectedFileName = node.name;
-    // Simulate loading file content; in real app, fetch via HTTP
-    if (node.name.match(/\.(json|txt)$/)) {
-      fetch(node.name)
-        .then(res => res.text())
-        .then(text => this.selectedFileContent = text)
-        .catch(() => this.selectedFileContent = 'Unable to load file');
-    } else if (node.name.match(/\.(jpg|png|gif)$/)) {
-      this.selectedFileContent = node.name; // URL for img src
-    } else if (node.name.match(/\.(pdf)$/)) {
-      this.selectedFileContent = node.name; // URL for embed
-    } else {
-      this.selectedFileContent = 'Preview not available';
-    }
+    const path = node.path ? node.path + '/' : '';
+    this.selectedFileName = path + node.name;
   }
 
   private clearSelection() {
-    this.selectedFileContent = null;
     this.selectedFileName = null;
   }
 
-  /***************************************************** */
+  /** ADD FILE FOLDER *************************************************** */
 
   openAddFolderDialog(){
     this.newFolderName = '';

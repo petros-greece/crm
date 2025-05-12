@@ -199,6 +199,7 @@ export class CompanyComponent {
     this.selectedTabIndex = 0;
     this.dealsTableConfig = null;
     this.companyDeals = null;
+    this.companyAssets = [];
     this.chartData = { categories: [], series: [] };
 
     this.companyInfoValues = row;

@@ -58,8 +58,11 @@
         <mat-icon class="example-tab-icon">folder</mat-icon>
         Assets
       </ng-template>
-      <div *ngIf="companyAssets.length">
-        <app-folder-structure [dataSourceInput]="companyAssets" [pathPrefix]="'assets/' + companyInfoValues.id + '/'"></app-folder-structure>
+      <div>
+        <app-folder-structure 
+          [dataSourceInput]="companyAssets" 
+          [pathPrefix]="'assets/' + companyInfoValues.id + '/'">
+        </app-folder-structure>
       </div>
     </mat-tab>
 

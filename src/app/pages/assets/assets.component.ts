@@ -1,16 +1,16 @@
-import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TreeComponent, TreeNodeI } from '../../components/tree/tree.component';
-import { AssetsVars } from './assets.vars';
 import { DialogService } from '../../services/dialog.service';
 import { CommonModule } from '@angular/common';
 import { PreviewAssetComponent } from '../../components/preview-asset.component';
 import { FolderStructureComponent } from '../../components/folder-structure/folder-structure.component';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-assets',
   imports: [CommonModule, TreeComponent, PreviewAssetComponent, FolderStructureComponent],
   template: `
-  <app-folder-structure [dataSourceInput]="assetsTree"></app-folder-structure>
+  <app-folder-structure [dataSourceInput]="assetsTree" pathPrefix="assets/"></app-folder-structure>
   <!-- <app-tree [dataSourceInput]="assetsTree" (nodeClicked)="previewAsset($event)"></app-tree> -->
   <ng-template #previewAssetTmpl>
     <app-preview-asset [assetPath]="assetPath"></app-preview-asset>
@@ -18,11 +18,20 @@ import { FolderStructureComponent } from '../../components/folder-structure/fold
   `,
   styleUrl: './assets.component.scss'
 })
-export class AssetsComponent extends AssetsVars {
+export class AssetsComponent implements OnInit{
 
   @ViewChild('previewAssetTmpl', { static: true }) previewAssetTmpl!: TemplateRef<any>;
   dialogService = inject(DialogService);
+  dataService = inject(DataService)
   assetPath = '';
+  assetsTree: TreeNodeI[] = [];
+
+  ngOnInit(): void {
+    this.dataService.getCompaniesWithAssetsTree().subscribe((data) => {
+      console.log('data', data);
+      this.assetsTree = data;
+    })
+  }
 
   previewAsset(node: TreeNodeI) {
     if(node.children){ return }

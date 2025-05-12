@@ -36,7 +36,7 @@
   </div>
 
   <!-- Content Preview Pane (2/3 width on large screens, full width on small) -->
-  <div class="w-full lg:w-2/3 content-pane" *ngIf="selectedFileName">
+  <div class="w-full lg:w-2/3 py-8 px-2 bg-gray-200 flex justify-center" *ngIf="selectedFileName">
     <app-preview-asset [assetPath]="pathPrefix+selectedFileName"></app-preview-asset>
   </div>
 </div>
