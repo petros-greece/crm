@@ -8,10 +8,18 @@ import { FormBuilderComponent } from '../../form-builder/form-builder.component'
 import { FormConfig } from '../../form-builder/form-builder.model';
 import { DataService } from '../../services/data.service';
 import { MatTabsModule } from '@angular/material/tabs';
+import { PageHeaderComponent } from '../../components/page-header/page-header.component';
 
 @Component({
   selector: 'app-departments',
-  imports: [CommonModule, MatButtonModule, MatIcon, FormBuilderComponent, MatTabsModule],
+  imports: [
+    CommonModule, 
+    MatButtonModule, 
+    MatIcon, 
+    FormBuilderComponent, 
+    MatTabsModule,
+    PageHeaderComponent,
+  ],
   templateUrl: './departments.component.html',
   styleUrl: './departments.component.scss'
 })
@@ -108,7 +116,7 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
       });
       this.dialogService.openTemplate({
         panelClass: 'responsive-dialog',
-        header: `<em>Department</em>: ${department.label}`,
+        header: `Department: ${department.label}`,
         icon:  department.icon,
         content: this.departmentPreviewTmpl,
         cls: 'bg-violet-800 !text-white',
@@ -144,10 +152,11 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
   }
 
   openConfirmDeleteDepartmentDialog(){
+  
     this.dialogService.openConfirm({
       cls: 'bg-red-500',
       header: 'Remove Department?',
-      content: `Are you sure you want to remove the department: ${this.departmentFormValues.name}?`,
+      content: `Are you sure you want to remove the department: ${this.departmentFormValues.label}?`,
     })
       .subscribe(confirmed => {
         if (confirmed === true) {
