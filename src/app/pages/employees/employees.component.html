@@ -1,29 +1,39 @@
-<div class="flex flex-row">
-  <button mat-raised-button 
-  (click)="openNewEmployeeDialog()">
-    Add
-    <mat-icon>manage_accounts</mat-icon>
+<app-page-header header="Employees" icon="manage_accounts">
+  <button mat-raised-button (click)="openNewEmployeeDialog()" class="flex items-center">
+    Add Employee
+    <mat-icon>add</mat-icon>
   </button>
+</app-page-header>
+
+<div class="flex flex-row items-center justify-between px-3 pt-2 pb-4 bg-violet-200 rounded-sm shadow-md ">
+  <app-table-builder [config]="tableConfig">
+    <ng-template appColumnTemplate="actions" let-row>
+      <button mat-icon-button (click)="openEditEmployeeDialog(row)">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </ng-template>
+  </app-table-builder>
 </div>
 
-<app-table-builder [config]="tableConfig">
-  <ng-template appColumnTemplate="actions" let-row>
-    <button mat-icon-button (click)="openEditEmployeeDialog(row)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </ng-template>
-</app-table-builder>
 
 <ng-template #previewEmployeeTmpl>
-  <mat-tab-group>
+  <mat-tab-group class="min-h-[80vh]">
     <mat-tab label="Tasks">
 
+      <div class="flex justify-end my-2">
+        <button mat-raised-button color="primary" (click)="openTaskDialog()" class="flex items-center gap-2">
+          <mat-icon>add</mat-icon>
+          Add Task
+        </button>
+      </div>
+      
+
       <app-table-builder [config]="tasksTableConfig">
-        <!-- <ng-template appColumnTemplate="actions" let-row>
-          <button mat-icon-button (click)="openEditEmployeeDialog(row)">
-            <mat-icon>edit</mat-icon>
+        <ng-template appColumnTemplate="actions" let-row>
+          <button mat-icon-button (click)="openConfirmDeleteTaskDialog(row)">
+            <mat-icon>delete</mat-icon>
           </button>
-        </ng-template> -->
+        </ng-template>
       </app-table-builder>
 
     </mat-tab>
@@ -46,4 +56,12 @@
   (formValuesChange)="checkDepartment($event)"
   (submitHandler)="addNewEmployee($event)"
   ></app-form-builder> 
+</ng-template>
+
+<ng-template #taskFormTmpl>
+  <app-task-form 
+    [taskData]="taskData" 
+    [assignee]="employeeData.id"
+    (onAfterSubmit)="onAfterSubmitTask($event)">
+  </app-task-form>
 </ng-template>
