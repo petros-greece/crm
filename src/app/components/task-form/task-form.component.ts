@@ -99,7 +99,7 @@ export class TaskFormComponent implements OnInit{
     // return
     this.dataService.addOrUpdateTask(task).subscribe((res) => {
       //console.log('Task added:', res);
-      this.snackbarService.showSnackbar(task.data.id ? 'Task updates successfully' : 'Task added successfully');
+      this.snackbarService.showSnackbar(task.data.id ? 'Task updated successfully' : 'Task added successfully');
       this.onAfterSubmit.emit(res);
     });
 

@@ -67,7 +67,6 @@ export class XLSXTableComponent implements OnChanges {
       data: jsonData,
       pagination: true,
       pageSizeOptions: [5, 10, 25],
-      download: true
     };
   }
 
