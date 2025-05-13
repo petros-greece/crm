@@ -38,7 +38,7 @@ export class EntityFieldsService {
   /** PERSON ******************************************************************************** */
 
   personBaseFields: FormFieldConfig[] = [
-    { type: 'hidden', name: 'id', label: '', columns: 1, },
+    { type: 'hidden', name: 'id', label: 'ID', columns: 1, },
     { type: 'text', name: 'fullName', label: 'Full Name', required: true, validators: { minLength: 3, maxLength: 40, }, columns: 2, },
     { type: 'email', name: 'email', label: 'Email Address', required: true, validators: { pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$' }, columns: 2, },
     { type: 'text', name: 'phoneNumber', label: 'Phone Number', required: true, validators: { pattern: '^\\+?[0-9]{10,15}$' }, columns: 2, },
@@ -75,7 +75,7 @@ export class EntityFieldsService {
       },
       columns: 2
     },
-    { type: 'slide-toggle', name: 'isActive', label: 'Is Active?', required: true, columns: 1, },
+    { type: 'slide-toggle', name: 'isActive', label: 'Is Active?', required: false, columns: 1, defaultValue: true },
     // { type: 'multi-row', name: 'tasks', label: 'Tasks', addRow: 'Add Task', fields: [
     //   {
     //     type: 'select',
@@ -391,11 +391,9 @@ export class EntityFieldsService {
     ]
   };
 
-
   getDealTypeFields(dealTypeId: string): FormFieldConfig[] {
     return [...this.baseDealFields, ...this.dealTypeFields[dealTypeId], this.dateAndNoteMultiRowField];
   }
-
 
   // "14": [ // Equipment Purchase
   //   { type: 'multi-row', name: 'equipmentItems', label: 'Equipment Items', addRow: 'Add Item', columns: 2, fields: [
