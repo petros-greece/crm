@@ -35,8 +35,9 @@ export interface TableConfig {
   data: any[];
   pagination?: boolean;
   pageSizeOptions?: number[];
-  download?: boolean;
+  hideButtons?: boolean;
   cacheOptionsProp?:string;
+  noDataMessage?: string;
 }
 
 @Component({
@@ -53,11 +54,13 @@ export interface TableConfig {
     MatIcon,
     MatButtonModule,
     MatMenuModule,
-    MatCheckboxModule
+    MatCheckboxModule,
   ],
   template: `
+  <div>
+
     <div *ngIf="config.data.length > 0">
-      <div class="flex flex-row justify-end">
+      <div class="flex flex-row justify-end" *ngIf="config.hideButtons !== true">
 
         <button mat-button (click)="xlsxService.exportTableToExcel(dataSource.data)">
           EXCEL
@@ -68,8 +71,8 @@ export interface TableConfig {
           <mat-icon>download</mat-icon>
         </button>
 
-        <button mat-button [matMenuTriggerFor]="columnsMenu" #menuTrigger="matMenuTrigger">
-          <mat-icon class="m-auto">filter_list</mat-icon>
+        <button mat-button [matMenuTriggerFor]="columnsMenu" #menuTrigger="matMenuTrigger" >
+          <mat-icon class="!m-auto">filter_list</mat-icon>
         </button>
         <mat-menu #columnsMenu="matMenu" class="column-menu">
           <div class="p-2 flex flex-col gap-2" (click)="$event.stopPropagation()">
@@ -89,8 +92,9 @@ export interface TableConfig {
           </div>
         </mat-menu>
       </div>
-      <div class="overflow-x-auto">
-        <table mat-table [dataSource]="dataSource" matSort class="overflow-scroll">
+
+      <div class="rounded-sm overflow-auto">
+        <table mat-table [dataSource]="dataSource" matSort class="min-w-full">
           <!-- Column Definitions -->
           <ng-container *ngFor="let col of config.columns" [matColumnDef]="col.key">
             <th mat-header-cell *matHeaderCellDef 
@@ -125,9 +129,18 @@ export interface TableConfig {
       <mat-paginator *ngIf="config.pagination"
                     [pageSizeOptions]="config.pageSizeOptions || [5, 10, 25]"
                     showFirstLastButtons
-                    aria-label="Select page">
+                    aria-label="Select page"
+                    class="rounded-sm">
       </mat-paginator>
     </div> 
+
+    <div *ngIf="config.data.length === 0 && config.noDataMessage" 
+      class="flex flex-col items-center justify-center h-full p-4">
+      <mat-icon class="text-6xl text-gray-400">info</mat-icon> 
+      <h2 class="text-2xl text-gray-400">{{ config.noDataMessage }}</h2>
+    </div>
+
+  </div>
   `,
   styles: [`
     table { width: 100%; }
@@ -151,6 +164,9 @@ export class TableBuilderComponent implements OnInit, AfterViewInit, OnChanges {
   constructor(private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
+    if(!this.config.noDataMessage) {
+      this.config.noDataMessage = 'No data available';
+    }
     this.checkColumns();
     this.dataSource.data = this.config.data;
   }
