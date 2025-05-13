@@ -8,7 +8,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogComponent } from '../../components/dialog/dialog.component';
 import { FormBuilderService } from '../form-builder.service';
 import { MatIcon } from '@angular/material/icon';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 interface IconCategory {
   name: string;
@@ -25,7 +26,8 @@ interface IconCategory {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIcon
+    MatIcon,
+    MatExpansionModule
   ],
   template: `
     <div class="flex flex-col items-center justify-center h-full w-full">
@@ -38,18 +40,29 @@ interface IconCategory {
     </div>
 
     <ng-template #selectIconTmpl>
-    <div *ngFor="let category of icons" class="category">
-      <div class="text-lg font-bold my-2">
-        {{ category.name }}
-      </div>
-      <div class="icon-list">
-        <button mat-mini-fab *ngFor="let icon of category.icons" (click)="selectIcon(icon)">
-        <mat-icon class="icon-item">
-          {{ icon }}
-        </mat-icon> 
-        </button>
-      </div>
-    </div>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let category of icons">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+            {{ category.name | titlecase }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="icon-list">
+            <!-- <button mat-mini-fab *ngFor="let icon of category.icons" (click)="selectIcon(icon)">
+              <mat-icon class="icon-item">
+                {{ icon }}
+              </mat-icon> 
+            </button> -->
+            <mat-icon 
+              class="m-2 transition-transform transform hover:scale-125 duration-200 ease-in-out cursor-pointer"
+              *ngFor="let icon of category.icons"
+              (click)="selectIcon(icon)">
+              {{ icon }}
+            </mat-icon>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </ng-template>
 
 
