@@ -67,7 +67,7 @@ export class TasksComponent extends TasksVarsComponent implements OnInit{
   addColumn() {
     const title = this.newColumnTitle.trim();
     if (!title) return;
-    this.columns.push({ id: new Date().getTime(), title, tasks: [] });
+    this.columns = [...this.columns, { id: this.columns.length+1, title, tasks: [] }];
     this.newColumnTitle = '';
   }
 
