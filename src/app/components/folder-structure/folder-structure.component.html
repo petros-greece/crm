@@ -36,8 +36,9 @@
   </div>
 
   <!-- Content Preview Pane (2/3 width on large screens, full width on small) -->
-  <div class="w-full lg:w-2/3 py-8 px-2 bg-gray-200 flex justify-center" *ngIf="selectedFileName">
-    <app-preview-asset [assetPath]="pathPrefix+selectedFileName"></app-preview-asset>
+  <div class="w-full lg:w-2/3 p-2 mt-2 justify-center max-h-[700px] overflow-auto" *ngIf="selectedFileName" style="border: 3px solid #ccc; border-radius: 8px;background: #eee;">
+    <app-preview-asset [assetPath]="pathPrefix+selectedFileName" 
+    class="flex justify-center w-full max-h-full"></app-preview-asset>
   </div>
 </div>
 

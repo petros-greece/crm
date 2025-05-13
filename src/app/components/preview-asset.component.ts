@@ -10,13 +10,20 @@ import { AssetResponseType, AssetsService } from '../pages/assets/assets.service
   standalone: true,
   imports: [CommonModule, XLSXTableComponent, NgxJsonViewerModule],
   template: `
-  <ng-container [ngSwitch]="previewType">
-    <xlsx-table *ngSwitchCase="'arraybuffer'" [buffer]="previewData"></xlsx-table>
-    <img *ngSwitchCase="'blob'" [src]="previewData" style="max-width: 100%; max-height: 500px;"/> 
-    <iframe *ngSwitchCase="'pdfBlob'" [src]="previewData" width="100%" height="800px" style="border: none;"></iframe>
-    <pre *ngSwitchCase="'text'">{{ previewData }}</pre>
-    <ngx-json-viewer *ngIf="previewType === 'json'" [json]="previewData"></ngx-json-viewer>
-  </ng-container>
+  <div class="p-2 w-full h-full overflow-auto">
+    <ng-container [ngSwitch]="previewType">
+      <xlsx-table *ngSwitchCase="'arraybuffer'" [buffer]="previewData"></xlsx-table>
+      <div *ngSwitchCase="'blob'" class="flex justify-center items-center">
+        <img  [src]="previewData" style="max-width: 100%; max-height: 500px;"/> 
+      </div>
+      
+      <iframe *ngSwitchCase="'pdfBlob'" [src]="previewData" width="100%" height="800px" style="border: none;"></iframe>
+      <pre *ngSwitchCase="'text'">{{ previewData }}</pre>
+      <div *ngIf="previewType === 'json'" class="overflow-auto">
+        <ngx-json-viewer [json]="previewData"></ngx-json-viewer>
+      </div>
+    </ng-container>
+  </div>
   `
 })
 export class PreviewAssetComponent implements OnChanges{
