@@ -18,6 +18,7 @@ import { ApexAxisChartSeries, ApexXAxis, ApexChart } from 'ng-apexcharts';
 import { ChartService } from '../../components/chart/chart.service';
 import { FolderStructureComponent } from '../../components/folder-structure/folder-structure.component';
 import { TreeNodeI } from '../../components/tree/tree.component';
+import { PageHeaderComponent } from '../../components/page-header/page-header.component';
 
 @Component({
   selector: 'app-company',
@@ -32,7 +33,8 @@ import { TreeNodeI } from '../../components/tree/tree.component';
     TableBuilderComponent, 
     ColumnTemplateDirective,
     ChartComponentWrapper,
-    FolderStructureComponent
+    FolderStructureComponent,
+    PageHeaderComponent
   ],
   templateUrl: './company.component.html',
   styleUrl: './company.component.scss'

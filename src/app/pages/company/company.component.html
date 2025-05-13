@@ -1,22 +1,26 @@
 
-<div class="flex flex-row items-center gap-2">
-  <h2>
-    Companies
-  </h2>
-  <mat-icon>business</mat-icon>
-  <button mat-raised-button class="ml-4" (click)="openNewCompanyTmpl()">
-    Add Company
-  </button>
-</div>
 
 
-<app-table-builder [config]="companiesTableConfig" *ngIf="companiesTableConfig">
-  <ng-template appColumnTemplate="actions" let-row>
-    <button mat-icon-button (click)="openEditCompanyDialog(row)">
-      <mat-icon>edit</mat-icon>
+
+  <app-page-header header="Companies" icon="business">
+    <button mat-raised-button class="ml-4" (click)="openNewCompanyTmpl()">
+      <mat-icon>add</mat-icon>
+      Add Company
     </button>
-  </ng-template>
-</app-table-builder>
+  </app-page-header>
+  
+  <div class="flex flex-row items-center justify-between px-3 pt-2 pb-4 bg-violet-200 rounded-sm shadow-md">
+  
+    <app-table-builder [config]="companiesTableConfig" *ngIf="companiesTableConfig" class="w-full">
+      <ng-template appColumnTemplate="actions" let-row>
+        <button mat-icon-button (click)="openEditCompanyDialog(row)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </ng-template>
+    </app-table-builder>
+  </div>
+
+
 
 <!-- TEMPATES ---------------------------------------->
 
