@@ -1,21 +1,27 @@
-<!-- <div *ngIf="calendarEvents.length > 0"> -->
- 
-  <app-calendar 
-    [events]="calendarEvents" 
-    (onDayClicked)="onDayClicked($event)"
-    (onEventClicked)="onEventClicked($event)"
-    (onEventTimesChanged)="onEventTimesChanged($event)">
-  </app-calendar>
-<!-- </div> -->
+<app-calendar 
+  [events]="calendarEvents" 
+  (onDayClicked)="onDayClicked($event)"
+  (onEventClicked)="onEventClicked($event)"
+  (onEventTimesChanged)="onEventTimesChanged($event)">
+</app-calendar>
+
 
 
 <!--TMPL ------------------------------------------------------------------------------------------>
 
 <ng-template #dayTmpl>
-  Hello Day
+  <app-table-builder [config]="dayEventsTableConfig">
+    <ng-template appColumnTemplate="icon" let-row>
+        <mat-icon>{{ row.icon }}</mat-icon>
+    </ng-template> 
+    <ng-template appColumnTemplate="edit" let-row let-edit>
+      <button mat-icon-button (click)="onEditTask(edit)">
+        <mat-icon>edit</mat-icon>
+      </button>  
+    </ng-template>
+  </app-table-builder>
 </ng-template>
 
 <ng-template #eventTmpl>
-  <!-- <app-task-form (onSubmit)="addOrUpdateTask($event)" [taskData]="selectedTaskData"></app-task-form> -->
-  <app-task-form [taskData]="selectedTaskMeta"></app-task-form>
+  <app-task-form [taskData]="selectedTaskMeta" (onAfterSubmit)="afterSumbitEvent($event)"></app-task-form>
 </ng-template>
