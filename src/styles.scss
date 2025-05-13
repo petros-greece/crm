@@ -15,7 +15,7 @@ html {
   ));
 }
 
-// Customize the entire app. Change :root to your selector if you want to scope the styles.
+// Toolbar
 :root {
   @include mat.toolbar-overrides((
     container-background-color: #5f00c0,
@@ -26,11 +26,11 @@ html {
   color: #fff;
 }
 
-
+// Sidenav
 :root {
   @include mat.sidenav-overrides((
-    container-background-color: #d5baff,
-    // container-text-color: #fff,
+    //container-background-color: #5f00c0,
+    //container-text-color: #fff,
   ));
 }
 
@@ -201,6 +201,12 @@ body {
  // pointer-events: none !important;
 }
 
+.no-field-wrapper{
+  .mat-mdc-form-field-subscript-wrapper{
+    display: none;
+  }
+}
+
 /** DND *****************************************/
 
 .dnd-preview-list {
@@ -251,5 +257,33 @@ body {
 }
 
 
-/*******************************************/
+/** SCROLLBAR *****************************************/
 
+.my-scrollbar {
+  overflow: auto; /* Make sure scrolling is enabled */
+}
+
+/* WebKit-based browsers (Chrome, Edge, Safari) */
+.my-scrollbar::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+.my-scrollbar::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Track background */
+}
+
+.my-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #5f00c0; /* Scroll thumb color */
+  border-radius: 8px;
+  border: 3px solid #f0f0f0; /* Creates padding around thumb */
+}
+
+/* Firefox */
+.my-scrollbar {
+  scrollbar-width: auto;
+  scrollbar-color: #5f00c0 #f0f0f0;
+}
+
+
+/*******************************************/
