@@ -37,6 +37,7 @@ export class TaskFormComponent implements OnInit{
   snackbarService = inject(SnackbarService);
 
   @Input() taskData:any = null;
+  @Input() assignee:string = '';
   @Output() onAfterSubmit = new EventEmitter<any>();
   entityService = inject(EntityService);
   fieldsService = inject(EntityFieldsService);
@@ -67,6 +68,9 @@ export class TaskFormComponent implements OnInit{
       icon: !this.taskData ? task?.icon : '',
       fields: this.fieldsService.getTaskFields(taskType),
       submitText: this.taskData? 'Update Task' : 'Add Task'
+    }
+    if(this.assignee){
+      this.values.assignee = this.assignee;
     }
    //console.log(this.taskTypeFields[taskType]);
   }
