@@ -290,6 +290,24 @@ export class DataService {
     return taskData.data.id ? this.updateTask(taskData) : this.addTask(taskData);
   }
 
+  deleteTask(taskId: string): Observable<any[]> {
+    return this.getTasks().pipe(
+      map((taskColumns: any[]) => {
+        const updatedColumns = taskColumns.map(column => ({
+          ...column,
+          tasks: column.tasks.filter((task: any) => task.data.id !== taskId)
+        }));
+  
+        localStorage.setItem(this.tasksStorageKey, JSON.stringify(updatedColumns));
+        return updatedColumns;
+      }),
+      catchError(error => {
+        console.error('Error deleting task', error);
+        return throwError(() => new Error('Failed to delete task'));
+      })
+    );
+  }
+
   /** DEPARTMENT**********************************************************************************8***** */
 
   private readonly departmentsStorageKey = 'crm-departments';
