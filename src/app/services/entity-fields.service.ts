@@ -57,36 +57,14 @@ export class EntityFieldsService {
       dependsOn: {
         fieldName: 'department',
         updateOptions: (departmentValue: string) => {
-
-          // Find the department with matching value
-          const department = this.departments.find((d: DepartmentI) => d.id === departmentValue);
-
-          if (!department || !department.roles) {
-            return of([]); // Return empty array if no department or roles found
-          }
-          // Map roles to options format
-          const options = department.roles.map((r: any) => ({
-            label: r.role,
-            value: r.role
-          }));
-
-          return of(options);
+          const department = this.departments.find((d: DepartmentI) => d.label === departmentValue);
+          return of((department?.roles || []).map(((r:{role:string}) => ({ label: r.role, value: r.role }))));
         }
       },
       columns: 2
     },
     { type: 'slide-toggle', name: 'isActive', label: 'Is Active?', required: false, columns: 1, defaultValue: true },
-    // { type: 'multi-row', name: 'tasks', label: 'Tasks', addRow: 'Add Task', fields: [
-    //   {
-    //     type: 'select',
-    //     name: 'type',
-    //     label: 'Task Type',
-    //     listName: 'Jobs', 
-    //   },
-    //   { type: 'date', name: 'startDate', label: 'Start Date', required: true },
-    //   { type: 'date', name: 'endDate', label: 'End Date', required: true },
-    //   ]
-    // }
+    { type: 'select', name: 'crmRole', label: 'CRM Role', dynamicOptions: this.dataService.getRoleOptions(), required: true}
   ];
 
 
@@ -478,7 +456,7 @@ export class EntityFieldsService {
     { type: 'text', name: 'subject', label: 'Subject', required: true, validators: { minLength: 3, maxLength: 100 }, columns: 1 },
     { type: 'select', name: 'priority', label: 'Priority', required: false, multiple: false, listName: 'Priority', columns: 2 },
     { type: 'date', name: 'dueDate', label: 'Due Date', required: false, columns: 2 },
-    { type: 'textarea', name: 'notes', label: 'Notes', required: false, validators: { minLength: 0, maxLength: 500 }, columns: 1 },
+    { type: 'text-editor', name: 'notes', label: 'Notes', required: false, validators: { minLength: 0, maxLength: 500 }, columns: 1 },
     { type: 'autocomplete', name: 'assignee', label: 'Assignee', required: true, dynamicOptions: this.dataService.getEmployeeOptions(), columns: 1 },
   ];
 
@@ -490,12 +468,12 @@ export class EntityFieldsService {
     ],
     email: [
       { type: 'email', name: 'emailAddress', label: 'Email Address', required: true, validators: { pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$' }, columns: 1 },
-      { type: 'textarea', name: 'emailBody', label: 'Email Body', required: true, columns: 1 },
+      { type: 'text-editor', name: 'emailBody', label: 'Email Body', required: true, columns: 1 },
     ],
     meeting: [
       { type: 'text', name: 'location', label: 'Location/Link', required: false, columns: 2 },
       { type: 'number', name: 'duration', label: 'Duration (minutes)', required: false, columns: 2 },
-      { type: 'textarea', name: 'agenda', label: 'Agenda', required: false, columns: 1 },
+      { type: 'text-editor', name: 'agenda', label: 'Agenda', required: false, columns: 1 },
     ],
     followUp: [
       { type: 'text', name: 'relatedLead', label: 'Related Lead/Opportunity', required: false, columns: 1 },
@@ -531,7 +509,7 @@ export class EntityFieldsService {
       { type: 'date', name: 'sendDate', label: 'Send Date', required: true, columns: 2 },
     ],
     internalNote: [
-      { type: 'textarea', name: 'noteBody', label: 'Note', required: true, columns: 1 },
+      { type: 'text-editor', name: 'noteBody', label: 'Note', required: true, columns: 1 },
     ],
     leadQualification: [
       { type: 'select', name: 'qualificationStatus', label: 'Qualification Status', required: false, multiple: false, listName: 'Lead Qualification', columns: 1 },
