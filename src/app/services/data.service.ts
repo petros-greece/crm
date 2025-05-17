@@ -11,7 +11,7 @@ import { TreeNodeI } from '../components/folder-structure/folder-structure.compo
 export class DataService {
 
   private readonly employeesStorageKey = 'crm-employees';
-  private readonly employeesJsonFile = 'assets/data/employees.json'; // Adjust path as needed
+  private readonly employeesJsonFile = 'assets/data/employees.json';
 
   constructor(private http: HttpClient) { }
 
@@ -351,7 +351,7 @@ export class DataService {
         const departments = JSON.parse(storedEmployees);
         const mapped = departments.map((item: any) => ({
           label: item.label,
-          value: item.id
+          value: item.label
         }));
         return of(mapped);
       } catch (error) {
@@ -359,7 +359,7 @@ export class DataService {
         return this.getDepartmentsFromFile().pipe(
           map(departments => departments.map((item: any) => ({
             label: item.label,
-            value: item.id
+            value: item.label
           })))
         );
       }
@@ -367,7 +367,7 @@ export class DataService {
       return this.getDepartmentsFromFile().pipe(
         map(departments => departments.map((item: any) => ({
           label: item.label,
-          value: item.id
+          value: item.label
         })))
       );
     }
@@ -755,6 +755,111 @@ export class DataService {
       return node;
     });
   }  
+
+  /** ROLES ******************************************************************************** */
+
+  private readonly rolesStorageKey = 'crm-roles';
+  private readonly rolesJsonFile = 'assets/data/roles.json';
+
+  getRoles(): Observable<any[]> {
+    const storedRoles = localStorage.getItem(this.rolesStorageKey);
+
+    if (storedRoles) {
+      try {
+        const roles = JSON.parse(storedRoles);
+        return of(roles);
+      } catch (error) {
+        console.error('Error parsing stored roles', error);
+        return this.getRolesFromFile();
+      }
+    } else {
+      return this.getRolesFromFile();
+    }
+  }
+
+  getRoleOptions(): Observable<{ label: string; value: any }[]> {
+    return this.getRoles().pipe(
+      map(roles => roles.map(item => ({
+        label: item.roleName,
+        value: item.roleName
+      })))
+    );
+  }
+
+  private getRolesFromFile(): Observable<any[]> {
+    return this.http.get<any[]>(this.rolesJsonFile).pipe(
+      catchError(error => {
+        console.error('Error loading roles file', error);
+        return of([]);
+      }),
+      switchMap(roles => {
+        console.log('roles', roles);
+        if (roles && roles.length > 0) {
+          localStorage.setItem(this.rolesStorageKey, JSON.stringify(roles));
+        }
+        return of(roles);
+      })
+    );
+  }
+
+  addRole(newRole: any): Observable<any[]> {
+    return this.getRoles().pipe(
+      map((roles: any[]) => {
+        if (!newRole.id) {
+          newRole.id = Date.now().toString();
+        }
+
+        const updatedRoles = [...roles, newRole];
+        localStorage.setItem(this.rolesStorageKey, JSON.stringify(updatedRoles));
+        return updatedRoles;
+      })
+    );
+  }
+
+  updateRole(updatedRole: any): Observable<any[]> {
+    return this.getRoles().pipe(
+      map((roles: any[]) => {
+        const updatedRoles = roles.map(role =>
+          role.id === updatedRole.id ? { ...role, ...updatedRole } : role
+        );
+
+        localStorage.setItem(this.rolesStorageKey, JSON.stringify(updatedRoles));
+        return updatedRoles;
+      })
+    );
+  }
+
+  addOrUpdateRole(role:any): Observable<any[]> {
+    if(role.id) return this.updateRole(role);
+    return this.addRole(role);
+  }
+
+  updateRolePermissions(roleId: string | number, newPermissions: any[]): Observable<any[]> {
+    return this.getRoles().pipe(
+      map((roles: any[]) => {
+        const updatedRoles = roles.map(role => {
+          if (role.id === roleId) {
+            return { ...role, permissions: newPermissions };
+          }
+          return role;
+        });
+
+        localStorage.setItem(this.rolesStorageKey, JSON.stringify(updatedRoles));
+        return updatedRoles;
+      })
+    );
+  }
+
+  deleteRole(roleId: string | number): Observable<any[]> {
+    return this.getRoles().pipe(
+      map((roles: any[]) => {
+        const updatedRoles = roles.filter(role => role.id !== roleId);
+        localStorage.setItem(this.rolesStorageKey, JSON.stringify(updatedRoles));
+        return updatedRoles;
+      })
+    );
+  }
+
 
 
 }
