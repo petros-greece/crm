@@ -21,7 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
         [uploader]="uploader"
       >
         <mat-icon class="text-4xl mb-2 text-gray-400">cloud_upload</mat-icon>
-        <p class="text-gray-600 mb-1">Drag and drop files here or click to upload</p>
+        <p class="text-gray-600 mb-1">{{ message }}</p>
         <p class="text-sm text-gray-500" *ngIf="acceptedTypes">
           Accepted formats: {{ acceptedTypes }}
         </p>
@@ -65,24 +65,63 @@ import { MatButtonModule } from '@angular/material/button';
 export class UploadFileFieldComponent implements OnInit {
   @Input() isMultiple = false;
   @Input() acceptedTypes = '';
+  @Input() message = 'Drag and drop files here or click to upload';
   @Output() filesUploaded = new EventEmitter<File[]>();
   @Output() uploadError = new EventEmitter<string>();
 
   uploader!: FileUploader;
   isFileOver = false;
 
-  commonMimeTypes: { [key: string]: string } = {
-    '.pdf': 'application/pdf',
-    '.jpg': 'image/jpeg',
-    '.png': 'image/png',
-    '.doc': 'application/msword',
-    '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    '.xls': 'application/vnd.ms-excel',
-    '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    '.csv': 'text/csv',
-    '.txt': 'text/plain',
-    '.zip': 'application/zip'
-  };
+commonMimeTypes: { [ext: string]: string[] } = {
+  // Archives and compressed files
+  '.zip':  ['application/zip', 'application/x-zip-compressed', 'application/octet-stream'], 
+  '.7z':   ['application/x-7z-compressed'], 
+  '.rar':  ['application/vnd.rar'], 
+  '.tar':  ['application/x-tar'], 
+  '.gz':   ['application/gzip', 'application/x-gzip'], 
+  '.bz2':  ['application/x-bzip2'], 
+  '.bz':   ['application/x-bzip'], 
+  // Documents
+  '.pdf':  ['application/pdf'], 
+  '.doc':  ['application/msword'], 
+  '.docx': ['application/vnd.openxmlformats-officedocument.wordprocessingml.document'], 
+  '.xls':  ['application/vnd.ms-excel'], 
+  '.xlsx': ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'], 
+  '.ppt':  ['application/vnd.ms-powerpoint'], 
+  '.pptx': ['application/vnd.openxmlformats-officedocument.presentationml.presentation'], 
+  '.txt':  ['text/plain'], 
+  '.csv':  ['text/csv'], 
+  '.html': ['text/html'], 
+  '.htm':  ['text/html'], 
+  '.css':  ['text/css'], 
+  '.js':   ['text/javascript'], 
+  '.json': ['application/json'], 
+  '.xml':  ['application/xml', 'text/xml'],  // XML (RFC 7303 recommends application/xml):contentReference[oaicite:3]{index=3} 
+  // Images
+  '.jpg':  ['image/jpeg', 'image/pjpeg'],     // IE hack 'image/pjpeg' for JPEGs:contentReference[oaicite:4]{index=4} 
+  '.jpeg': ['image/jpeg', 'image/pjpeg'], 
+  '.png':  ['image/png', 'image/x-png'],     // IE used 'image/x-png':contentReference[oaicite:5]{index=5} 
+  '.gif':  ['image/gif'], 
+  '.bmp':  ['image/bmp', 'image/x-ms-bmp'],  // Windows BMP:contentReference[oaicite:6]{index=6} 
+  '.ico':  ['image/vnd.microsoft.icon'], 
+  '.svg':  ['image/svg+xml'], 
+  '.webp': ['image/webp'], 
+  '.tif':  ['image/tiff'], 
+  '.tiff': ['image/tiff'], 
+  // Audio/Video
+  '.mp3':  ['audio/mpeg'], 
+  '.wav':  ['audio/wav'], 
+  '.oga':  ['audio/ogg'], 
+  '.ogg':  ['audio/ogg'], 
+  '.mp4':  ['video/mp4'], 
+  '.avi':  ['video/x-msvideo'], 
+  '.mov':  ['video/quicktime'],  // QuickTime:contentReference[oaicite:7]{index=7} 
+  '.mpg':  ['video/mpeg'], 
+  '.mpeg': ['video/mpeg'], 
+  // Fallbacks / others
+  '.bin':  ['application/octet-stream'],  // generic binary:contentReference[oaicite:8]{index=8} 
+  // ...add other types as needed...
+};
 
   ngOnInit() {
     this.initializeUploader();
@@ -94,12 +133,16 @@ export class UploadFileFieldComponent implements OnInit {
     this.uploader = new FileUploader({
       url: 'www.test.com', // Add your upload endpoint if needed
       autoUpload: false,
-      allowedMimeType: this.acceptedTypes?.split(',').map(t => this.commonMimeTypes[t.trim()]),
+      allowedMimeType: this.acceptedTypes
+            ?.split(',')
+            .map(ext => ext.trim().toLowerCase())
+            .map(ext => ext.startsWith('.') ? ext : '.' + ext)
+            .flatMap(ext => this.commonMimeTypes[ext] || [])
+            .filter((type, i, arr) => arr.indexOf(type) === i), 
       maxFileSize: 5 * 1024 * 1024 // 5MB
     });
 
     this.uploader.onAfterAddingAll = (files: FileItem[]) => {
-      console.log('yoyo')
       this.filesUploaded.emit(files.map(f => f._file));
     };
 

@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormControl } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { AbstractControl, FormControl } from '@angular/forms';
 import { FormFieldConfig, FieldComponent } from './../form-builder.model';
 
 @Component({

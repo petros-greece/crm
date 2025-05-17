@@ -14,6 +14,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { InputFieldComponent } from './input-field.component';
 import { SelectFieldComponent } from './select-field.component';
 import { DatepickerFieldComponent } from './datepicker-field.component';
+import { TextareaFieldComponent } from './textarea-field.component';
+import { SlideToggleFieldComponent } from './slide-toggle-field.component';
+import { RadioGroupFieldComponent } from './radio-group-field.component';
+import { ColorPickerFieldComponent } from './colorpicker-field.component';
+import { AutocompleteFieldComponent } from './autocomplete-field.component';
+import { AutocompleteChipFieldComponent } from './autocomplete-chips-field.component';
+import { SliderFieldComponent } from './slider-field.component';
+import { SliderRangeFieldComponent } from './slider-range-field.component';
+import { IconPickerFieldComponent } from './icon-picker-field.component';
+import { FileUploadComponent } from './file-upload-field.component';
 
 @Component({
   selector: 'app-group-field',
@@ -25,7 +35,17 @@ import { DatepickerFieldComponent } from './datepicker-field.component';
     MatButtonModule,
     InputFieldComponent,
     SelectFieldComponent,
-    DatepickerFieldComponent
+    DatepickerFieldComponent,
+    TextareaFieldComponent,
+    SlideToggleFieldComponent,
+    RadioGroupFieldComponent,
+    ColorPickerFieldComponent,
+    AutocompleteFieldComponent,
+    AutocompleteChipFieldComponent,
+    SliderFieldComponent,
+    SliderRangeFieldComponent,
+    IconPickerFieldComponent,
+    FileUploadComponent
   ],
   template: `
     <fieldset class="border p-4 rounded">
@@ -33,12 +53,17 @@ import { DatepickerFieldComponent } from './datepicker-field.component';
       <div class="grid gap-4" [style.gridTemplateColumns]="gridColumns">
         <ng-container *ngFor="let field of config.fields">
           <ng-container [ngSwitch]="field.type">
-            <app-input-field
-              *ngSwitchCase="'text'"
-              [config]="field"
-              [control]="getFormControl(field.name)">
-            </app-input-field>
 
+            <!-- Shared input field for text-based types -->
+            <ng-container *ngSwitchDefault>
+              <app-input-field
+                *ngIf="['text', 'number', 'password', 'email'].includes(field.type)"
+                [config]="field"
+                [control]="getFormControl(field.name)">
+              </app-input-field>
+            </ng-container>
+
+            <!-- Specific field types -->
             <app-select-field
               *ngSwitchCase="'select'"
               [config]="field"
@@ -51,9 +76,66 @@ import { DatepickerFieldComponent } from './datepicker-field.component';
               [control]="getFormControl(field.name)">
             </app-date-field>
 
-            <!-- add more field types here as needed -->
+            <app-textarea-field 
+              *ngSwitchCase="'textarea'"
+              [config]="field"
+              [control]="getFormControl(field.name)">
+            </app-textarea-field>
+
+              <app-slide-toggle-field *ngSwitchCase="'slide-toggle'"
+                [config]="field"
+                [control]="getFormControl(field.name)">
+              </app-slide-toggle-field>
+
+              <app-radio-group-field *ngSwitchCase="'radio'"
+                [config]="field"
+                [control]="getFormControl(field.name)">
+              </app-radio-group-field>
+
+              <app-color-picker-field *ngSwitchCase="'color'"
+                [config]="field"
+                [control]="getFormControl(field.name)">
+              </app-color-picker-field>
+
+              <app-autocomplete-field *ngSwitchCase="'autocomplete'"
+                [config]="field"
+                [control]="getFormControl(field.name)">
+              </app-autocomplete-field>
+
+              <app-autocomplete-chips *ngSwitchCase="'chips'"
+                [config]="field"
+                [control]="getFormControl(field.name)">
+              </app-autocomplete-chips>
+
+              <app-slider-field *ngSwitchCase="'slider'"
+                [config]="field"
+                [control]="getFormControl(field.name)">
+              </app-slider-field>
+
+              
+              <app-slide-toggle-field *ngSwitchCase="'slide-toggle'"
+                [config]="field"
+                [control]="getFormControl(field.name)">
+              </app-slide-toggle-field>
+
+              <!-- <app-slider-range-field *ngSwitchCase="'slider-range'"
+                [config]="field"
+                [control]="getFormControl(field.name)">
+              </app-slider-range-field> -->
+
+              <app-icon-picker-field *ngSwitchCase="'icon'"
+                [config]="field"
+                [control]="getFormControl(field.name)">
+              </app-icon-picker-field>
+
+              <app-file-upload *ngSwitchCase="'file'"
+                [config]="field"
+                [control]="getFormControl(field.name)">
+              </app-file-upload>
+
           </ng-container>
         </ng-container>
+
       </div>
     </fieldset>
   `,
@@ -65,8 +147,7 @@ import { DatepickerFieldComponent } from './datepicker-field.component';
 })
 export class GroupFieldComponent
   extends BaseFieldComponent<FormGroup>
-  implements ControlValueAccessor, OnInit
-{
+  implements ControlValueAccessor, OnInit {
   /** Alias for the FormGroup passed in as `control` */
   get groupControl(): FormGroup {
     return this.control;

@@ -14,6 +14,15 @@ import { InputFieldComponent } from './input-field.component';
 import { SelectFieldComponent } from './select-field.component';
 import { DatepickerFieldComponent } from './datepicker-field.component';
 import { TextareaFieldComponent } from './textarea-field.component';
+import { SlideToggleFieldComponent } from './slide-toggle-field.component';
+import { RadioGroupFieldComponent } from './radio-group-field.component';
+import { ColorPickerFieldComponent } from './colorpicker-field.component';
+import { AutocompleteFieldComponent } from './autocomplete-field.component';
+import { AutocompleteChipFieldComponent } from './autocomplete-chips-field.component';
+import { SliderFieldComponent } from './slider-field.component';
+import { SliderRangeFieldComponent } from './slider-range-field.component';
+import { IconPickerFieldComponent } from './icon-picker-field.component';
+import { FileUploadComponent } from './file-upload-field.component';
 
 @Component({
   selector: 'app-multi-row-field',
@@ -26,7 +35,16 @@ import { TextareaFieldComponent } from './textarea-field.component';
     InputFieldComponent,
     SelectFieldComponent,
     DatepickerFieldComponent,
-    TextareaFieldComponent
+    TextareaFieldComponent,
+    SlideToggleFieldComponent,
+    RadioGroupFieldComponent,
+    ColorPickerFieldComponent,
+    AutocompleteFieldComponent,
+    AutocompleteChipFieldComponent,
+    SliderFieldComponent,
+    SliderRangeFieldComponent,
+    IconPickerFieldComponent,
+    FileUploadComponent
   ],
   template: `
     <div class="multi-row-container">
@@ -44,31 +62,89 @@ import { TextareaFieldComponent } from './textarea-field.component';
       <div>
         <div class="row-container" *ngFor="let row of rows.controls; index as i">
         <div class="fields-container">
-  <div *ngFor="let field of config.fields" 
-       class="field-wrapper"
-       [style.grid-column]="'span ' + (field.columns || 1)">
-    <ng-container [ngSwitch]="field.type">
-      <app-input-field *ngSwitchCase="'text'"
-        [config]="field"
-        [control]="getRowControl(i, field.name)">
-      </app-input-field>
+          <div *ngFor="let field of config.fields" 
+              class="field-wrapper"
+              [style.grid-column]="'span ' + (field.columns || 1)">
+            <ng-container [ngSwitch]="field.type">
+              
+              <!-- Shared input field for text-based types -->
+              <ng-container *ngSwitchDefault>
+                <app-input-field
+                  *ngIf="['text', 'number', 'password', 'email'].includes(field.type)"
+                  [config]="field"
+                  [control]="getRowControl(i, field.name)">
+                </app-input-field>
+              </ng-container>
 
-      <app-select-field *ngSwitchCase="'select'"
-        [config]="field"
-        [control]="getRowControl(i, field.name)">
-      </app-select-field>
+              <!-- Specific field types -->
+              <app-select-field *ngSwitchCase="'select'"
+                [config]="field"
+                [control]="getRowControl(i, field.name)">
+              </app-select-field>
 
-      <app-date-field *ngSwitchCase="'date'"
-        [config]="field"
-        [control]="getRowControl(i, field.name)">
-      </app-date-field>
+              <app-date-field *ngSwitchCase="'date'"
+                [config]="field"
+                [control]="getRowControl(i, field.name)">
+              </app-date-field>
 
-      <app-textarea-field *ngSwitchCase="'textarea'"
-        [config]="field"
-        [control]="getRowControl(i, field.name)">
-      </app-textarea-field>
-    </ng-container>
-  </div>
+              <app-textarea-field *ngSwitchCase="'textarea'"
+                [config]="field"
+                [control]="getRowControl(i, field.name)">
+              </app-textarea-field>
+
+              <app-slide-toggle-field *ngSwitchCase="'slide-toggle'"
+                [config]="field"
+                [control]="getRowControl(i, field.name)">
+              </app-slide-toggle-field>
+
+              <app-radio-group-field *ngSwitchCase="'radio'"
+                [config]="field"
+                [control]="getRowControl(i, field.name)">
+              </app-radio-group-field>
+
+              <app-color-picker-field *ngSwitchCase="'color'"
+                [config]="field"
+                [control]="getRowControl(i, field.name)">
+              </app-color-picker-field>
+
+              <app-autocomplete-field *ngSwitchCase="'autocomplete'"
+                [config]="field"
+                [control]="getRowControl(i, field.name)">
+              </app-autocomplete-field>
+
+              <app-autocomplete-chips *ngSwitchCase="'chips'"
+                [config]="field"
+                [control]="getRowControl(i, field.name)">
+              </app-autocomplete-chips>
+
+              <app-slider-field *ngSwitchCase="'slider'"
+                [config]="field"
+                [control]="getRowControl(i, field.name)">
+              </app-slider-field>
+
+              
+              <app-slide-toggle-field *ngSwitchCase="'slide-toggle'"
+                [config]="field"
+                [control]="getRowControl(i, field.name)">
+              </app-slide-toggle-field>
+
+              <!-- <app-slider-range-field *ngSwitchCase="'slider-range'"
+                [config]="field"
+                [control]="getRowControl(i, field.name)">
+              </app-slider-range-field> -->
+
+              <app-icon-picker-field *ngSwitchCase="'icon'"
+                [config]="field"
+                [control]="getRowControl(i, field.name)">
+              </app-icon-picker-field>
+
+              <app-file-upload *ngSwitchCase="'file'"
+                [config]="field"
+                [control]="getRowControl(i, field.name)">
+              </app-file-upload>
+
+            </ng-container>
+          </div>
 </div>
 
           <button mat-icon-button 
@@ -124,7 +200,7 @@ import { TextareaFieldComponent } from './textarea-field.component';
   }]
 })
 export class MultiRowFieldComponent extends BaseFieldComponent<FormArray> implements OnInit {
-  
+
   // override ngOnInit(): void {
   //   super.ngOnInit();
 
