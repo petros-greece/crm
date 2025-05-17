@@ -42,8 +42,8 @@ export class EmployeesComponent {
   dialogService = inject(DialogService);
   snackbarService = inject(SnackbarService);
 
-  tableConfig!: TableConfig;
-  tasksTableConfig!: TableConfig;
+  tableConfig: TableConfig = {data: [], columns: []};
+  tasksTableConfig: TableConfig = {data: [], columns: []};
 
   employeeFormConfig: FormConfig = {
     title: '',
@@ -53,8 +53,6 @@ export class EmployeesComponent {
 
   employeeData:any;
   taskData:any;
-
-
 
   ngOnInit(){
     this.dataService.getEmployees().subscribe(employees=>{
@@ -100,12 +98,14 @@ export class EmployeesComponent {
     formData.id = `${this.tableConfig.data.length+1}`
     this.dataService.addEmployee(formData).subscribe(res=>{
       this.giveEmployeeTableConfig(res);
+      this.dialogService.closeAll();
     })
   }
 
   updateEmployee(formData: any) {    
     this.dataService.updateEmployee(formData).subscribe(res=>{
       this.giveEmployeeTableConfig(res);
+      this.dialogService.closeAll();
     })
   }
 
@@ -121,6 +121,30 @@ export class EmployeesComponent {
       cacheOptionsProp: 'employees-table',
       pagination: true,
     };
+  }
+
+  openConfirmDeleteEmployee(){
+    const name = this.employeeData.fullName;
+    this.dialogService.openConfirm({
+      header: 'Delete Employee',
+      content: `Are you sure you want to delete employee "${name}"?`,
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      cls: 'bg-red-500 !text-white',
+    }).subscribe(confirmed => {
+      if(this.tasksTableConfig.data.length > 0){
+        this.snackbarService.showSnackbar(`Please reassign ${name}'s tasks before proceeding with deletion.`);
+        return;
+      }
+
+      if (confirmed === true) {
+        this.dataService.deleteEmployee(this.employeeData.id).subscribe(res => {
+          this.snackbarService.showSnackbar(`Employee "${name}" deleted successfully`);
+          this.dialogService.closeAll();
+          this.giveEmployeeTableConfig(res);
+        });
+      }
+    }); 
   }
 
   /******************************************************************************** */

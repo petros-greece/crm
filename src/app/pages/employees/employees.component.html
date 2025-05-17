@@ -6,7 +6,7 @@
 </app-page-header>
 
 <div class="flex flex-row items-center justify-between px-3 pt-2 pb-4 bg-violet-200 rounded-sm shadow-md ">
-  <app-table-builder [config]="tableConfig">
+  <app-table-builder [config]="tableConfig" class="w-full">
     <ng-template appColumnTemplate="actions" let-row>
       <button mat-icon-button (click)="openEditEmployeeDialog(row)">
         <mat-icon>edit</mat-icon>
@@ -26,7 +26,6 @@
           Add Task
         </button>
       </div>
-      
 
       <app-table-builder [config]="tasksTableConfig">
         <ng-template appColumnTemplate="actions" let-row>
@@ -38,30 +37,28 @@
 
     </mat-tab>
     <mat-tab label="Info">
-      <app-form-builder 
-      [config]="employeeFormConfig" 
-      [values]="employeeData"
-      (formValuesChange)="checkDepartment($event)"
-      (submitHandler)="updateEmployee($event)"
-      ></app-form-builder>
+      <div class="overflow-hidden">
+
+        <app-form-builder [config]="employeeFormConfig" [values]="employeeData"
+          (formValuesChange)="checkDepartment($event)" (submitHandler)="updateEmployee($event)"></app-form-builder>
+        <div class="mt-64 text-center">
+        <button mat-raised-button (click)="openConfirmDeleteEmployee()" class="!bg-red-500 !text-white">
+          Delete
+          <mat-icon>delete</mat-icon>
+        </button>
+        </div>
+      </div>
     </mat-tab>
   </mat-tab-group>
 
 </ng-template>
 
 <ng-template #addEmployeeTmpl>
-  <app-form-builder 
-  [config]="employeeFormConfig" 
-  [values]="employeeData"
-  (formValuesChange)="checkDepartment($event)"
-  (submitHandler)="addNewEmployee($event)"
-  ></app-form-builder> 
+  <app-form-builder [config]="employeeFormConfig" [values]="employeeData" (formValuesChange)="checkDepartment($event)"
+    (submitHandler)="addNewEmployee($event)"></app-form-builder>
 </ng-template>
 
 <ng-template #taskFormTmpl>
-  <app-task-form 
-    [taskData]="taskData" 
-    [assignee]="employeeData.id"
-    (onAfterSubmit)="onAfterSubmitTask($event)">
+  <app-task-form [taskData]="taskData" [assignee]="employeeData.id" (onAfterSubmit)="onAfterSubmitTask($event)">
   </app-task-form>
 </ng-template>
