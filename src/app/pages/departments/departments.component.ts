@@ -110,7 +110,7 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
     };
     this.departmentRoles = [...this.departmentFormValues.roles];
 
-    this.dataService.getEmployeesForDepartment(this.departments[index].id).subscribe(employees=>{
+    this.dataService.getEmployeesForDepartment(this.departments[index].label).subscribe(employees=>{
       this.departmentRoles.forEach((rObj:any) => {
         rObj.employees = employees.filter((e)=> e.role === rObj.role);
       });
