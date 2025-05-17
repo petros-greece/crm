@@ -1,0 +1,86 @@
+[
+  {
+    "roleName": "Super Admin",
+    "employees": ["r", "c", "u", "d"],
+    "companies": ["r", "c", "u", "d"],
+    "departments": ["r", "c", "u", "d"],
+    "tasks": ["r", "c", "u", "d"],
+    "billing": ["r", "c", "u", "d"],
+    "assets": ["r", "c", "u", "d"],
+    "calendar": ["r", "c", "u", "d"],
+    "settings": ["r", "c", "u", "d"],
+    "id": "1"
+  },
+  {
+    "roleName": "Admin",
+    "employees": ["r", "c", "u", "d"],
+    "companies": ["r", "c", "u", "d"],
+    "departments": ["r", "c", "u", "d"],
+    "tasks": ["r", "c", "u", "d"],
+    "billing": ["r", "c", "u", "d"],
+    "assets": ["r", "c", "u", "d"],
+    "calendar": ["r", "c", "u", "d"],
+    "settings": ["r", "u"],
+    "id": "2"
+  },
+  {
+    "roleName": "Manager",
+    "employees": ["r", "u"],
+    "companies": ["r"],
+    "departments": ["r"],
+    "tasks": ["r", "c", "u", "d"],
+    "billing": ["r"],
+    "assets": ["r", "u"],
+    "calendar": ["r", "c", "u", "d"],
+    "settings": [],
+    "id": "3"
+  },
+  {
+    "roleName": "Sales Representative",
+    "employees": [],
+    "companies": ["r", "c", "u"],
+    "departments": ["r"],
+    "tasks": ["r", "c", "u"],
+    "billing": ["r"],
+    "assets": ["r"],
+    "calendar": ["r", "c"],
+    "settings": [],
+    "id": "4"
+  },
+  {
+    "roleName": "Support Agent",
+    "employees": [],
+    "companies": ["r"],
+    "departments": [],
+    "tasks": ["r", "c", "u"],
+    "billing": [],
+    "assets": ["r"],
+    "calendar": ["r", "c"],
+    "settings": [],
+    "id": "5"
+  },
+  {
+    "roleName": "Finance",
+    "employees": ["r"],
+    "companies": ["r"],
+    "departments": ["r"],
+    "tasks": [],
+    "billing": ["r", "c", "u", "d"],
+    "assets": ["r"],
+    "calendar": [],
+    "settings": [],
+    "id": "6"
+  },
+  {
+    "roleName": "Employee",
+    "employees": [],
+    "companies": ["r"],
+    "departments": [],
+    "tasks": ["r", "c"],
+    "billing": [],
+    "assets": ["r"],
+    "calendar": ["r"],
+    "settings": [],
+    "id": "7"
+  }
+]

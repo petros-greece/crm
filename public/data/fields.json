@@ -1,0 +1,11 @@
+{
+  "employee": {
+    "sections": {
+      "info": {
+        "name": "Info",
+        "icon": "info",
+        "fields": []
+      }
+    }
+  }
+}
