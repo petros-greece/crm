@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, from } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators';
+import { Observable, forkJoin, from, of } from 'rxjs';
+import { switchMap, catchError, map } from 'rxjs/operators';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class TransferService {
 
   constructor() { }
@@ -15,106 +13,120 @@ export class TransferService {
     return new Observable((observer) => {
       const zip = new JSZip();
       const folder = zip.folder('crm-data');
-      
+
       if (!folder) {
+        console.error('Failed to create crm-data folder in ZIP.');
         observer.error('Failed to create folder in ZIP.');
         return;
       }
-  
+
       const keys = Object.keys(localStorage).filter(key => key !== 'debug');
+      console.log('Exporting localStorage keys:', keys);
+
       const fileObservables = keys.map(key => {
-        return new Observable((subObserver) => {
+        return new Observable<void>((subObserver) => {
           const value = localStorage.getItem(key);
           let parsed;
-  
+
           try {
             parsed = JSON.parse(value!);
           } catch {
             parsed = value;
           }
-  
-          // Each key becomes a file inside 'crm-data' folder
-          folder.file(`${key}.json`, JSON.stringify(parsed, null, 2));
-          subObserver.next(null); // Emit value after the file is added
-          subObserver.complete(); // Complete observable
+
+          try {
+            folder.file(`${key}.json`, JSON.stringify(parsed, null, 2));
+            console.log(`Added ${key}.json to ZIP`);
+            subObserver.next(); // Emit value after the file is added
+            subObserver.complete();
+          } catch (err) {
+            console.error(`Failed to add file ${key}.json:`, err);
+            subObserver.error(err);
+          }
         });
       });
-  
-      // Use switchMap to handle file processing
-      from(fileObservables)
-        .pipe(
-          switchMap(() => zip.generateAsync({ type: 'blob' })),
-          catchError((error) => {
-            observer.error(error);
-            return [];
-          })
-        )
-        .subscribe({
-          next: (content) => {
-            saveAs(content, 'crm-data.zip');
-            observer.complete();
-          },
-          error: (error) => observer.error(error),
-        });
+
+      // Wait for all "file creation" observables to complete
+      forkJoin(fileObservables).pipe(
+        switchMap(() => {
+          console.log('All files added. Generating ZIP...');
+          return from(zip.generateAsync({ type: 'blob' }));
+        }),
+        catchError((error) => {
+          console.error('ZIP generation failed:', error);
+          observer.error(error);
+          return of(); // required fallback
+        })
+      ).subscribe({
+        next: (content) => {
+          console.log('Saving ZIP as crm-data.zip');
+          saveAs(content, 'crm-data.zip');
+          observer.complete();
+        },
+        error: (error) => {
+          console.error('Error in final step:', error);
+          observer.error(error);
+        }
+      });
     });
   }
 
-  uploadAndRestoreLocalStorage(event: Event): Observable<void> {
+  uploadAndRestoreLocalStorage(file: File): Observable<void> {
     return new Observable((observer) => {
-      const input = event.target as HTMLInputElement;
-      const file = input?.files?.[0];
-      
       if (!file) {
         observer.error('No file selected.');
         return;
       }
-  
+
       JSZip.loadAsync(file)
         .then((zip) => {
-          const folder = zip.folder('crm-data');
-          
+          const folderPrefix = Object.keys(zip.files).find(path =>
+            /^crm-data[^/]*\/$/.test(path)
+          );
+
+          console.log(folderPrefix)
+
+          if (!folderPrefix) {
+            observer.error('No crm-data folder found in ZIP');
+            return;
+          }
+          console.log(folderPrefix)
+          const folder = zip.folder(folderPrefix);
           if (!folder) {
             observer.error('No crm-data folder found in ZIP');
             return;
           }
-  
-          const fileObservables:any = [];
-          
+          console.log(folder)
+          const fileObservables: Observable<void>[] = [];
+
           folder.forEach((relativePath, zipEntry) => {
-            if (!zipEntry.dir) { // Skip directories
+            if (!zipEntry.dir) {
               const fileObservable = from(zipEntry.async('text')).pipe(
-                switchMap((fileContent) => {
-                  try {
-                    const parsedData = JSON.parse(fileContent);
-                    const key = relativePath.replace('.json', '');
-                    // Update localStorage with parsed data
-                    localStorage.setItem(key, JSON.stringify(parsedData));
-                    return [];
-                  } catch (error) {
-                    observer.error('Error parsing JSON for file ' + relativePath);
-                    return [];
-                  }
-                }),
-                catchError((error) => {
-                  observer.error('Error processing file ' + relativePath);
-                  return [];
+                map((fileContent) => {
+                  const parsedData = JSON.parse(fileContent);
+                  const key = relativePath.replace(/\.json$/, '');
+                  localStorage.setItem(key, JSON.stringify(parsedData));
                 })
               );
               fileObservables.push(fileObservable);
             }
           });
-  
-          // Use from to process all file observables
-          from(fileObservables).subscribe({
-            next: () => {},
+          console.log(fileObservables)
+          forkJoin(fileObservables).subscribe({
+            next: () => { },
             complete: () => observer.complete(),
-            error: (error) => observer.error(error),
+            error: (err) => {
+              console.error('Error during ZIP processing:', err);
+              observer.error('Failed to process some files in ZIP: ' + err.message);
+            },
           });
         })
         .catch((error) => {
-          observer.error('Error reading ZIP file: ' + error);
+          console.error('JSZip load failed:', error);
+          observer.error('Error reading ZIP file: ' + error.message);
         });
     });
   }
+
 
 }

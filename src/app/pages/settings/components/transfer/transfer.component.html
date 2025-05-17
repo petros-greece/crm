@@ -1,0 +1,16 @@
+<div class="flex flex-col items-center gap-2">
+
+  <button mat-raised-button (click)="downloadCrmData()">
+    <mat-icon>download</mat-icon>
+    Download CRM data
+  </button> 
+  
+  <app-upload-file-field 
+    [isMultiple]="true"
+    acceptedTypes=".zip"
+    (filesUploaded)="addZipFile($event)"
+    message="Click or Drop your current files to upload CRM data"
+  ></app-upload-file-field>
+
+</div>
+
