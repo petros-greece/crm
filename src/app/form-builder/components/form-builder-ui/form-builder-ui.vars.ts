@@ -1,6 +1,6 @@
 import { inject } from "@angular/core";
-import { FieldFormConfig, FormConfig, FormFieldConfig } from "../form-builder.model";
-import { FormBuilderService } from "../form-builder.service";
+import { FieldFormConfig, FormConfig, FormFieldConfig } from "../../form-builder.model";
+import { FormBuilderService } from "../../form-builder.service";
 
 
 
@@ -17,22 +17,22 @@ export class FormBuilderUIVars {
           minLength: 3,
           maxLength: 50
         },
-        columns: 2,
+        columns: 1,
         icon: 'label',
       },
-      {
-        type: 'text',
-        name: 'machineName',
-        label: 'Machine Name',
-        required: false,
-        validators: {
-          minLength: 3,
-          maxLength: 50,
-          pattern: '^[a-zA-Z0-9_]+$'
-        },
-        columns: 2,
-        icon: 'smart_toy', // Updated to official Material icon
-      },
+      // {
+      //   type: 'text',
+      //   name: 'machineName',
+      //   label: 'Machine Name',
+      //   required: false,
+      //   validators: {
+      //     minLength: 3,
+      //     maxLength: 50,
+      //     pattern: '^[a-zA-Z0-9_]+$'
+      //   },
+      //   columns: 2,
+      //   icon: 'smart_toy', 
+      // },
       {
         type: 'select',
         name: 'columns',
@@ -99,7 +99,7 @@ export class FormBuilderUIVars {
       title: 'Select Field',
       fields: [
         {
-          type: 'select',
+          type: 'autocomplete',
           name: 'list',
           label: 'Select Options From List',
           multiple: false,
@@ -134,8 +134,10 @@ export class FormBuilderUIVars {
               label: 'Key',
               icon: 'vpn_key'
             },
-          ]
-        },    
+          ],
+          defaultValue: []   
+        },
+        
       ]
     };
     
@@ -143,7 +145,7 @@ export class FormBuilderUIVars {
       title: 'Autocomplete Field',
       fields: [
         {
-          type: 'select',
+          type: 'autocomplete',
           name: 'list',
           label: 'Select Options From List',
           multiple: false,
@@ -172,7 +174,8 @@ export class FormBuilderUIVars {
               label: 'Key',
               icon: 'key'
             },
-          ]
+          ],
+          defaultValue: []
         },    
       ]
     };
@@ -201,7 +204,7 @@ export class FormBuilderUIVars {
       title: 'Radio Group Field',
       fields: [
         {
-          type: 'select',
+          type: 'autocomplete',
           name: 'list',
           label: 'Select Options From List',
           multiple: false,
@@ -230,7 +233,8 @@ export class FormBuilderUIVars {
               label: 'Key',
               icon: 'password'
             },
-          ]
+          ],
+          defaultValue: []
         },    
       ]
     };
@@ -306,6 +310,26 @@ export class FormBuilderUIVars {
       ]
     };
 
+    textEditorFormConfig: FormConfig  = {
+      title: 'Textarea Field',
+      fields: [ ...this.baseFields,
+        {
+          type: 'number',
+          name: 'min',
+          label: 'Min Length Charecters',
+          columns: 2,
+          icon: 'arrow_downward'
+        }, 
+        {
+          type: 'number',
+          name: 'max',
+          label: 'Max Length Characters',
+          columns: 2,
+          icon: 'arrow_upward'
+        }, 
+      ]
+    };
+
     /******************************************************************************** */
 
     // They All can be required, icon, label, machineName, value ?? 
@@ -319,20 +343,25 @@ export class FormBuilderUIVars {
       { field: 'radio', text: 'Radio Group', config: this.radioGroupFormConfig  },   //class
       { field: 'slider', text: 'Slider Field', config: this.sliderFormConfig }, //min, max, step, formatLabel
       { field: 'slider-range', text: 'Slider Range Field', config: this.sliderFormConfig }, //min, max, step, formatLabel
-    // { field: 'multi-row', text: 'Multi Row Field', config: this.baseFields  },  //@todo
       { field: 'slide-toggle', text: 'Slide Toggle', config: this.slideToggleFormConfig },
       { field: 'file', text: 'File Upload', config: this.fileFormConfig  }, //accepted types
       { field: 'color', text: 'Color Picker Field', config: this.colorFormConfig },
-      { field: 'textarea', text: 'Textarea Field', config: this.textareaFormConfig  } //minlength, maxLength, pattern
+      { field: 'textarea', text: 'Textarea Field', config: this.textareaFormConfig  }, //minlength, maxLength, pattern
+      { field: 'text-editor', text: 'Text Editor Field', config: this.textEditorFormConfig  }, //minlength, maxLength, pattern
+      //{ field: 'group', text: 'Group Field', config: this.textEditorFormConfig  } //minlength, maxLength, pattern     
     ];
 
 
-    outputFormConfig: FormConfig = {
-      title: 'Form Builder Preview',
-      className: 'bg-gray-300 text-gray-100 p-4 rounded-lg shadow-md',
-      fields: [],
-      submitText: 'Test Form',
-    };
+    outputFormConfig: FormConfig = { "fields": [ 
+      { "type": "group", "name": "nameandmonth", "label": "name and month", "fields": [ 
+        { "type": "text", "name": "name input", "label": "name", "required": false, "columns": 1 }, 
+        { "type": "select", "name": "month", "label": "month", "required": false, "columns": 1, "listName": "Month" } ,
+         {"type": "select", "name": "testselectgroup", label: "test select", "listName": "Month", multiple: false}
+      ] } ,
+      {"type": "select", "name": "testselect", label: "test select", "listName": "Month", multiple: false}
+     
+     ], "submitText": "Test Form" }
   
+          //outputFormConfig: FormConfig = { fields: [], submitText: "Test Form" }
   
 }

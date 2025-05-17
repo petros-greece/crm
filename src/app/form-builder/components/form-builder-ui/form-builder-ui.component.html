@@ -1,0 +1,99 @@
+<div class="flex flex-row gap-2 px-2 pt-4 my-2 border-2 border-gray-200 rounded-md bg-violet-800">
+
+  <button mat-raised-button (click)="focusSelect()" class="mt-2">
+    <mat-icon>add_circle</mat-icon>
+    Add Field To Form
+  </button>
+
+  <mat-form-field appearance="fill" class="flex-grow">
+    <mat-label>Select Field Type</mat-label>
+    <mat-select #fieldSelect (selectionChange)="onSelectionChange($event.value); fieldSelect.value = null">
+      <mat-option *ngFor="let fc of fieldComponents" [value]="fc">
+        {{ fc.text }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+
+
+<div *ngIf="outputConfig().fields.length > 0">
+
+  <div class="flex flex-col md:flex-row">
+    <div class="w-full md:w-1/2 p-4 bg-violet-100">
+      <app-form-builder [config]="outputConfig()"></app-form-builder>
+    </div>
+    <div class="w-full md:w-1/2 p-4 bg-violet-200">
+      <mat-grid-list cols="12" rowHeight="50" cdkDropList (cdkDropListDropped)="drop($event)"
+        cdkDropListOrientation="mixed" class="bg-gray-100 dnd-preview-list">
+        <mat-grid-tile *ngFor="let field of outputConfig().fields; let i = index" [colspan]="12 / (field?.columns || 1)"
+          cdkDrag>
+          <div class="border-2 border-gray-800 flex items-center justify-between px-2 dnd-preview-box w-full h-full">
+            <div class="dnd-placeholder" *cdkDragPlaceholder></div>
+            <span (click)="editField(field, i)" class="cursor-pointer ">{{ field.label }}</span>
+  
+            <div class="flex flex-row gap-2">
+              <button mat-mini-fab>
+                <mat-icon (click)="duplicateField(field, i)">content_copy</mat-icon>
+              </button>
+  
+              <button mat-mini-fab>
+                <mat-icon (click)="removeField(i)">remove_circle</mat-icon>
+              </button>
+  
+              <span class="cursor-move" cdkDragHandle>
+                <mat-icon>drag_indicator</mat-icon>
+              </span>
+            </div>
+          </div>
+  
+  
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </div>
+  
+  <div class="flex flex-row justify-center p-2">
+    <button mat-raised-button (click)="openNewGroupDialog()">
+      Create Group
+    </button>
+  </div>
+
+</div>
+
+
+
+<ng-template #fieldFormToOutputTmpl>
+  <app-form-builder [config]="selectedConfig().config" (submitHandler)="addFieldToOutput($event)"></app-form-builder>
+</ng-template>
+
+<ng-template #groupFormToOutputTmpl>
+<!-- <pre>
+
+  {{outputConfig().fields[editingIndex]|json}}
+</pre> -->
+
+<div
+  *ngIf="editingIndex > -1"
+  class="flex flex-row gap-4 p-2 justify-center items-center"
+  cdkDropList
+  cdkDropListOrientation="horizontal"
+  [cdkDropListData]="outputConfig().fields[editingIndex].fields ?? []"
+  (cdkDropListDropped)="dropGroupField($event)"
+>
+  <div
+    *ngFor="let field of outputConfig().fields[editingIndex].fields"
+    class="p-2 bg-gray-200 rounded cursor-move"
+    cdkDrag
+  >
+    {{ field.label }}
+  </div>
+</div>
+
+  <app-form-builder [config]="groupConfig" (submitHandler)="addOrUpdateGroupToOutput($event)"></app-form-builder>
+</ng-template>
+
+<pre>
+
+  {{ outputConfig() | json}}
+</pre>
