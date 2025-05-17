@@ -25,6 +25,7 @@ import { GroupFieldComponent } from './fields/group-field.component';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 import { InputHiddenFieldComponent } from './fields/input-hidden-field.component';
+import { TextEditorFieldComponent } from './fields/text-editor-field.component';
 @Component({
   selector: 'app-form-builder',
   standalone: true,
@@ -60,8 +61,7 @@ export class FormBuilderComponent implements AfterViewInit {
   private destroy$ = new Subject<void>();
   private formBuilderService = inject(FormBuilderService);
 
-  constructor(private cdr: ChangeDetectorRef) { 
-
+  constructor(private cdr: ChangeDetectorRef) {
     // reactively rebuild form when config or values change
     effect(() => {
       const cfg = this._config();
@@ -73,13 +73,19 @@ export class FormBuilderComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if(this.formValuesChange){
+    if (this.formValuesChange) {
       this.formGroup.valueChanges
-      .pipe(debounceTime(200), distinctUntilChanged())
-      .subscribe(vals => {
-        //console.log('Form changed:', vals);
-        this.formValuesChange.emit(vals);
-      });
+        .pipe(debounceTime(200), distinctUntilChanged())
+        .subscribe(vals => {
+          //console.log('Form changed:', vals);
+          this.formValuesChange.emit(vals);
+        });
+    }
+  }
+
+  public patchFormValues(vals: Record<string, any>) {
+    if (this.formGroup) {
+      this.formGroup.patchValue(vals);
     }
   }
 
@@ -92,17 +98,26 @@ export class FormBuilderComponent implements AfterViewInit {
       if (field.listName) {
         clone.dynamicOptions = this.formBuilderService.getListOptions(field.listName);
       }
+      if(field.fields){
+        field.fields.forEach(f=>{
+          if(f.listName){
+            f.dynamicOptions = this.formBuilderService.getListOptions(f.listName);
+          }
+        });
+      }
+
+
       const fieldValue = values[field.name] || field.defaultValue;
       if (fieldValue !== undefined) {
         if (field.type === 'multi-row' && Array.isArray(fieldValue)) {
           clone.value = fieldValue;
-        } 
+        }
         else if (
           (field.type === 'slider-range' || field.type === 'range-picker' || field.type === 'group') &&
           typeof fieldValue === 'object'
         ) {
           clone.value = { start: fieldValue.start ?? null, end: fieldValue.end ?? null };
-        } 
+        }
         else {
           clone.value = fieldValue;
         }
@@ -123,14 +138,14 @@ export class FormBuilderComponent implements AfterViewInit {
       }
       else if (field.type === 'group') {
         group[field.name] = this.createNestedGroup(field, val);
-      } 
+      }
       else if (field.type === 'range-picker' || field.type === 'slider-range') {
         group[field.name] = new FormGroup({ start: new FormControl(val?.start ?? null), end: new FormControl(val?.end ?? null) });
-      } 
+      }
       else {
         group[field.name] = new FormControl(val, this.getValidators(field));
       }
-      if(field.dependsOn){
+      if (field.dependsOn) {
         field.dynamicOptions = of([]);
       }
 
@@ -143,15 +158,18 @@ export class FormBuilderComponent implements AfterViewInit {
         const parentControl = this.formGroup.get(field.dependsOn.fieldName);
         if (parentControl) {
           const optionsSubject = new BehaviorSubject<Option[]>(field.options || []);
-          
+
           parentControl.valueChanges.pipe(
             takeUntil(this.destroy$),
             startWith(parentControl.value),
             distinctUntilChanged(),
             switchMap(value => {
               try {
-                const result = field.dependsOn!.updateOptions(value);
-                return this.normalizeOptions(result);
+                if (field.dependsOn && typeof field.dependsOn.updateOptions === 'function') {
+                  const result = field.dependsOn.updateOptions(value);
+                  return this.normalizeOptions(result);
+                }
+                return of([]);
               } catch {
                 return of([]);
               }
@@ -163,8 +181,27 @@ export class FormBuilderComponent implements AfterViewInit {
             },
             error: () => optionsSubject.next([])
           });
-  
+
           field.dynamicOptions = optionsSubject.asObservable();
+        }
+      }
+      if (field.dependsOn?.disableCondition) {
+        const parentControl = this.formGroup.get(field.dependsOn.fieldName);
+        const dependentControl = this.formGroup.get(field.name);
+        const disableCondition = field.dependsOn?.disableCondition;
+        if (parentControl && dependentControl) {
+          parentControl.valueChanges.pipe(
+            takeUntil(this.destroy$),
+            startWith(parentControl.value),
+            distinctUntilChanged()
+          ).subscribe(value => {
+            const shouldDisable = disableCondition(value);
+            if (shouldDisable && !dependentControl.disabled) {
+              dependentControl.disable({ emitEvent: false });
+            } else if (!shouldDisable && dependentControl.disabled) {
+              dependentControl.enable({ emitEvent: false });
+            }
+          });
         }
       }
     });
@@ -176,14 +213,14 @@ export class FormBuilderComponent implements AfterViewInit {
 
     return of([]);
   }
-  
+
   private safeUpdateControlValue(fieldName: string, options: Option[]) {
     const control = this.formGroup.get(fieldName);
     if (!control) return;
-  
+
     const currentValue = control.value;
     const isValid = options.some(o => o.value === currentValue);
-    
+
     if (!isValid) {
       control.reset(null, { emitEvent: false });
     }
@@ -203,7 +240,7 @@ export class FormBuilderComponent implements AfterViewInit {
       const subVal = initialValues?.[sub.name] ?? sub.value ?? null;
       fg[sub.name] = new FormControl(subVal, this.getValidators(sub));
     });
-  
+
     return new FormGroup(fg);
   }
 
@@ -236,32 +273,33 @@ export class FormBuilderComponent implements AfterViewInit {
       const f = field.validators;
       f.minLength && v.push(Validators.minLength(f.minLength));
       f.maxLength && v.push(Validators.maxLength(f.maxLength));
-      f.pattern   && v.push(Validators.pattern(f.pattern));
-      f.min       && v.push(Validators.min(f.min));
-      f.max       && v.push(Validators.max(f.max));
+      f.pattern && v.push(Validators.pattern(f.pattern));
+      f.min && v.push(Validators.min(f.min));
+      f.max && v.push(Validators.max(f.max));
     }
     return v;
   }
 
   private resolveFieldComponent(type: FieldType): Type<any> {
     switch (type) {
-      case 'select':       return SelectFieldComponent;
+      case 'select': return SelectFieldComponent;
       case 'autocomplete': return AutocompleteFieldComponent;
-      case 'date':         return DatepickerFieldComponent;
-      case 'radio':        return RadioGroupFieldComponent;
-      case 'slider':       return SliderFieldComponent;
-      case 'multi-row':    return MultiRowFieldComponent;
+      case 'date': return DatepickerFieldComponent;
+      case 'radio': return RadioGroupFieldComponent;
+      case 'slider': return SliderFieldComponent;
+      case 'multi-row': return MultiRowFieldComponent;
       case 'slide-toggle': return SlideToggleFieldComponent;
       case 'range-picker': return DateRangeFieldComponent;
       case 'slider-range': return SliderRangeFieldComponent;
-      case 'chips':        return AutocompleteChipFieldComponent;
-      case 'file':         return FileUploadComponent;
-      case 'color':        return ColorPickerFieldComponent;
-      case 'textarea':     return TextareaFieldComponent;
-      case 'icon':         return IconPickerFieldComponent;
-      case 'group':        return GroupFieldComponent;
-      case 'hidden':       return InputHiddenFieldComponent;
-      default:             return InputFieldComponent;
+      case 'chips': return AutocompleteChipFieldComponent;
+      case 'file': return FileUploadComponent;
+      case 'color': return ColorPickerFieldComponent;
+      case 'textarea': return TextareaFieldComponent;
+      case 'icon': return IconPickerFieldComponent;
+      case 'group': return GroupFieldComponent;
+      case 'hidden': return InputHiddenFieldComponent;
+      case 'text-editor': return TextEditorFieldComponent;
+      default: return InputFieldComponent;
     }
   }
 
@@ -269,12 +307,12 @@ export class FormBuilderComponent implements AfterViewInit {
     console.log(this.formGroup);
     if (this.formGroup.valid) {
       this.submitHandler.emit(this.formGroup.value);
-      if(this.config.resetOnSubmit){
+      if (this.config.resetOnSubmit) {
         this.formGroup.reset();
         this.formGroup.markAsUntouched();
         this.formGroup.markAsPristine();
       }
-    } 
+    }
     else {
       this.formGroup.markAllAsTouched();
     }

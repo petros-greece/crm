@@ -7,27 +7,34 @@ import { Option } from './form-builder.model';
   providedIn: 'root'
 })
 export class FormBuilderService {
+
   private http: HttpClient = inject(HttpClient);
-  
+  private readonly listsStorageKey = 'crm-lists';
+  private readonly listsJsonFile = 'assets/json/lists.json';
+  private readonly iconsStorageKey = 'crm-icons';
+  private readonly iconsJsonFile = 'assets/json/icons.json';
+
   constructor() { }
 
   getData(url: string, headers?: HttpHeaders): Observable<any> {
     return this.http.get(url, { headers });
   }
 
+  /**************************************************************************** */
+
   getIcons(): Observable<any> {
-    const icons = localStorage.getItem('crm-icons');
+    const icons = localStorage.getItem(this.iconsStorageKey);
     if (icons) {
       return new Observable((observer) => {
         observer.next(JSON.parse(icons));
         observer.complete();
       });
     }
-  
+
     // Fetch from file, save to localStorage, then return
     return new Observable((observer) => {
-      this.getData('./assets/json/icons.json').subscribe((data) => {
-        localStorage.setItem('crm-icons', JSON.stringify(data));
+      this.getData(this.iconsJsonFile).subscribe((data) => {
+        localStorage.setItem(this.iconsStorageKey, JSON.stringify(data));
         observer.next(data);
         observer.complete();
       }, (error) => {
@@ -36,19 +43,21 @@ export class FormBuilderService {
     });
   }
 
+  /**************************************************************************** */
+
   getLists(): Observable<any> {
-    const lists = localStorage.getItem('crm-lists');
+    const lists = localStorage.getItem(this.listsStorageKey);
     if (lists) {
       return new Observable((observer) => {
         observer.next(JSON.parse(lists));
         observer.complete();
       });
     }
-  
+
     // Fetch from file, save to localStorage, then return
     return new Observable((observer) => {
-      this.getData('./assets/json/lists.json').subscribe((data) => {
-        localStorage.setItem('crm-lists', JSON.stringify(data));
+      this.getData(this.listsJsonFile).subscribe((data) => {
+        localStorage.setItem(this.listsStorageKey, JSON.stringify(data));
         observer.next(data);
         observer.complete();
       }, (error) => {
@@ -70,7 +79,7 @@ export class FormBuilderService {
   }
 
   getListOptions(key: string): Observable<Option[]> {
-    if(key === 'lists list'){
+    if (key === 'lists list') {
       return this.getListKeysOptions();
     }
 
@@ -97,5 +106,45 @@ export class FormBuilderService {
       })
     );
   }
+
+  addList(formData: { key: string, items: string[] }): Observable<any> {
+    return this.getLists().pipe(
+      map((lists: { [key: string]: string[] }) => {
+        if (lists.hasOwnProperty(formData.key)) {
+          throw new Error(`List "${formData.key}" already exists`);
+        }
+        lists[formData.key] = formData.items;
+        localStorage.setItem(this.listsStorageKey, JSON.stringify(lists));
+        return lists;
+      })
+    );
+  }
+
+  updateList(formData: { key: string, items: string[] }): Observable<any> {
+    return this.getLists().pipe(
+      map((lists: { [key: string]: string[] }) => {
+        if (!lists.hasOwnProperty(formData.key)) {
+          throw new Error(`List "${formData.key}" does not exist`);
+        }
+        lists[formData.key] = formData.items;
+        localStorage.setItem(this.listsStorageKey, JSON.stringify(lists));
+        return lists;
+      })
+    );
+  }
+
+  deleteList(listKey: string): Observable<any> {
+    return this.getLists().pipe(
+      map((lists: { [key: string]: string[] }) => {
+        if (!lists.hasOwnProperty(listKey)) {
+          throw new Error(`List "${listKey}" does not exist`);
+        }
+        delete lists[listKey];
+        localStorage.setItem(this.listsStorageKey, JSON.stringify(lists));
+        return lists;
+      })
+    );
+  }
+
 
 }

@@ -31,7 +31,8 @@ export type FieldType = 'text' | //
                         'tel' | 
                         'chips' | //
                         'slider' |
-                        'group'; //
+                        'group' | //
+                        'text-editor'; //
 
 export interface FormFieldConfig{
   type: FieldType;
@@ -69,7 +70,11 @@ export interface FormFieldConfig{
   dynamicOptions?: Observable<Option[]> | (() => Promise<Option[]>);
   listName?: string; // For dynamic options
   acceptedTypes?: string,
-  dependsOn?: {fieldName:string, updateOptions: (parentValue: any) =>  Observable<Option[]>;}
+  dependsOn?: {
+    fieldName:string, 
+    updateOptions?: (parentValue: any) =>  Observable<Option[]>,
+    disableCondition?: (value: any) => boolean
+  }
   helperText?:string;
 }
 
