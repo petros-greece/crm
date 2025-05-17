@@ -1,4 +1,4 @@
-<div *ngIf="data.header" mat-dialog-title [ngClass]="data.cls" class="!flex items-center gap-2 !p-4 relative w-full h-full">
+<div *ngIf="data.header" mat-dialog-title [ngClass]="data.cls || 'bg-violet-800 !text-white'" class="!flex items-center gap-2 !p-4 relative w-full h-full">
   <span [innerHTML]="data.header"></span>
   @if(data.icon){
    <mat-icon>{{ data.icon }}</mat-icon>
