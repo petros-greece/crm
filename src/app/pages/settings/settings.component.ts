@@ -1,12 +1,26 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, ViewChild, WritableSignal } from '@angular/core';
 import { FormConfig } from '../../form-builder/form-builder.model';
 import { FormBuilderComponent } from '../../form-builder/form-builder.component';
-import { FormBuilderUiComponent } from '../../form-builder/form-builder-ui/form-builder-ui.component';
+import { FormBuilderUiComponent } from '../../form-builder/components/form-builder-ui/form-builder-ui.component';
 import { FormBuilderService } from '../../form-builder/form-builder.service';
+import { FormListsUiComponent } from '../../form-builder/components/form-lists-ui/form-lists-ui.component';
+import { RolesFormComponent } from './components/roles-form/roles-form.component';
+import { TransferComponent } from './components/transfer/transfer.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIcon } from '@angular/material/icon';
+
 
 @Component({
   selector: 'app-settings',
-  imports: [FormBuilderComponent, FormBuilderUiComponent],
+  imports: [
+    FormBuilderComponent, 
+    FormBuilderUiComponent, 
+    FormListsUiComponent, 
+    RolesFormComponent,
+    TransferComponent,
+    MatTabsModule,
+    MatIcon
+  ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'
 })
@@ -15,10 +29,19 @@ export class SettingsComponent {
 
   formBuilderService = inject(FormBuilderService);
 
+
   formConfig: FormConfig = {
     title: 'User Registration',
     fields: [
-
+      {
+        type: 'text-editor',
+        name: 'test44',
+        label: 'test44',
+        required: true,
+        columns: 1,
+  className: 'h-64',
+  placeholder: 'Add Note...'
+      },
       {
         type: 'select',
         name: 'test',
@@ -280,4 +303,22 @@ export class SettingsComponent {
         }
     ]
   }
+
+
+  //*** LISTS OK *************************************************************************************/
+
+  //*** ROLES OK*************************************************************************************/
+  //crud employees, company, departments, tasks, assets, deals
+  //todo add default roles to the users
+
+
+  //*** FORMS *************************************************************************************/
+
+
+  
+  //*** IMPORT EXPORT (transfer)*************************************************************************************/
+
+
+
+
 }

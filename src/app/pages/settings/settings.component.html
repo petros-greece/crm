@@ -1,3 +1,47 @@
-<app-form-builder-ui></app-form-builder-ui> 
-
+<!-- <app-form-builder-ui></app-form-builder-ui>  -->
 <!-- <app-form-builder [config]="formConfig" [values]="values"></app-form-builder>  -->
+<!-- <app-roles-form></app-roles-form> -->
+<mat-tab-group>
+    <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>assignment</mat-icon>
+      Forms
+    </ng-template>
+    <div>
+      <app-form-builder-ui></app-form-builder-ui>
+    </div>
+  </mat-tab>
+  
+  
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>security</mat-icon>
+      Roles
+    </ng-template>
+    <div>
+      <app-roles-form></app-roles-form>
+    </div>
+  </mat-tab>
+
+
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>list</mat-icon>
+      Lists
+    </ng-template>
+    <div>
+      <app-form-lists-ui></app-form-lists-ui> 
+    </div>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>swap_horiz</mat-icon>
+      Transfer
+    </ng-template>
+    <div>
+      <app-transfer></app-transfer>
+    </div>
+  </mat-tab>
+</mat-tab-group>
