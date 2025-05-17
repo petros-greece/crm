@@ -1,0 +1,44 @@
+<div class="flex flex-row gap-4 py-4">
+  <button mat-raised-button (click)="openListDialog(null)">
+    <mat-icon>add</mat-icon>
+    Add List
+  </button>
+  
+  <button mat-raised-button (click)="openImportListDialog()">
+    <mat-icon>upload</mat-icon>
+    Import List
+  </button>
+</div>
+
+<ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+  <li
+    *ngFor="let item of lists | keyvalue"
+    class="p-4 bg-white dark:bg-gray-800 shadow rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+    (click)="openListDialog(item)">
+    {{ item.key }}
+  </li>
+</ul>
+
+<!---------------------------------------------------->
+
+<ng-template #listTmpl>
+  <app-form-builder 
+    [config]="listFormConfig"
+    (submitHandler)="onSubmitList($event)">
+  </app-form-builder> 
+
+  <div *ngIf="!isNewList" class="mt-64 text-center">
+    <button mat-raised-button class="!bg-red-500 !text-white" (click)="deleteList()">
+      Delete
+    </button>
+  </div>
+
+
+</ng-template>
+
+<ng-template #importlistTmpl>
+  <app-form-builder 
+    [config]="importListFormConfig"
+    (submitHandler)="onImportList($event)">
+  </app-form-builder> 
+</ng-template>
