@@ -33,7 +33,7 @@
       </ng-template>
 
       <div class="flex my-2">
-        <button mat-raised-button color="primary" (click)="openTaskDialog()" class="flex items-center gap-2">
+        <button mat-raised-button color="primary" (click)="openTaskDialog(null)" class="flex items-center gap-2">
           <mat-icon>add</mat-icon>
           Add Task
         </button>
@@ -41,9 +41,14 @@
 
       <app-table-builder [config]="tasksTableConfig">
         <ng-template appColumnTemplate="actions" let-row>
-          <button mat-icon-button (click)="openConfirmDeleteTaskDialog(row)">
-            <mat-icon>delete</mat-icon>
-          </button>
+          <div class="flex flex-row">
+            <button mat-icon-button (click)="openTaskDialog(row)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="openConfirmDeleteTaskDialog(row)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
         </ng-template>
       </app-table-builder>
     </mat-tab>
@@ -75,5 +80,5 @@
 
 <ng-template #taskFormTmpl>
   <app-task-form [taskData]="taskData" [assignee]="employeeData.id" (onAfterSubmit)="onAfterSubmitTask($event)">
-  </app-task-form>
+  </app-task-form> 
 </ng-template>

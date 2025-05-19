@@ -13,17 +13,19 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { DataService } from '../../services/data.service';
 import { TaskFormComponent } from '../../components/task-form/task-form.component';
 import { SnackbarService } from '../../services/snackbar.service';
-import { map } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { PageHeaderComponent } from '../../components/page-header/page-header.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-employees',
   imports: [
-    TableBuilderComponent, 
-    MatButtonModule, 
-    MatIcon, 
+    CommonModule,
+    TableBuilderComponent,
+    MatButtonModule,
+    MatIcon,
     MatTabsModule,
-    ColumnTemplateDirective, 
+    ColumnTemplateDirective,
     FormBuilderComponent,
     TaskFormComponent,
     PageHeaderComponent
@@ -42,8 +44,10 @@ export class EmployeesComponent {
   dialogService = inject(DialogService);
   snackbarService = inject(SnackbarService);
 
-  tableConfig: TableConfig = {data: [], columns: []};
-  tasksTableConfig: TableConfig = {data: [], columns: []};
+  private originalTaskColumns: TaskColumnI[] = [];
+
+  tableConfig: TableConfig = { data: [], columns: [] };
+  tasksTableConfig: TableConfig = { data: [], columns: [] };
 
   employeeFormConfig: FormConfig = {
     title: '',
@@ -51,16 +55,16 @@ export class EmployeesComponent {
     submitText: 'Add Employee'
   };
 
-  employeeData:any;
-  taskData:any;
+  employeeData: any;
+  taskData: any;
 
-  ngOnInit(){
-    this.dataService.getEmployees().subscribe(employees=>{
+  ngOnInit() {
+    this.dataService.getEmployees().subscribe(employees => {
       this.giveEmployeeTableConfig(employees);
     })
   }
 
-  openNewEmployeeDialog(){
+  openNewEmployeeDialog() {
     this.employeeData = {};
     this.employeeFormConfig = {
       title: '',
@@ -76,7 +80,7 @@ export class EmployeesComponent {
     })
   }
 
-  openEditEmployeeDialog(row?: any ) {
+  openEditEmployeeDialog(row?: any) {
     this.employeeData = row;
     this.employeeFormConfig = {
       title: '',
@@ -94,25 +98,25 @@ export class EmployeesComponent {
     })
   }
 
-  addNewEmployee(formData:any){
-    formData.id = `${this.tableConfig.data.length+1}`
-    this.dataService.addEmployee(formData).subscribe(res=>{
+  addNewEmployee(formData: any) {
+    formData.id = `${this.tableConfig.data.length + 1}`
+    this.dataService.addEmployee(formData).subscribe(res => {
       this.giveEmployeeTableConfig(res);
       this.dialogService.closeAll();
     })
   }
 
-  updateEmployee(formData: any) {    
-    this.dataService.updateEmployee(formData).subscribe(res=>{
+  updateEmployee(formData: any) {
+    this.dataService.updateEmployee(formData).subscribe(res => {
       this.giveEmployeeTableConfig(res);
       this.dialogService.closeAll();
     })
   }
 
-  checkDepartment(formData:any){
+  checkDepartment(formData: any) {
     console.log('check department', formData);
   }
-  
+
   private giveEmployeeTableConfig(data: any) {
     this.tableConfig = {
       columns: this.entityFieldsService.buildEntityTableConfigColumns('employee'),
@@ -123,7 +127,7 @@ export class EmployeesComponent {
     };
   }
 
-  openConfirmDeleteEmployee(employeeData:any){
+  openConfirmDeleteEmployee(employeeData: any) {
     const name = employeeData.fullName;
     this.dialogService.openConfirm({
       header: 'Delete Employee',
@@ -133,7 +137,7 @@ export class EmployeesComponent {
       cls: 'bg-red-500 !text-white',
     }).subscribe(confirmed => {
       if (confirmed === true) {
-        if(this.tasksTableConfig.data.length > 0){
+        if (this.tasksTableConfig.data.length > 0) {
           this.snackbarService.showSnackbar(`Please reassign ${name}'s tasks before proceeding with deletion.`);
           return;
         }
@@ -144,27 +148,38 @@ export class EmployeesComponent {
           this.giveEmployeeTableConfig(res);
         });
       }
-    }); 
+    });
   }
 
   /******************************************************************************** */
 
-  openTaskDialog(){
+  private findTaskById(taskId: number):any {
+    for (const column of this.originalTaskColumns) {
+      const task = column.tasks.find(t => t.data.id === taskId);
+      if (task) {
+        return task;
+      }
+    }
+    return null;
+  }
+
+  openTaskDialog(taskData: any) {
+    this.taskData = taskData ? this.findTaskById(taskData.id) : taskData;
     this.dialogService.openTemplate({
       panelClass: 'responsive-dialog',
-      header: `Add task to ${this.employeeData.fullName}`,
+      header: taskData ? `Update task` : `Add task to ${this.employeeData.fullName}`,
       content: this.taskFormTmpl,
       cls: 'bg-violet-800 !text-white',
       id: 'add-task-dialog',
     })
   }
 
-  onAfterSubmitTask(event:any){
+  onAfterSubmitTask(event: any) {
     this.dialogService.closeDialogById('add-task-dialog');
     this.getTasksForEmployee(this.employeeData.id);
   }
 
-  openConfirmDeleteTaskDialog(task:any){
+  openConfirmDeleteTaskDialog(task: any) {
     console.log('delete task', task);
     this.dialogService.openConfirm({
       header: 'Delete Task',
@@ -186,11 +201,11 @@ export class EmployeesComponent {
   private giveTasksTableConfig(data: any) {
     this.tasksTableConfig = {
       columns: [
-        {key: 'id', label: 'ID', type: 'text'}, 
-        {key: 'type', label: 'Type', type: 'text'}, 
-        {key: 'subject', label: 'Subject', type: 'text'}, 
-        {key: 'status', label: 'Status', type: 'text'},
-        {key: 'actions', label: 'Actions', type: 'custom'}      
+        { key: 'id', label: 'ID', type: 'text' },
+        { key: 'type', label: 'Type', type: 'text' },
+        { key: 'subject', label: 'Subject', type: 'text' },
+        { key: 'status', label: 'Status', type: 'text' },
+        { key: 'actions', label: 'Actions', type: 'custom' }
       ],
       data: data,
       pagination: true,
@@ -198,13 +213,14 @@ export class EmployeesComponent {
       hideButtons: true,
     };
   }
-
+  
   private getTasksForEmployee(employeeId: string) {
     this.dataService.getTasksForEmployee(employeeId).pipe(
-      // Filter out columns with no tasks
-      map(columns => columns.filter((column:TaskColumnI) => column.tasks.length > 0)),
-      // Flatten the structure and transform each task
-      map(columns => columns.flatMap((column:TaskColumnI) => 
+      tap((columns: TaskColumnI[]) => {
+        this.originalTaskColumns = columns; // Save full unfiltered, unflattened response
+      }),
+      map(columns => columns.filter((column: TaskColumnI) => column.tasks.length > 0)),
+      map(columns => columns.flatMap((column: TaskColumnI) =>
         column.tasks.map(task => ({
           id: task.data.id,
           type: task.type.label,
@@ -213,10 +229,8 @@ export class EmployeesComponent {
         }))
       ))
     ).subscribe((tasks) => {
-      //console.log('tasks for employee', tasks)
       this.giveTasksTableConfig(tasks);
     });
   }
-
 
 }
