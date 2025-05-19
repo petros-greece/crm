@@ -167,9 +167,10 @@ export class EmployeesComponent {
     this.taskData = taskData ? this.findTaskById(taskData.id) : taskData;
     this.dialogService.openTemplate({
       panelClass: 'responsive-dialog',
-      header: taskData ? `Update task` : `Add task to ${this.employeeData.fullName}`,
+      header: taskData ? `${this.taskData.type.label}` : `Add task to ${this.employeeData.fullName}`,
       content: this.taskFormTmpl,
       id: 'add-task-dialog',
+      icon: taskData ? `${this.taskData.type.icon}` : ''
     })
   }
 
