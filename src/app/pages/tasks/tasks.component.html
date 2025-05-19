@@ -3,7 +3,7 @@
     <mat-form-field appearance="fill" class="flex-1">
       <input matInput placeholder="New column title" [(ngModel)]="newColumnTitle">
     </mat-form-field>
-    <button mat-raised-button (click)="addColumn()" [disabled]="!newColumnTitle.length">Add Column</button>
+    <button mat-raised-button (click)="addColumn()">Add Column</button>
     <button mat-raised-button color="accent" (click)="openTaskDialog()">Add Task</button>
   </div>
 
@@ -26,7 +26,7 @@
       </div>
 
       <div cdkDropList [id]="'list-' + (i+1)" [cdkDropListData]="col.tasks" [cdkDropListConnectedTo]="connectedListIds"
-        class="bg-white flex-1 min-h-[50px] p-2 pb-10 rounded overflow-y-auto" (cdkDropListDropped)="drop($event)">
+        class="bg-white flex-1 min-h-[50px] p-2 pb-10 rounded overflow-y-auto" (cdkDropListDropped)="dropTask($event)">
 
 
         <div class="flex flex-col bg-gray-200 mb-2 p-2 rounded cursor-move"

@@ -76,7 +76,7 @@ export class TasksComponent extends TasksVarsComponent implements OnInit{
     this.columns.splice(index, 1);
   }
 
-  drop(event: CdkDragDrop<TaskI[]>) {
+  dropTask(event: CdkDragDrop<TaskI[]>) {
     console.log(event);
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
