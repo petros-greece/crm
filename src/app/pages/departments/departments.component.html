@@ -7,23 +7,17 @@
 
 
 <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
-  <div *ngFor="let dept of departments; index as i"
-  class="group p-2 relative shadow-sm rounded-lg flex h-32 overflow-hidden 
+  <div *ngFor="let dept of departments; index as i" class="group p-2 relative shadow-sm rounded-lg flex h-32 overflow-hidden 
   bg-violet-500 cursor-pointer transition-transform transform 
-  hover:scale-105 hover:shadow-lg hover:bg-violet-600"
-  (click)="openPreviewDepartmentDialog(i)">
+  hover:scale-105 hover:shadow-lg hover:bg-violet-600" (click)="openPreviewDepartmentDialog(i)">
 
     <!-- Background icon, scaled up -->
-    <mat-icon
-      class="absolute right-3 bottom-3 transform scale-450 opacity-60 pointer-events-none"
-    >
+    <mat-icon class="absolute right-3 bottom-3 transform scale-450 opacity-60 pointer-events-none">
       {{ dept.icon }}
     </mat-icon>
 
     <!-- Label on top -->
-    <span class="relative w-full text-lg font-semibold"
-    [ngClass]="'text-gray-900'"
-    >
+    <span class="relative w-full text-lg font-semibold" [ngClass]="'text-gray-900'">
       {{ dept.label }}
     </span>
   </div>
@@ -31,30 +25,39 @@
 
 <ng-template #departmentPreviewTmpl>
   <mat-tab-group>
-    
+
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon class="mr-1">info</mat-icon>
         Info
       </ng-template>
 
-      <div *ngFor="let departmentRole of departmentRoles">
-        <div class="flex flex-row items-center h-16">
-          <b>{{ departmentRole.role }}</b>
-          <button mat-icon-button (click)="toggleForm(departmentRole.role)">
-            <mat-icon>{{ showForm[departmentRole.role] ? 'remove_circle' : 'add_circle' }}</mat-icon>
-          </button>
-          <div class="pt-4" *ngIf="showForm[departmentRole.role]">
-            <app-form-builder 
-              [config]="selectEmployeeFormConfig" 
-              (formValuesChange)="addEmployeeToRole($event, departmentRole.role)">
-            </app-form-builder>
+      <div class="overflow-hidden">
+
+        <div *ngFor="let departmentRole of departmentRoles">
+          <div class="flex flex-row items-center h-16">
+            <b>{{ departmentRole.role }}</b>
+            <button mat-icon-button (click)="toggleForm(departmentRole.role)">
+              <mat-icon>{{ showForm[departmentRole.role] ? 'remove_circle' : 'add_circle' }}</mat-icon>
+            </button>
+            <div class="pt-4" *ngIf="showForm[departmentRole.role]">
+              <app-form-builder [config]="selectEmployeeFormConfig"
+                (formValuesChange)="addEmployeeToRole($event, departmentRole.role)">
+              </app-form-builder>
+            </div>
+          </div>
+          <div *ngFor="let employee of departmentRole.employees">
+            {{ employee.fullName }}
           </div>
         </div>
-        <div *ngFor="let employee of departmentRole.employees">
-          {{ employee.fullName }}
+
+        <div class="mt-30 text-center">
+          <button mat-button class="!bg-red-500 !text-white" (click)="openConfirmDeleteDepartmentDialog()">
+            Delete Department
+          </button>
         </div>
       </div>
+
     </mat-tab>
 
     <mat-tab>
@@ -65,11 +68,6 @@
 
       <div class="overflow-hidden">
         <ng-container *ngTemplateOutlet="departmentFormTmpl"></ng-container>
-        <div class="mt-30 text-center">
-          <button mat-button class="!bg-red-500 !text-white" (click)="openConfirmDeleteDepartmentDialog()">
-            Delete Department
-          </button>
-        </div>
       </div>
     </mat-tab>
 
@@ -79,6 +77,7 @@
 
 <ng-template #departmentFormTmpl>
   <div class="p-4">
-    <app-form-builder [config]="departmentFormConfig" [values]="departmentFormValues" (submitHandler)="addOrUpdateDepartment($event)"></app-form-builder>
+    <app-form-builder [config]="departmentFormConfig" [values]="departmentFormValues"
+      (submitHandler)="addOrUpdateDepartment($event)"></app-form-builder>
   </div>
 </ng-template>

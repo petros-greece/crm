@@ -9,6 +9,7 @@ import { FormConfig } from '../../form-builder/form-builder.model';
 import { DataService } from '../../services/data.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { PageHeaderComponent } from '../../components/page-header/page-header.component';
+import { SnackbarService } from '../../services/snackbar.service';
 
 @Component({
   selector: 'app-departments',
@@ -25,8 +26,9 @@ import { PageHeaderComponent } from '../../components/page-header/page-header.co
 })
 export class DepartmentsComponent extends DepartmentsVars implements OnInit{
 
-  dialogService = inject(DialogService)
+  dialogService = inject(DialogService);
   dataService = inject(DataService);
+  snackbarService = inject(SnackbarService);
   @ViewChild('departmentPreviewTmpl', { static: true }) departmentPreviewTmpl!: TemplateRef<any>;
   @ViewChild('departmentFormTmpl', { static: true }) departmentFormTmpl!: TemplateRef<any>;
 
@@ -145,6 +147,10 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
     })
   }
 
+  private get canDeleteDepartment(): boolean {
+    return this.departmentRoles.every((role:any) => role.employees.length === 0);
+  }
+
   openConfirmDeleteDepartmentDialog(){
   
     this.dialogService.openConfirm({
@@ -154,9 +160,15 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
     })
       .subscribe(confirmed => {
         if (confirmed === true) {
+          if(!this.canDeleteDepartment){
+            this.snackbarService.showSnackbar(`Department "${this.departmentFormValues.label}" cannot be deleted because it has employees.`);
+            return;
+          }
+
           this.dataService.deleteDepartment(this.departmentFormValues.id).subscribe((res)=>{
             this.departments = res;
             this.dialogService.closeAll();
+            this.snackbarService.showSnackbar(`Department ${this.departmentFormValues.label} deleted succesfully`);
           })
         }
       });
