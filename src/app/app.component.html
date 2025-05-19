@@ -1,21 +1,15 @@
 <mat-sidenav-container class="h-screen">
   <mat-sidenav #sidenav mode="side" opened class="!w-[300px] !rounded-none !border-r-2 !border-gray-300 !bg-violet-100">
     <mat-toolbar>
-
       <h2 class="text-xl font-bold mb-4">CRM System</h2>
     </mat-toolbar>
-    <div class="p-4">   
+    <div class="p-4">
       <mat-nav-list>
         <!-- Loop through filtered routes -->
-        <a mat-list-item 
-           *ngFor="let route of routes"
-           [routerLink]="route.path" 
-           routerLinkActive="active-link"
-           #rla="routerLinkActive"
-           [disabled]="rla.isActive"
-          >
-          <div  class="flex flex-row items-center gap-2">
-           <mat-icon>{{ route.data?.['icon'] }}</mat-icon>
+        <a mat-list-item *ngFor="let route of routes" [routerLink]="route.path" routerLinkActive="active-link"
+          #rla="routerLinkActive" [disabled]="rla.isActive">
+          <div class="flex flex-row items-center gap-2">
+            <mat-icon>{{ route.data?.['icon'] }}</mat-icon>
             <div>{{ route.title }}</div>
           </div>
         </a>
@@ -28,7 +22,14 @@
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
-      <span class="ml-2"></span>
+      <span class="flex flex-grow"></span>
+      <button mat-button [matMenuTriggerFor]="menu">
+        <mat-icon>person</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Profile</button>
+        <button mat-menu-item>Logout</button>
+      </mat-menu>
     </mat-toolbar>
 
     <div class="p-4">
