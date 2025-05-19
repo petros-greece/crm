@@ -8,9 +8,16 @@
 <div class="flex flex-row items-center justify-between px-3 pt-2 pb-4 bg-violet-200 rounded-sm shadow-md ">
   <app-table-builder [config]="tableConfig" class="w-full">
     <ng-template appColumnTemplate="actions" let-row>
-      <button mat-icon-button (click)="openEditEmployeeDialog(row)">
-        <mat-icon>edit</mat-icon>
-      </button>
+
+      <div class="flex flex-row">
+        <button mat-icon-button (click)="openEditEmployeeDialog(row)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="openConfirmDeleteEmployee(row)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
     </ng-template>
   </app-table-builder>
 </div>
@@ -18,9 +25,14 @@
 
 <ng-template #previewEmployeeTmpl>
   <mat-tab-group class="min-h-[80vh]">
-    <mat-tab label="Tasks">
 
-      <div class="flex justify-end my-2">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="mr-1">assignment</mat-icon>
+        Tasks
+      </ng-template>
+
+      <div class="flex my-2">
         <button mat-raised-button color="primary" (click)="openTaskDialog()" class="flex items-center gap-2">
           <mat-icon>add</mat-icon>
           Add Task
@@ -34,24 +46,27 @@
           </button>
         </ng-template>
       </app-table-builder>
-
     </mat-tab>
-    <mat-tab label="Info">
-      <div class="overflow-hidden">
 
-        <app-form-builder [config]="employeeFormConfig" [values]="employeeData"
-          (formValuesChange)="checkDepartment($event)" (submitHandler)="updateEmployee($event)"></app-form-builder>
-        <div class="mt-64 text-center">
-        <button mat-raised-button (click)="openConfirmDeleteEmployee()" class="!bg-red-500 !text-white">
-          Delete
-          <mat-icon>delete</mat-icon>
-        </button>
-        </div>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="mr-1">info</mat-icon>
+        Info
+      </ng-template>
+
+      <div class="p-4 overflow-hidden">
+        <app-form-builder
+          [config]="employeeFormConfig"
+          [values]="employeeData"
+          (formValuesChange)="checkDepartment($event)"
+          (submitHandler)="updateEmployee($event)">
+        </app-form-builder>
       </div>
     </mat-tab>
-  </mat-tab-group>
 
+  </mat-tab-group>
 </ng-template>
+
 
 <ng-template #addEmployeeTmpl>
   <app-form-builder [config]="employeeFormConfig" [values]="employeeData" (formValuesChange)="checkDepartment($event)"

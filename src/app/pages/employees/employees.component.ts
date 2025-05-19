@@ -123,8 +123,8 @@ export class EmployeesComponent {
     };
   }
 
-  openConfirmDeleteEmployee(){
-    const name = this.employeeData.fullName;
+  openConfirmDeleteEmployee(employeeData:any){
+    const name = employeeData.fullName;
     this.dialogService.openConfirm({
       header: 'Delete Employee',
       content: `Are you sure you want to delete employee "${name}"?`,
@@ -138,7 +138,7 @@ export class EmployeesComponent {
           return;
         }
 
-        this.dataService.deleteEmployee(this.employeeData.id).subscribe(res => {
+        this.dataService.deleteEmployee(employeeData.id).subscribe(res => {
           this.snackbarService.showSnackbar(`Employee "${name}" deleted successfully`);
           this.dialogService.closeAll();
           this.giveEmployeeTableConfig(res);
