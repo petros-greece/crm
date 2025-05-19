@@ -52,7 +52,6 @@ export class DataService {
     );
   }
 
-  // New method to get employee options
   getEmployeeOptions(): Observable<Option[]> {
     return this.getEmployees().pipe(
       map(employees =>
@@ -308,6 +307,40 @@ export class DataService {
     );
   }
 
+  /** TASKS TYPE ********************************************************************************************** */
+
+  private readonly taskTypesStorageKey = 'crm-task-types';
+  private readonly taskTypesJsonFile = 'assets/data/task-types.json';
+
+  getTaskTypes(): Observable<any[]> {
+    const storedTaskTypes = localStorage.getItem(this.taskTypesStorageKey);
+    if (storedTaskTypes) {
+      try {
+        const tasks = JSON.parse(storedTaskTypes);
+        return of(tasks);
+      } catch (error) {
+        console.error('Error parsing stored tasks', error);
+        return this.getTaskTypesFromFile();
+      }
+    } else {
+      return this.getTaskTypesFromFile();
+    }
+  }
+
+  private getTaskTypesFromFile(): Observable<any[]> {
+    return this.http.get<any[]>(this.taskTypesJsonFile).pipe(
+      catchError(error => {
+        return of([]);
+      }),
+      switchMap(tasks => {
+        if (tasks && tasks.length > 0) {
+          localStorage.setItem(this.taskTypesStorageKey, JSON.stringify(tasks));
+        }
+        return of(tasks);
+      })
+    );
+  }
+
   /** DEPARTMENT**********************************************************************************8***** */
 
   private readonly departmentsStorageKey = 'crm-departments';
@@ -325,15 +358,15 @@ export class DataService {
 
   getDepartments(): Observable<any[]> {
     // Try to get from localStorage first
-    const storedEmployees = localStorage.getItem(this.departmentsStorageKey);
+    const storedDepartments = localStorage.getItem(this.departmentsStorageKey);
 
-    if (storedEmployees) {
+    if (storedDepartments) {
       // Parse and return as observable
       try {
-        const employees = JSON.parse(storedEmployees);
-        return of(employees);
+        const departments = JSON.parse(storedDepartments);
+        return of(departments);
       } catch (error) {
-        console.error('Error parsing stored employees', error);
+        console.error('Error parsing stored departments', error);
         // If parsing fails, proceed to get from file
         return this.getDepartmentsFromFile();
       }
@@ -860,7 +893,10 @@ export class DataService {
     );
   }
 
+  /** FORMS ******************************************************************************** */
 
+  private readonly formsStorageKey = 'crm-forms';
+  private readonly formsJsonFile = 'assets/data/forms.json';
 
 }
 
