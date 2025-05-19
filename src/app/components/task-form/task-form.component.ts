@@ -6,8 +6,7 @@ import { TaskItemI, TaskTypeT } from '../../pages/tasks/tasks.model';
 import { MatIcon } from '@angular/material/icon';
 import { FormBuilderComponent } from '../../form-builder/form-builder.component';
 import { FormConfig } from '../../form-builder/form-builder.model';
-import { EntityFieldsService } from '../../services/entity-fields.service';
-import { EntityService } from '../../services/entity.service';
+import { EntityFieldsService, TaskTypeI } from '../../services/entity-fields.service';
 import { DataService } from '../../services/data.service';
 import { SnackbarService } from '../../services/snackbar.service';
 
@@ -39,7 +38,6 @@ export class TaskFormComponent implements OnInit{
   @Input() taskData:any = null;
   @Input() assignee:string = '';
   @Output() onAfterSubmit = new EventEmitter<any>();
-  entityService = inject(EntityService);
   fieldsService = inject(EntityFieldsService);
 
   values:any = {};
@@ -47,32 +45,41 @@ export class TaskFormComponent implements OnInit{
   taskFormConfig:FormConfig = {
     fields: [],
   }
-  tasks = this.entityService.tasks;
+  tasks:TaskTypeI[] = [];
 
   ngOnInit(): void {
-    if(this.taskData){
-      this.values = this.taskData.data;
-      this.onSelectTaskType(this.taskData.type.value)
-    }
+
+    this.fieldsService.getTaskTypeOptions().subscribe((taskTypes:TaskTypeI[])=>{
+      this.tasks = taskTypes;
+      if(this.taskData){
+        this.values = this.taskData.data;
+        this.onSelectTaskType(this.taskData.type.value)
+      }
+    })
+
+
   }
 
-  getTaskFields(value: TaskTypeT | null): TaskItemI | undefined {
+  getTaskFields(value: TaskTypeT | null): TaskTypeI | undefined {
     return this.tasks.find(task => task.value === value);
   }
 
   onSelectTaskType(taskType:TaskTypeT){
     const task = this.getTaskFields(taskType);
     this.taskType = taskType;
-    this.taskFormConfig = {
-      title: !this.taskData ? task?.label : '',
-      icon: !this.taskData ? task?.icon : '',
-      fields: this.fieldsService.getTaskFields(taskType),
-      submitText: this.taskData? 'Update Task' : 'Add Task'
-    }
-    if(this.assignee){
-      this.values.assignee = this.assignee;
-    }
-   //console.log(this.taskTypeFields[taskType]);
+
+    this.fieldsService.getTaskFieldsForType(taskType).subscribe(fields=>{
+      this.taskFormConfig = {
+        title: !this.taskData ? task?.label : '',
+        icon: !this.taskData ? task?.icon : '',
+        fields: fields,
+        submitText: this.taskData? 'Update Task' : 'Add Task'
+      }
+      if(this.assignee){
+        this.values.assignee = this.assignee;
+      }
+    })
+
   }
 
   submit(formData:any){  
