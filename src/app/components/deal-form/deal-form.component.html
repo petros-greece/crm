@@ -1,0 +1,24 @@
+  <div>
+    <div *ngIf="!dealFormValues.id">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Select a Deal Type</mat-label>
+        <mat-select [(ngModel)]="selectedDealType" (selectionChange)="onSelectDealType($event.value)">
+          <mat-option *ngFor="let deal of dealTypes" [value]="deal.id">
+            <mat-icon class="mr-2">{{ deal.icon }}</mat-icon>
+            {{ deal.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <small *ngIf="!selectedDealType">
+        Available deal types depend on the relationship with the selected company
+        ({{ companyInfo.relations }})
+      </small>
+    </div>
+
+    <app-form-builder *ngIf="selectedDealType || dealFormValues.id" [config]="dealFormConfig" [values]="dealFormValues"
+      (submitHandler)="submitDeal($event)">
+    </app-form-builder>
+
+    {{dealFormConfig|json}}
+
+  </div>

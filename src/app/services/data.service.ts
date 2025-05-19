@@ -621,15 +621,9 @@ export class DataService {
     return this.getDeals().pipe(
       map((dealsMap: { [key: string]: any[] }) => {
         const companyDeals = dealsMap[companyId] || [];
-
-        // Optionally generate a unique ID if not provided
-        if (!newDeal.id) {
-          newDeal.id = Date.now().toString(); // or use UUID if preferred
-        }
-
+        newDeal.id = Date.now().toString(); // or use UUID if preferred  
         companyDeals.push(newDeal);
         dealsMap[companyId] = companyDeals;
-
         localStorage.setItem(this.dealsStorageKey, JSON.stringify(dealsMap));
         return companyDeals;
       })
@@ -640,15 +634,8 @@ export class DataService {
     return this.getDeals().pipe(
       map((dealsMap: { [key: string]: any[] }) => {
         const companyDeals = dealsMap[companyId] || [];
-
-        const index = companyDeals.findIndex((d: any) => d.id === updatedDeal.id);
-
-        if (index !== -1) {
-          companyDeals[index] = updatedDeal;
-        } else {
-          companyDeals.push(updatedDeal); // If it doesn't exist, add it
-        }
-
+        const index = companyDeals.findIndex((d: any) => d.id === updatedDeal.id);  
+        companyDeals[index] = updatedDeal;
         dealsMap[companyId] = companyDeals;
         localStorage.setItem(this.dealsStorageKey, JSON.stringify(dealsMap));
         return companyDeals;

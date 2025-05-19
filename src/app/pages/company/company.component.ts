@@ -18,29 +18,31 @@ import { ChartService } from '../../components/chart/chart.service';
 import { FolderStructureComponent } from '../../components/folder-structure/folder-structure.component';
 import { TreeNodeI } from '../../components/tree/tree.component';
 import { PageHeaderComponent } from '../../components/page-header/page-header.component';
+import { DealFormComponent } from '../../components/deal-form/deal-form.component';
 
 @Component({
   selector: 'app-company',
   imports: [
-    CommonModule, 
-    FormBuilderComponent, 
-    MatTabsModule, 
-    MatIcon, 
+    CommonModule,
+    FormBuilderComponent,
+    MatTabsModule,
+    MatIcon,
     MatButtonModule,
-    FormsModule, 
-    MatSelectModule, 
-    TableBuilderComponent, 
+    FormsModule,
+    MatSelectModule,
+    TableBuilderComponent,
     ColumnTemplateDirective,
     ChartComponentWrapper,
     FolderStructureComponent,
-    PageHeaderComponent
+    PageHeaderComponent,
+    DealFormComponent
   ],
   templateUrl: './company.component.html',
   styleUrl: './company.component.scss'
 })
 export class CompanyComponent {
   @ViewChild('previewCompanyTmpl', { static: true }) previewCompanyTmpl!: TemplateRef<any>;
-  @ViewChild('newDealTmpl', { static: true }) newDealTmpl!: TemplateRef<any>;
+  @ViewChild('dealTmpl', { static: true }) dealTmpl!: TemplateRef<any>;
   @ViewChild('updateDealTmpl', { static: true }) updateDealTmpl!: TemplateRef<any>;
   @ViewChild('newCompanyTmpl', { static: true }) newCompanyTmpl!: TemplateRef<any>;
 
@@ -52,23 +54,22 @@ export class CompanyComponent {
 
   selectedTabIndex = 0;
 
-  companiesTableConfig: TableConfig | null = null;  
-  dealsTableConfig: TableConfig | null = null; 
+  companiesTableConfig: TableConfig | null = null;
+  dealsTableConfig: TableConfig | null = null;
   companyDeals: any = null;
   companyAssets: TreeNodeI[] = [];
 
-  originalDealTypes:DealTypeI[] = [];
-  dealTypes:DealTypeI[] = [];
-  selectedDealType = '';
-  dealFormConfig:FormConfig = { fields: [] }
-  dealFormValues:any;
-  companyInfoFormConfig:FormConfig = { fields: this.entityFieldsService.companyFields }
-  companyInfoValues:any;
-  companyContactsFormConfig:FormConfig = { fields: this.entityFieldsService.companyTabFields['contacts'] }
-  companyContactsValues:any;
+
+  dealFormConfig: FormConfig = { fields: [] }
+  dealFormValues: any;
+
+  companyInfoFormConfig: FormConfig = { fields: this.entityFieldsService.companyFields }
+  companyInfoValues: any;
+  companyContactsFormConfig: FormConfig = { fields: this.entityFieldsService.companyTabFields['contacts'] }
+  companyContactsValues: any;
 
   chartData: ChartData = { categories: [], series: [] };
-  chartConfig:ChartConfig = {
+  chartConfig: ChartConfig = {
     chart: {
       type: 'area' as ApexChart['type'],
       height: 300
@@ -82,17 +83,13 @@ export class CompanyComponent {
   };
 
 
-  ngOnInit(){
-
-    this.dataService.getCompanies().subscribe(companies=>{
+  ngOnInit() {
+    this.dataService.getCompanies().subscribe(companies => {
       this.giveCompaniesTableConfig(companies);
-    })    
-
-    this.entityFieldsService.getDealTypeOptions().subscribe(dealTypes=>this.originalDealTypes = dealTypes)
-
+    })
   }
 
-  giveCompaniesTableConfig(companies:any){
+  private giveCompaniesTableConfig(companies: any) {
     this.companiesTableConfig = {
       columns: this.entityFieldsService.buildEntityTableConfigColumns('company'),
       data: companies,
@@ -104,97 +101,35 @@ export class CompanyComponent {
 
   /** DEAL *************************************************************** */
 
-  onSelectDealType(dealTypeId:string){
-    const deal:any = this.originalDealTypes.find(deal => deal.id === dealTypeId);
-    this.entityFieldsService.getDealFieldsForType(dealTypeId).subscribe((fields:FormFieldConfig[])=>{
-      console.log(dealTypeId)
-      this.dealFormConfig = {
-        title: deal.label || '',
-        icon: deal.icon || '',
-        fields: fields,
-        submitText: 'Add Deal'
-      }
-    })
-
-  }
-
-  openNewDealDialog(){
-    this.selectedDealType = '';
-    this.dealFormValues = {};
+  openDealDialog(dealData: any){
+    this.dealFormValues = dealData;
+    const header = dealData.id ? `Deal with ${this.companyInfoValues.companyName}` : `Add New Deal with ${this.companyInfoValues.companyName}`;
     this.dialogService.openTemplate({
       panelClass: 'big-dialog',
-      header: `Add New Deal with ${this.companyInfoValues.companyName}`,
-      content: this.newDealTmpl,
-      cls: '!bg-violet-800 !text-white',
+      header: header,
+      content: this.dealTmpl,
       id: 'deal-dialog'
-    })   
-  }
-
-  openEditDealDialog(dealData:any){
-    this.selectedDealType = dealData.dealType;
-    this.dealFormValues = dealData;
-    const dealType:any = this.originalDealTypes.find(deal => deal.id === dealData.dealType);
-
-    this.entityFieldsService.getDealFieldsForType(dealType.id).subscribe((fields:FormFieldConfig[])=>{
-
-      this.dealFormConfig = {
-       // title: deal.label || '',
-       // icon: deal.icon || '',
-        fields: fields
-      }
-      this.dialogService.openTemplate({
-        panelClass: 'big-dialog',
-        header: `Deal with ${this.companyInfoValues.companyName}`,
-        content: this.updateDealTmpl,
-        cls: '!bg-violet-800 !text-white',
-        id: 'deal-dialog',
-        icon: dealType?.icon || ''
-      })  
-    })
-
-  }
-
-  addNewDeal(formData:any){
-    formData.dealType = this.selectedDealType;
-    formData.dealTypeName = (this.dealTypes.find(dt => dt.id === formData.dealType))?.label;
-    formData.notes = [];
-    //console.log(formData, this.companyInfoValues.id);
-    this.dataService.addDeal(this.companyInfoValues.id, formData).subscribe((response)=>{
-      //console.log(response)
-      this.dealsTableConfig = {
-        data: response,
-        columns: this.entityFieldsService.buildEntityTableConfigColumns('deal')
-      }
-      this.selectedDealType = '';
-      this.dialogService.closeDialogById('deal-dialog');
     })
   }
 
-  updateDeal(formData:any){
- 
-    //console.log(formData, this.companyInfoValues.id);
-    this.dataService.updateDeal(this.companyInfoValues.id, formData).subscribe((response)=>{
-      //console.log(response)
-      this.dealsTableConfig = {
-        data: response,
-        columns: this.entityFieldsService.buildEntityTableConfigColumns('deal')
-      }
-      this.selectedDealType = '';
-      this.dialogService.closeDialogById('deal-dialog');
-    })
+  onAfterSubmitDeal(response: any) {
+    this.dealsTableConfig = {
+      data: response,
+      columns: this.entityFieldsService.buildEntityTableConfigColumns('deal')
+    }
+    this.dialogService.closeDialogById('deal-dialog');
   }
 
-  deleteDeal(companyId:string, dealId:string){
+  deleteDeal(companyId: string, dealId: string) {
 
     this.dialogService.openConfirm({
       cls: 'bg-red-500 !text-white',
       header: `Delete deal?`,
       content: 'Are you sure you want to delete the current deal?',
-    })
-      .subscribe(confirmed => {
+    }).subscribe(confirmed => {
         if (confirmed === true) {
           console.log(companyId, dealId)
-          this.dataService.deleteDeal(companyId, dealId).subscribe((data:any)=>{
+          this.dataService.deleteDeal(companyId, dealId).subscribe((data: any) => {
             this.dealsTableConfig = {
               data: data,
               columns: this.entityFieldsService.buildEntityTableConfigColumns('deal')
@@ -208,7 +143,7 @@ export class CompanyComponent {
 
   /** COMPANY *************************************************************** */
 
-  openEditCompanyDialog(row:any){
+  openEditCompanyDialog(row: any) {
     this.selectedTabIndex = 0;
     this.dealsTableConfig = null;
     this.companyDeals = null;
@@ -216,10 +151,8 @@ export class CompanyComponent {
     this.chartData = { categories: [], series: [] };
 
     this.companyInfoValues = row;
-    this.companyContactsValues = {contacts: row.contacts};
-    this.dealTypes = this.originalDealTypes.filter(dealType => 
-      dealType.relations.some(relation => row.relations.includes(relation))
-    );
+    this.companyContactsValues = { contacts: row.contacts };
+
     this.dialogService.openTemplate({
       panelClass: 'big-dialog',
       header: `Company: ${row.companyName}`,
@@ -228,33 +161,33 @@ export class CompanyComponent {
     })
   }
 
-  openNewCompanyTmpl(){
+  openNewCompanyTmpl() {
     this.dialogService.openTemplate({
       panelClass: 'big-dialog',
       header: `Add New company`,
       content: this.newCompanyTmpl,
       cls: '!bg-violet-800 !text-white',
-    })    
+    })
   }
 
-  addNewCompany(formData:any){
+  addNewCompany(formData: any) {
     console.log('formData', formData);
-    this.dataService.addCompany(formData).subscribe(companies=>{
+    this.dataService.addCompany(formData).subscribe(companies => {
       this.giveCompaniesTableConfig(companies);
       this.dialogService.closeAll();
     })
   }
 
-  updateCompany(formData:any){
-    this.dataService.updateCompany(formData).subscribe(companies=>{
+  updateCompany(formData: any) {
+    this.dataService.updateCompany(formData).subscribe(companies => {
       this.giveCompaniesTableConfig(companies);
       //this.dialogService.closeAll();
       this.snackbarService.showSnackbar('Company updated succesfully');
     })
   }
 
-  updateCompanyContacts(formData:any){
-    this.dataService.updateCompanyContacts(this.companyInfoValues.id, formData.contacts).subscribe(companies=>{  
+  updateCompanyContacts(formData: any) {
+    this.dataService.updateCompanyContacts(this.companyInfoValues.id, formData.contacts).subscribe(companies => {
       //this.dialogService.closeAll();
       this.snackbarService.showSnackbar('Company contacts updated succesfully');
     })
@@ -262,21 +195,21 @@ export class CompanyComponent {
 
 
   //CHECK IF IS THE DEALS TAB TO GET THE DEALS
-  selectedTabChange(event:any){
+  selectedTabChange(event: any) {
     //this.selectedTabIndex = event.index;
-    if( (event.index === 3 || event.index === 4) && !this.companyDeals){
-      this.dataService.getDealsForCompany(this.companyInfoValues.id).subscribe((deals)=>{
+    if ((event.index === 3 || event.index === 4) && !this.companyDeals) {
+      this.dataService.getDealsForCompany(this.companyInfoValues.id).subscribe((deals) => {
         console.log('gotten into dels', deals)
         this.companyDeals = deals;
         this.dealsTableConfig = {
           data: deals,
           columns: this.entityFieldsService.buildEntityTableConfigColumns('deal')
         }
-        this.chartData = this.chartService.dealsToChartData(deals);    
+        this.chartData = this.chartService.dealsToChartData(deals);
       })
     }
-    else if( event.index === 2 && !this.companyAssets.length ){
-      this.dataService.getAssetsForCompany(this.companyInfoValues.id).subscribe((assets)=>{
+    else if (event.index === 2 && !this.companyAssets.length) {
+      this.dataService.getAssetsForCompany(this.companyInfoValues.id).subscribe((assets) => {
         console.log('gotten into assets', assets)
         this.companyAssets = assets;
       })
@@ -284,22 +217,22 @@ export class CompanyComponent {
     }
   }
 
-  deleteCompany(){
+  deleteCompany() {
 
     this.dialogService.openConfirm({
       cls: 'bg-red-500 !text-white',
       header: `Delete company?`,
       content: `Are you sure you want to delete the company ${this.companyInfoValues.companyName}?`,
     })
-    .subscribe(confirmed => {
-      if (confirmed === true) {
-        this.dataService.deleteCompany(this.companyInfoValues.id).subscribe((companies:any)=>{
-          this.giveCompaniesTableConfig(companies);
-          this.dialogService.closeAll();
-          this.snackbarService.showSnackbar(`Company ${this.companyInfoValues.companyName} was deleted succesfully`);
-        })
-      }
-    });
+      .subscribe(confirmed => {
+        if (confirmed === true) {
+          this.dataService.deleteCompany(this.companyInfoValues.id).subscribe((companies: any) => {
+            this.giveCompaniesTableConfig(companies);
+            this.dialogService.closeAll();
+            this.snackbarService.showSnackbar(`Company ${this.companyInfoValues.companyName} was deleted succesfully`);
+          })
+        }
+      });
 
   }
 

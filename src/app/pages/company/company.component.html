@@ -76,13 +76,13 @@
         Deals
       </ng-template>
       <div class="p-4 text-center">
-        <button mat-raised-button (click)="openNewDealDialog()">
+        <button mat-raised-button (click)="openDealDialog({})">
           <mat-icon>add</mat-icon>
           Add New Deal
         </button>
         <app-table-builder [config]="dealsTableConfig" *ngIf="dealsTableConfig">
           <ng-template appColumnTemplate="actions" let-row>
-            <button mat-icon-button (click)="openEditDealDialog(row)">
+            <button mat-icon-button (click)="openDealDialog(row)">
               <mat-icon>edit</mat-icon>
             </button>
           </ng-template>
@@ -113,47 +113,11 @@
   </mat-tab-group>
 </ng-template>
 
-<ng-template #newDealTmpl>
-  <div class="pt-4">
-    <div>
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Select a Deal Type</mat-label>
-        <mat-select [(ngModel)]="selectedDealType" (selectionChange)="onSelectDealType($event.value)">
-          <mat-option *ngFor="let deal of dealTypes" [value]="deal.id">
-            <mat-icon class="mr-2">{{ deal.icon }}</mat-icon>
-            {{ deal.label }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <small *ngIf="!selectedDealType">
-        Available deal types depend on the relationship with the selected company
-        ({{ companyInfoValues.relations }})
-      </small>
-    </div>
-
-    <app-form-builder *ngIf="selectedDealType" [config]="dealFormConfig" [values]="dealFormValues"
-      (submitHandler)="addNewDeal($event)">
-    </app-form-builder>
-
-  </div>
+<ng-template #dealTmpl>
+  <app-deal-form [companyInfo]="companyInfoValues" [dealFormValues]="dealFormValues" (onAfterSubmitDeal)="onAfterSubmitDeal($event)"></app-deal-form>
 </ng-template>
 
-<ng-template #updateDealTmpl>
-  <div class="pt-4">
-    
-    <app-form-builder *ngIf="selectedDealType" [config]="dealFormConfig" [values]="dealFormValues"
-      (submitHandler)="updateDeal($event)">
-    </app-form-builder>
-  
-    <div class="text-center mt-64">
-      <button mat-raised-button class="!bg-red-500 !text-white"
-        (click)="deleteDeal(companyInfoValues.id, dealFormValues.id)">
-        Delete Deal
-      </button>
-    </div>
-  </div>
 
-</ng-template>
 
 <ng-template #newCompanyTmpl>
   <app-form-builder [config]="companyInfoFormConfig" (submitHandler)="addNewCompany($event)"></app-form-builder>
