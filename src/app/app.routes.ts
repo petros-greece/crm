@@ -13,7 +13,7 @@ export const routes: Routes = [
   { path: 'employees', component: EmployeesComponent, title: 'Employees', data: { icon: 'manage_accounts' }, canActivate: [AuthGuard] },
   { path: 'companies', component: CompanyComponent, title: 'Companies', data: { icon: 'business' }, canActivate: [AuthGuard] },
   { path: 'departments', component: DepartmentsComponent, title: 'Departments', data: { icon: 'store' }, canActivate: [AuthGuard] },
-  { path: 'tasks', component: TasksComponent, title: 'Tasks', data: { icon: 'check_circle' }, canActivate: [AuthGuard] },
+  { path: 'tasks', component: TasksComponent, title: 'Tasks', data: { icon: 'assignment' }, canActivate: [AuthGuard] },
   { path: 'billing', component: BillingComponent, title: 'Billing', data: { icon: 'credit_card' }, canActivate: [AuthGuard] },
   { path: 'assets', component: AssetsComponent, title: 'Assets', data: { icon: 'folder' }, canActivate: [AuthGuard] },
   { path: 'calendar-and-scheduling', component: CalendarAndSchedulingComponent, title: 'Calendar', data: { icon: 'calendar_month' }, canActivate: [AuthGuard] },
