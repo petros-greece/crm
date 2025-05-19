@@ -98,9 +98,9 @@ export class FormBuilderComponent implements AfterViewInit {
       if (field.listName) {
         clone.dynamicOptions = this.formBuilderService.getListOptions(field.listName);
       }
-      if(field.fields){
-        field.fields.forEach(f=>{
-          if(f.listName){
+      if (field.fields) {
+        field.fields.forEach(f => {
+          if (f.listName) {
             f.dynamicOptions = this.formBuilderService.getListOptions(f.listName);
           }
         });
@@ -185,16 +185,19 @@ export class FormBuilderComponent implements AfterViewInit {
           field.dynamicOptions = optionsSubject.asObservable();
         }
       }
-      if (field.dependsOn?.disableCondition) {
+      if (field.dependsOn?.disableCondition || field.dependsOn?.disableConditionValue) {
         const parentControl = this.formGroup.get(field.dependsOn.fieldName);
         const dependentControl = this.formGroup.get(field.name);
-        const disableCondition = field.dependsOn?.disableCondition;
         if (parentControl && dependentControl) {
           parentControl.valueChanges.pipe(
             takeUntil(this.destroy$),
             startWith(parentControl.value),
             distinctUntilChanged()
           ).subscribe(value => {
+            const disableCondition = (value: any) =>
+              field.dependsOn?.disableCondition
+                ? field.dependsOn.disableCondition(value)
+                : value !== field.dependsOn?.disableConditionValue;
             const shouldDisable = disableCondition(value);
             if (shouldDisable && !dependentControl.disabled) {
               dependentControl.disable({ emitEvent: false });
