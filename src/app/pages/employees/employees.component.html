@@ -22,7 +22,6 @@
   </app-table-builder>
 </div>
 
-
 <ng-template #previewEmployeeTmpl>
   <mat-tab-group class="min-h-[80vh]">
 
@@ -74,8 +73,10 @@
 
 
 <ng-template #addEmployeeTmpl>
-  <app-form-builder [config]="employeeFormConfig" [values]="employeeData" (formValuesChange)="checkDepartment($event)"
-    (submitHandler)="addNewEmployee($event)"></app-form-builder>
+  <div class="p-4">
+    <app-form-builder [config]="employeeFormConfig" [values]="employeeData" (formValuesChange)="checkDepartment($event)"
+      (submitHandler)="addNewEmployee($event)"></app-form-builder>
+  </div>
 </ng-template>
 
 <ng-template #taskFormTmpl>

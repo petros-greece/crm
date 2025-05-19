@@ -151,7 +151,7 @@ export class EmployeesComponent {
     });
   }
 
-  /******************************************************************************** */
+  /** TASKS ****************************************************************************** */
 
   private findTaskById(taskId: number):any {
     for (const column of this.originalTaskColumns) {
@@ -169,7 +169,6 @@ export class EmployeesComponent {
       panelClass: 'responsive-dialog',
       header: taskData ? `Update task` : `Add task to ${this.employeeData.fullName}`,
       content: this.taskFormTmpl,
-      cls: 'bg-violet-800 !text-white',
       id: 'add-task-dialog',
     })
   }
@@ -217,7 +216,7 @@ export class EmployeesComponent {
   private getTasksForEmployee(employeeId: string) {
     this.dataService.getTasksForEmployee(employeeId).pipe(
       tap((columns: TaskColumnI[]) => {
-        this.originalTaskColumns = columns; // Save full unfiltered, unflattened response
+        this.originalTaskColumns = columns; 
       }),
       map(columns => columns.filter((column: TaskColumnI) => column.tasks.length > 0)),
       map(columns => columns.flatMap((column: TaskColumnI) =>
