@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { Option } from './form-builder.model';
+import { DataService } from '../services/data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ import { Option } from './form-builder.model';
 export class FormBuilderService {
 
   private http: HttpClient = inject(HttpClient);
+  private dataService = inject(DataService);
   private readonly listsStorageKey = 'crm-lists';
   private readonly listsJsonFile = 'assets/json/lists.json';
   private readonly iconsStorageKey = 'crm-icons';
@@ -79,7 +81,13 @@ export class FormBuilderService {
   }
 
   getListOptions(key: string): Observable<Option[]> {
-    if (key === 'lists list') {
+    if(key === 'crmEmployees'){
+      console.log('gotten intlFormat;')
+      return this.dataService.getEmployeeOptions()
+    }
+
+    
+    else if (key === 'lists list') {
       return this.getListKeysOptions();
     }
 

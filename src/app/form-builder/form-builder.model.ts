@@ -73,7 +73,8 @@ export interface FormFieldConfig{
   dependsOn?: {
     fieldName:string, 
     updateOptions?: (parentValue: any) =>  Observable<Option[]>,
-    disableCondition?: (value: any) => boolean
+    disableCondition?: (value: any) => boolean,
+    disableConditionValue?: string
   }
   helperText?:string;
 }
