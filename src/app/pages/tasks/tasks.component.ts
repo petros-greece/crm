@@ -13,6 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormConfig } from '../../form-builder/form-builder.model';
 import { TaskFormComponent } from '../../components/task-form/task-form.component';
 import { PriorityWidgetComponent } from '../../components/priority-widget.component';
+import { SnackbarService } from '../../services/snackbar.service';
 
 
 
@@ -39,6 +40,7 @@ export class TasksComponent extends TasksVarsComponent implements OnInit{
   @ViewChild('addTaskTmpl', { static: true }) addTaskTmpl!: TemplateRef<any>;
 
   private dialogService = inject(DialogService);
+  private snackbarService = inject(SnackbarService);
   
   newColumnTitle = '';
   newTaskType:TaskTypeT | null = null;
@@ -91,23 +93,30 @@ export class TasksComponent extends TasksVarsComponent implements OnInit{
     }
 
     this.dataService.updateTaskColumns(this.columns).subscribe(t=>{
-      console.log('Tasks Updated')
+      this.snackbarService.showSnackbar('Tasks Updated');
     })
   }
 
   dropColumn(event: CdkDragDrop<any>){
     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      this.dataService.updateTaskColumns(this.columns).subscribe(t=>{
+        this.snackbarService.showSnackbar('Tasks Updated');
+      //console.log('Tasks Updated')
+    })
   }
 
   confirmDeleteColumn(index: number) {
     this.dialogService.openConfirm({
-      cls: 'bg-red-500',
-      header: 'Add Task',
-      content: 'Are you sure you want to remove this?',
-    })
-      .subscribe(confirmed => {
+      cls: 'bg-red-500 !text-white',
+      header: 'Remove Column',
+      content: `Are you sure you want to remove this column?`,
+    }).subscribe(confirmed => {
         if (confirmed === true) {
           this.removeColumn(index);
+          this.columns.splice(index, 1);
+            this.dataService.updateTaskColumns(this.columns).subscribe(t=>{
+              this.snackbarService.showSnackbar('Tasks Updated');
+            })
         }
       });
   }

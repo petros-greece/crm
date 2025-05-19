@@ -1,5 +1,6 @@
 <div class="flex flex-col space-y-4">
-  <div class="flex flex-row justify-center items-center space-x-2 bg-violet-800 rounded-lg shadow-md p-2 no-field-wrapper">
+  <div
+    class="flex flex-row justify-center items-center space-x-2 bg-violet-800 rounded-lg shadow-md p-2 no-field-wrapper">
     <mat-form-field appearance="fill" class="flex-1">
       <input matInput placeholder="New column title" [(ngModel)]="newColumnTitle">
     </mat-form-field>
@@ -7,22 +8,20 @@
     <button mat-raised-button color="accent" (click)="openTaskDialog()">Add Task</button>
   </div>
 
-  <div 
-    class="flex space-x-4 overflow-x-auto pb-4" 
-    cdkDropList 
-    [cdkDropListData]="columns" 
-    (cdkDropListDropped)="dropColumn($event)" 
-    cdkDropListOrientation="horizontal">
-    <div *ngFor="let col of columns; let i = index"  cdkDrag
-      class="flex flex-col bg-gray-200 rounded p-3 max-h-[80vh]" style="width: 300px;min-width: 300px;">
+  <div class="flex space-x-4 overflow-x-auto pb-4" cdkDropList [cdkDropListData]="columns"
+    (cdkDropListDropped)="dropColumn($event)" cdkDropListOrientation="horizontal">
+    <div *ngFor="let col of columns; let i = index" cdkDrag class="flex flex-col bg-gray-200 rounded p-3 max-h-[80vh]"
+      style="width: 300px;min-width: 300px;">
       <div class="flex items-center justify-between mb-2">
         <h2>{{ col.title }}</h2>
-        <button mat-icon-button class="text-gray-500 hover:text-gray-700" cdkDragHandle>
-          <mat-icon class="opacity-70 hover:opacity-100">drag_handle</mat-icon>
-        </button>
-        <!-- <button mat-icon-button class="!text-red-400" (click)="confirmDeleteColumn(i);">
-          <mat-icon>delete</mat-icon>
-        </button> -->
+        <div>
+          <button mat-icon-button class="text-gray-500 hover:text-gray-700" cdkDragHandle>
+            <mat-icon class="opacity-70 hover:opacity-100">drag_handle</mat-icon>
+          </button>
+          <button mat-icon-button (click)="confirmDeleteColumn(i);" *ngIf="!col.tasks.length">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
       </div>
 
       <div cdkDropList [id]="'list-' + (i+1)" [cdkDropListData]="col.tasks" [cdkDropListConnectedTo]="connectedListIds"
@@ -38,7 +37,7 @@
                 <mat-icon> {{ task.type.icon }} </mat-icon>
                 {{ task.type.label }}
               </div>
-          
+
 
               <div class="text-sm whitespace-nowrap overflow-hidden text-ellipsis">
                 ({{task.data.subject}})
