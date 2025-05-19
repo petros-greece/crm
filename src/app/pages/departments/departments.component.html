@@ -31,7 +31,13 @@
 
 <ng-template #departmentPreviewTmpl>
   <mat-tab-group>
-    <mat-tab label="Info">
+    
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="mr-1">info</mat-icon>
+        Info
+      </ng-template>
+
       <div *ngFor="let departmentRole of departmentRoles">
         <div class="flex flex-row items-center h-16">
           <b>{{ departmentRole.role }}</b>
@@ -50,19 +56,29 @@
         </div>
       </div>
     </mat-tab>
-    <mat-tab label="Edit">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="mr-1">edit</mat-icon>
+        Edit
+      </ng-template>
+
       <div class="overflow-hidden">
         <ng-container *ngTemplateOutlet="departmentFormTmpl"></ng-container>
         <div class="mt-30 text-center">
           <button mat-button class="!bg-red-500 !text-white" (click)="openConfirmDeleteDepartmentDialog()">
-            Delete Departement
+            Delete Department
           </button>
         </div>
       </div>
     </mat-tab>
+
   </mat-tab-group>
 </ng-template>
 
+
 <ng-template #departmentFormTmpl>
-  <app-form-builder [config]="departmentFormConfig" [values]="departmentFormValues" (submitHandler)="addOrUpdateDepartment($event)"></app-form-builder>
+  <div class="p-4">
+    <app-form-builder [config]="departmentFormConfig" [values]="departmentFormValues" (submitHandler)="addOrUpdateDepartment($event)"></app-form-builder>
+  </div>
 </ng-template>

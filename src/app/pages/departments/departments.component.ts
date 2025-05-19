@@ -56,7 +56,7 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
   }
 
   addEmployeeToRole(event:any, role:string){
-    console.log(event.employee, this.departmentFormValues.id, role);
+    //console.log(event.employee, this.departmentFormValues.id, role);
     this.dataService.updateEmployeeRole(event.employee, this.departmentFormValues.id, role).subscribe(e=>{
 
       Object.keys(this.showForm).forEach(key => {
@@ -131,7 +131,7 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
     formData.id ? this.updateDepartment(formData) : this.addDepartment(formData);
   }
 
-  addDepartment(formData:any){
+  private addDepartment(formData:any){
     if(!formData.icon) formData.icon = 'store';
     formData.id = `${new Date().getTime()}`
     this.dataService.addDepartment(formData).subscribe((res)=>{
@@ -139,14 +139,8 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
     })
   }
 
-  updateDepartment(formData:any){
+  private updateDepartment(formData:any){
     this.dataService.updateDepartment(formData).subscribe((res)=>{
-      this.departments = res;
-    })
-  }
-
-  deleteDepartment(formData:any){
-    this.dataService.updateDepartment(formData.id).subscribe((res)=>{
       this.departments = res;
     })
   }
@@ -168,9 +162,7 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
       });
   }
 
-
   /** HELPERS ****************************************************************************** */
-
 
   private toCamelCaseMachineName(input: string): string {
     if (!input) return this.generateRandomName();
