@@ -30,8 +30,8 @@ interface IconCategory {
     MatExpansionModule
   ],
   template: `
-    <div class="flex flex-col items-center justify-center h-full w-full">
-      <button mat-stroked-button (click)="openSelectIconDialog()">
+    <div class="flex flex-col w-full mt-2">
+      <button mat-stroked-button (click)="openSelectIconDialog()" type="button">
         {{ config.label || 'Select Icon' }}
         <mat-icon *ngIf="control.value">
           {{ control.value }}
