@@ -1,0 +1,20 @@
+[
+  { "label": "Call", "value": "call", "icon": "phone" },
+  { "label": "Email", "value": "email", "icon": "email" },
+  { "label": "Meeting", "value": "meeting", "icon": "event" },
+  { "label": "Follow-up", "value": "followUp", "icon": "repeat" },
+  { "label": "Proposal/Quote", "value": "proposal", "icon": "description" },
+  { "label": "Onboarding", "value": "onboarding", "icon": "rocket_launch" },
+  { "label": "Support Request", "value": "supportRequest", "icon": "build" },
+  { "label": "Contract Signing", "value": "contractSigning", "icon": "edit_document" },
+  { "label": "Renewal Reminder", "value": "renewalReminder", "icon": "autorenew" },
+  { "label": "Payment Follow-up", "value": "paymentFollowUp", "icon": "payment" },
+  { "label": "Survey Request", "value": "surveyRequest", "icon": "poll" },
+  { "label": "Internal Note", "value": "internalNote", "icon": "note" },
+  { "label": "Lead Qualification", "value": "leadQualification", "icon": "track_changes" },
+  { "label": "Marketing Task", "value": "marketingTask", "icon": "campaign" },
+  { "label": "Birthday/Anniversary Reminder", "value": "birthdayReminder", "icon": "cake" },
+  { "label": "Product Demo", "value": "productDemo", "icon": "computer" },
+  { "label": "Account Review", "value": "accountReview", "icon": "insights" },
+  { "label": "Training Session", "value": "trainingSession", "icon": "school" }
+]
