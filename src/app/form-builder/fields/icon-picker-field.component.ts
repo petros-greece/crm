@@ -100,9 +100,15 @@ export class IconPickerFieldComponent extends BaseFieldComponent {
   selectIcon(icon: string): void {
     this.control.setValue(icon);
     if (this.selectIconDialogRef) {
-      this.selectIconDialogRef.close(); // <-- Close only this dialog
+      //  Close only this dialog
+      this.selectIconDialogRef.close();
+      this.control.markAsDirty();
     }
+
   }
+
+
+  
 
 
 }
