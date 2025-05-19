@@ -1,0 +1,37 @@
+<button mat-raised-button (click)="openDealDialog(false)">
+  <mat-icon>add</mat-icon>
+  Add New Deal Type
+</button>
+
+<app-table-builder [config]="dealsTableConfig">
+  <ng-template appColumnTemplate="icon" let-row>
+    <mat-icon>{{ row.icon }}</mat-icon>
+  </ng-template>
+  <ng-template appColumnTemplate="actions" let-row>
+    <div class="flex flex-row">
+      <button mat-icon-button (click)="openDealDialog(row)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button (click)="openConfirmDeleteDealTypeDialog(row)">
+        <mat-icon>delete</mat-icon>
+      </button> 
+    </div>
+  </ng-template>
+</app-table-builder>
+
+
+<!-- <div class="flex flex-row">
+      <button mat-icon-button (click)="openTaskDialog(row)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button (click)="openConfirmDeleteTaskDialog(row)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div> -->
+
+
+<ng-template #dealTmpl>
+  <div class="p-4">
+    <app-form-builder [config]="dealFormConfig" [values]="dealFormValues" (submitHandler)="onSubmitDeal($event)"></app-form-builder>
+  </div>
+</ng-template>

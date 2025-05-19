@@ -1,0 +1,38 @@
+<button mat-raised-button (click)="openTaskTypeDialog(false)">
+  <mat-icon>add</mat-icon>
+  Add New Task Type
+</button>
+
+<app-table-builder [config]="taskTableConfig">
+  <ng-template appColumnTemplate="icon" let-row>
+    <mat-icon>{{ row.icon }}</mat-icon>
+  </ng-template>
+  <ng-template appColumnTemplate="actions" let-row>
+    <!-- <div class="flex flex-row">
+      <button mat-icon-button (click)="openTaskTypeDialog(row)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button (click)="openConfirmDeleteDealTypeDialog(row)">
+        <mat-icon>delete</mat-icon>
+      </button> 
+    </div> -->
+  </ng-template>
+</app-table-builder>
+
+
+<!-- <div class="flex flex-row">
+      <button mat-icon-button (click)="openTaskDialog(row)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button (click)="openConfirmDeleteTaskDialog(row)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div> -->
+
+
+<ng-template #taskTmpl>
+  <div class="p-4">
+    <app-form-builder [config]="taskFormConfig" [values]="taskFormValues" (submitHandler)="onSubmitTaskType($event)"></app-form-builder>
+  </div>
+</ng-template>
+

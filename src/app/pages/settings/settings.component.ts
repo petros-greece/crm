@@ -8,6 +8,9 @@ import { RolesFormComponent } from './components/roles-form/roles-form.component
 import { TransferComponent } from './components/transfer/transfer.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
+import { DealTypesConfigComponent } from './components/deal-types-config/deal-types-config.component';
+import { TaskTypesConfigComponent } from './components/task-types-config/task-types-config.component';
+
 
 
 @Component({
@@ -18,8 +21,10 @@ import { MatIcon } from '@angular/material/icon';
     FormListsUiComponent, 
     RolesFormComponent,
     TransferComponent,
+    DealTypesConfigComponent,
     MatTabsModule,
-    MatIcon
+    MatIcon,
+    TaskTypesConfigComponent
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'

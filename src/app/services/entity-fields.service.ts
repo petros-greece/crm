@@ -8,7 +8,7 @@ import { DepartmentI } from '../pages/departments/departments.vars';
 import { HttpClient } from '@angular/common/http';
 
 
-export interface TaskTypeI { label: string; value: string; icon: string }
+export interface TaskTypeI { id: string; label: string; value: string; icon: string }
 export interface DealTypeI { id: string; label: string; value: string; icon: string; relations: string[]; }
 
 
@@ -20,8 +20,7 @@ export class EntityFieldsService {
   dataService = inject(DataService);
   http = inject(HttpClient);
 
-
-  constructor() {}
+  constructor() { }
 
   defaultEntites = [
     'employee',
@@ -133,9 +132,9 @@ export class EntityFieldsService {
     { type: 'number', name: 'dealValue', label: 'Deal Value (EURO)', required: true, columns: 2, },
     //{ type: 'select', name: 'paymentMethod', label: 'Payment Method', listName: 'Payment Method', required: false, columns: 2, },
     //{ type: 'select', name: 'paymentType', label: 'Payment Type', listName: 'Payment Type', required: false, columns: 2, },
-   // { type: 'select', name: 'numberOfInstallements', label: 'Number Of Installements', },
+    // { type: 'select', name: 'numberOfInstallements', label: 'Number Of Installements', },
     //{ type: 'select', name: 'installementFrequency', label: 'Installement Frequency', },
-   // { type: 'date', name: 'closeDate', label: 'Close Date', required: false, columns: 2, },
+    // { type: 'date', name: 'closeDate', label: 'Close Date', required: false, columns: 2, },
     { type: 'radio', name: 'revenueOrCost', label: 'Revenue or Cost' },
   ];
 
@@ -195,7 +194,6 @@ export class EntityFieldsService {
 
   /** TASKS ******************************************************************************** */
 
-
   private readonly taskTypesStorageKey = 'crm-task-fields';
   private readonly taskTypesJsonFile = 'assets/forms/tasks.json';
 
@@ -229,9 +227,11 @@ export class EntityFieldsService {
   }
 
   getTaskFieldsForType(taskType: TaskTypeT): Observable<FormFieldConfig[]> {
+    console.log(taskType)
     return this.getTaskFields().pipe(
       map(taskData => {
         const baseFields = taskData.baseFields || [];
+        console.log(baseFields)
         const typeFields = taskData.typeFields?.[taskType] || [];
         return [...baseFields, ...typeFields];
       })
@@ -259,7 +259,7 @@ export class EntityFieldsService {
   }
 
   private getTaskTypeOptionsFromFile(): Observable<TaskTypeI[]> {
-    return this.http.get<{ label: string; value: string; icon: string }[]>(this.taskTypeOptionsJsonFile).pipe(
+    return this.http.get<TaskTypeI[]>(this.taskTypeOptionsJsonFile).pipe(
       catchError(err => {
         console.error('Error loading task type options from file', err);
         return of([]);
@@ -272,6 +272,52 @@ export class EntityFieldsService {
       })
     );
   }
+
+  deleteTaskType(taskValue: string): Observable<TaskTypeI[]> {
+    const stored = localStorage.getItem(this.taskTypeOptionsStorageKey);
+    if (!stored) return of([]);
+
+    try {
+      let parsed: TaskTypeI[] = JSON.parse(stored);
+      parsed = parsed.filter(type => type.value !== taskValue);
+      localStorage.setItem(this.taskTypeOptionsStorageKey, JSON.stringify(parsed));
+      return of(parsed);
+    } catch (err) {
+      console.error('Error deleting task type', err);
+      return of([]);
+    }
+  }
+
+addOrUpdateTaskType(taskData: any): Observable<TaskTypeI[]> {
+  const stored = localStorage.getItem(this.taskTypeOptionsStorageKey);
+  let parsed: TaskTypeI[] = [];
+
+  try {
+    parsed = stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error('Error parsing stored task types:', error);
+    parsed = [];
+  }
+
+  if (taskData.value) {
+    // Update existing
+    const index = parsed.findIndex(task => task.value === taskData.value);
+    if (index !== -1) {
+      parsed[index] = taskData;
+    } else {
+      parsed.push(taskData); // Fallback: add if not found
+    }
+  } else {
+    // Create new
+    taskData.value = Date.now().toString(); // Generate new ID
+    parsed.push(taskData);
+  }
+
+  localStorage.setItem(this.taskTypeOptionsStorageKey, JSON.stringify(parsed));
+  return of(parsed);
+}
+
+
 
   /** DEALS ******************************************************************************** */
 
@@ -353,15 +399,124 @@ export class EntityFieldsService {
     );
   }
 
+  deleteDealType(dealId: string): Observable<DealTypeI[]> {
+    const stored = localStorage.getItem(this.dealTypeOptionsStorageKey);
+    if (!stored) return of([]);
+
+    try {
+      const parsed: DealTypeI[] = JSON.parse(stored);
+      const updated = parsed.filter(deal => deal.id !== dealId);
+      localStorage.setItem(this.dealTypeOptionsStorageKey, JSON.stringify(updated));
+      return of(updated);
+    } catch (error) {
+      console.error('Error deleting deal type:', error);
+      return of([]);
+    }
+  }
+
+  addOrUpdateDealType(dealData: any): Observable<DealTypeI[]> {
+    const stored = localStorage.getItem(this.dealTypeOptionsStorageKey);
+    let parsed: DealTypeI[] = [];
+
+    try {
+      parsed = stored ? JSON.parse(stored) : [];
+    } catch (error) {
+      console.error('Error parsing stored deal types:', error);
+      parsed = [];
+    }
+
+    if (dealData.id) {
+      // Update
+      const index = parsed.findIndex(deal => deal.id === dealData.id);
+      if (index !== -1) {
+        parsed[index] = dealData;
+      } else {
+        parsed.push(dealData); // fallback: add if not found
+      }
+    } else {
+      // Create new
+      dealData.id = Date.now().toString(); // or any ID generator logic
+      parsed.push(dealData);
+    }
+
+    localStorage.setItem(this.dealTypeOptionsStorageKey, JSON.stringify(parsed));
+    return of(parsed);
+  }
 
 
+  /** entity - fields ******************************************************************************** */
 
-  // outputFormConfig: FormConfig = {
-  //   title: 'Form Builder Preview',
-  //   className: 'bg-gray-300 text-gray-100 p-4 rounded-lg shadow-md',
-  //   fields: [],
-  //   submitText: 'Test Form',
-  // };
+  private readonly entityFieldsStorageKey = 'crm-entity-fields';
+  private readonly entityFieldsJsonFile = 'assets/forms/entity-fields.json';
 
 
+  getEntityFields(entityType: string): Observable<any[]> {
+    const stored = localStorage.getItem(this.entityFieldsStorageKey);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        return of(parsed[entityType] || []);
+      } catch (err) {
+        console.error('Error parsing stored entity fields', err);
+        return this.getEntityFieldsFromFile(entityType);
+      }
+    } else {
+      return this.getEntityFieldsFromFile(entityType);
+    }
+  }
+
+  private getEntityFieldsFromFile(entityType: string): Observable<any[]> {
+    return this.http.get<Record<string, any[]>>(this.entityFieldsJsonFile).pipe(
+      catchError(err => {
+        console.error('Error loading entity fields from file', err);
+        return of({});
+      }),
+      switchMap(fields => {
+        if (fields && typeof fields === 'object') {
+          localStorage.setItem(this.entityFieldsStorageKey, JSON.stringify(fields));
+        }
+        const typedFields = fields as Record<string, any[]>;
+        return of(typedFields[entityType] || []);
+      })
+    );
+  }
+
+  createEntityFields(formData: any): Observable<any[]> {
+    const entityType = (formData.entityType).toLowerCase();
+    delete formData.entityType;
+
+    const stored = localStorage.getItem(this.entityFieldsStorageKey);
+    const parsed = stored ? JSON.parse(stored) : {};
+    parsed[entityType] = parsed[entityType] || [];
+    parsed[entityType].push(formData);
+
+    localStorage.setItem(this.entityFieldsStorageKey, JSON.stringify(parsed));
+    return of(parsed[entityType]);
+  }
+
+  updateEntityFields(entityType: string, formIndex: number, formData: any): Observable<any[]> {
+    const stored = localStorage.getItem(this.entityFieldsStorageKey);
+    if (!stored) return of([]);
+
+    const parsed = JSON.parse(stored);
+    if (parsed[entityType] && parsed[entityType][formIndex]) {
+      parsed[entityType][formIndex] = formData;
+      localStorage.setItem(this.entityFieldsStorageKey, JSON.stringify(parsed));
+    }
+
+    return of(parsed[entityType] || []);
+  }
+
+  deleteEntityFields(entityType: string, formIndex: number): Observable<any[]> {
+    const stored = localStorage.getItem(this.entityFieldsStorageKey);
+    if (!stored) return of([]);
+
+    const parsed = JSON.parse(stored);
+    if (parsed[entityType] && parsed[entityType][formIndex]) {
+      parsed[entityType].splice(formIndex, 1);
+      localStorage.setItem(this.entityFieldsStorageKey, JSON.stringify(parsed));
+    }
+
+    return of(parsed[entityType] || []);
+  }
 }

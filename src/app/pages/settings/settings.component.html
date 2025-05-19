@@ -2,17 +2,46 @@
 <!-- <app-form-builder [config]="formConfig" [values]="values"></app-form-builder>  -->
 <!-- <app-roles-form></app-roles-form> -->
 <mat-tab-group>
-    <mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>handshake</mat-icon>
+      Deals
+    </ng-template>
+    <div>
+      
+      <app-deal-types-config></app-deal-types-config>
+
+
+
+
+      
+    </div>
+  </mat-tab>
+
+
+  <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>assignment</mat-icon>
+      Tasks
+    </ng-template>
+    <div>
+      <app-task-types-config></app-task-types-config>
+    </div>
+  </mat-tab>
+
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>border_color</mat-icon>
       Forms
     </ng-template>
     <div>
       <app-form-builder-ui></app-form-builder-ui>
     </div>
   </mat-tab>
-  
-  
+
+
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>security</mat-icon>
@@ -31,7 +60,7 @@
       Lists
     </ng-template>
     <div>
-      <app-form-lists-ui></app-form-lists-ui> 
+      <app-form-lists-ui></app-form-lists-ui>
     </div>
   </mat-tab>
 
