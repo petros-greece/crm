@@ -168,7 +168,7 @@ export class TableBuilderComponent implements OnInit, AfterViewInit, OnChanges {
       this.config.noDataMessage = 'No data available';
     }
     this.checkColumns();
-    this.dataSource.data = this.config.data;
+    this.dataSource.data = this.config.data;  
   }
 
   ngOnChanges(changes: SimpleChanges) {

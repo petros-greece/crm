@@ -64,7 +64,7 @@ export class SliderFieldComponent extends BaseFieldComponent {
   }
 
   markAsTouched() {
-    console.log(this.control);
+    //console.log(this.control);
     if (!this.control.touched) {
       this.control.markAsTouched();
     }

@@ -132,12 +132,12 @@ export class EmployeesComponent {
       cancelText: 'Cancel',
       cls: 'bg-red-500 !text-white',
     }).subscribe(confirmed => {
-      if(this.tasksTableConfig.data.length > 0){
-        this.snackbarService.showSnackbar(`Please reassign ${name}'s tasks before proceeding with deletion.`);
-        return;
-      }
-
       if (confirmed === true) {
+        if(this.tasksTableConfig.data.length > 0){
+          this.snackbarService.showSnackbar(`Please reassign ${name}'s tasks before proceeding with deletion.`);
+          return;
+        }
+
         this.dataService.deleteEmployee(this.employeeData.id).subscribe(res => {
           this.snackbarService.showSnackbar(`Employee "${name}" deleted successfully`);
           this.dialogService.closeAll();
