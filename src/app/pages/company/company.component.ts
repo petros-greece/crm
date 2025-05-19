@@ -1,5 +1,5 @@
 import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
-import { EntityFieldsService } from '../../services/entity-fields.service';
+import { DealTypeI, EntityFieldsService } from '../../services/entity-fields.service';
 import { DataService } from '../../services/data.service';
 import { DialogService } from '../../services/dialog.service';
 import { ColumnTemplateDirective, TableBuilderComponent, TableConfig } from '../../table-builder/table-builder.component';
@@ -8,8 +8,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
-import { EntityService } from '../../services/entity.service';
-import { FormConfig } from '../../form-builder/form-builder.model';
+import { FormConfig, FormFieldConfig } from '../../form-builder/form-builder.model';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { SnackbarService } from '../../services/snackbar.service';
@@ -45,7 +44,6 @@ export class CompanyComponent {
   @ViewChild('updateDealTmpl', { static: true }) updateDealTmpl!: TemplateRef<any>;
   @ViewChild('newCompanyTmpl', { static: true }) newCompanyTmpl!: TemplateRef<any>;
 
-  entityService = inject(EntityService)
   entityFieldsService = inject(EntityFieldsService);
   dataService = inject(DataService);
   dialogService = inject(DialogService);
@@ -59,7 +57,8 @@ export class CompanyComponent {
   companyDeals: any = null;
   companyAssets: TreeNodeI[] = [];
 
-  dealTypes = this.entityService.dealTypes;
+  originalDealTypes:DealTypeI[] = [];
+  dealTypes:DealTypeI[] = [];
   selectedDealType = '';
   dealFormConfig:FormConfig = { fields: [] }
   dealFormValues:any;
@@ -88,6 +87,9 @@ export class CompanyComponent {
     this.dataService.getCompanies().subscribe(companies=>{
       this.giveCompaniesTableConfig(companies);
     })    
+
+    this.entityFieldsService.getDealTypeOptions().subscribe(dealTypes=>this.originalDealTypes = dealTypes)
+
   }
 
   giveCompaniesTableConfig(companies:any){
@@ -103,13 +105,17 @@ export class CompanyComponent {
   /** DEAL *************************************************************** */
 
   onSelectDealType(dealTypeId:string){
-    const deal:any = this.entityService.getDealFields(dealTypeId);
-    this.dealFormConfig = {
-      title: deal.label || '',
-      icon: deal.icon || '',
-      fields: this.entityFieldsService.getDealTypeFields(dealTypeId),
-      submitText: 'Add Deal'
-    }
+    const deal:any = this.originalDealTypes.find(deal => deal.id === dealTypeId);
+    this.entityFieldsService.getDealFieldsForType(dealTypeId).subscribe((fields:FormFieldConfig[])=>{
+      console.log(dealTypeId)
+      this.dealFormConfig = {
+        title: deal.label || '',
+        icon: deal.icon || '',
+        fields: fields,
+        submitText: 'Add Deal'
+      }
+    })
+
   }
 
   openNewDealDialog(){
@@ -127,20 +133,25 @@ export class CompanyComponent {
   openEditDealDialog(dealData:any){
     this.selectedDealType = dealData.dealType;
     this.dealFormValues = dealData;
-    const dealType = this.entityService.getDealFields(dealData.dealType);
-    this.dealFormConfig = {
-     // title: deal.label || '',
-     // icon: deal.icon || '',
-      fields: this.entityFieldsService.getDealTypeFields( this.selectedDealType)
-    }
-    this.dialogService.openTemplate({
-      panelClass: 'big-dialog',
-      header: `Deal with ${this.companyInfoValues.companyName}`,
-      content: this.updateDealTmpl,
-      cls: '!bg-violet-800 !text-white',
-      id: 'deal-dialog',
-      icon: dealType.icon
-    })  
+    const dealType:any = this.originalDealTypes.find(deal => deal.id === dealData.dealType);
+
+    this.entityFieldsService.getDealFieldsForType(dealType.id).subscribe((fields:FormFieldConfig[])=>{
+
+      this.dealFormConfig = {
+       // title: deal.label || '',
+       // icon: deal.icon || '',
+        fields: fields
+      }
+      this.dialogService.openTemplate({
+        panelClass: 'big-dialog',
+        header: `Deal with ${this.companyInfoValues.companyName}`,
+        content: this.updateDealTmpl,
+        cls: '!bg-violet-800 !text-white',
+        id: 'deal-dialog',
+        icon: dealType?.icon || ''
+      })  
+    })
+
   }
 
   addNewDeal(formData:any){
@@ -206,7 +217,7 @@ export class CompanyComponent {
 
     this.companyInfoValues = row;
     this.companyContactsValues = {contacts: row.contacts};
-    this.dealTypes = this.entityService.dealTypes.filter(dealType => 
+    this.dealTypes = this.originalDealTypes.filter(dealType => 
       dealType.relations.some(relation => row.relations.includes(relation))
     );
     this.dialogService.openTemplate({
