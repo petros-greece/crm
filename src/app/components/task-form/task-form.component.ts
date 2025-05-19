@@ -38,7 +38,7 @@ export class TaskFormComponent implements OnInit{
   @Input() taskData:any = null;
   @Input() assignee:string = '';
   @Output() onAfterSubmit = new EventEmitter<any>();
-  fieldsService = inject(EntityFieldsService);
+  entityFieldsService = inject(EntityFieldsService);
 
   values:any = {};
   taskType:TaskTypeT | null = null;
@@ -49,7 +49,7 @@ export class TaskFormComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.fieldsService.getTaskTypeOptions().subscribe((taskTypes:TaskTypeI[])=>{
+    this.entityFieldsService.getTaskTypeOptions().subscribe((taskTypes:TaskTypeI[])=>{
       this.tasks = taskTypes;
       if(this.taskData){
         this.values = this.taskData.data;
@@ -68,7 +68,7 @@ export class TaskFormComponent implements OnInit{
     const task = this.getTaskFields(taskType);
     this.taskType = taskType;
 
-    this.fieldsService.getTaskFieldsForType(taskType).subscribe(fields=>{
+    this.entityFieldsService.getTaskFieldsForType(taskType).subscribe(fields=>{
       this.taskFormConfig = {
         title: !this.taskData ? task?.label : '',
         icon: !this.taskData ? task?.icon : '',
