@@ -120,16 +120,16 @@ export class CompanyComponent {
     this.dialogService.closeDialogById('deal-dialog');
   }
 
-  deleteDeal(companyId: string, dealId: string) {
+  deleteDeal(companyData: any, dealData: any) {
 
     this.dialogService.openConfirm({
       cls: 'bg-red-500 !text-white',
       header: `Delete deal?`,
-      content: 'Are you sure you want to delete the current deal?',
+      content: `Are you sure you want to delete the deal: "${dealData.dealName}" with the company ${companyData.companyName}?`,
     }).subscribe(confirmed => {
         if (confirmed === true) {
-          console.log(companyId, dealId)
-          this.dataService.deleteDeal(companyId, dealId).subscribe((data: any) => {
+          console.log(companyData.id, dealData.id)
+          this.dataService.deleteDeal(companyData.id, dealData.id).subscribe((data: any) => {
             this.dealsTableConfig = {
               data: data,
               columns: this.entityFieldsService.buildEntityTableConfigColumns('deal')
@@ -217,19 +217,18 @@ export class CompanyComponent {
     }
   }
 
-  deleteCompany() {
+  openConfirmDeleteCompany(companyData:any) {
 
     this.dialogService.openConfirm({
       cls: 'bg-red-500 !text-white',
       header: `Delete company?`,
-      content: `Are you sure you want to delete the company ${this.companyInfoValues.companyName}?`,
-    })
-      .subscribe(confirmed => {
+      content: `Are you sure you want to delete the company ${companyData.companyName}?`,
+    }).subscribe(confirmed => {
         if (confirmed === true) {
-          this.dataService.deleteCompany(this.companyInfoValues.id).subscribe((companies: any) => {
+          this.dataService.deleteCompany(companyData.id).subscribe((companies: any) => {
             this.giveCompaniesTableConfig(companies);
             this.dialogService.closeAll();
-            this.snackbarService.showSnackbar(`Company ${this.companyInfoValues.companyName} was deleted succesfully`);
+            this.snackbarService.showSnackbar(`Company ${companyData.companyName} was deleted succesfully`);
           })
         }
       });

@@ -1,50 +1,47 @@
+<app-page-header header="Companies" icon="business">
+  <button mat-raised-button class="ml-4" (click)="openNewCompanyTmpl()">
+    <mat-icon>add</mat-icon>
+    Add Company
+  </button>
+</app-page-header>
 
+<div class="flex flex-row items-center justify-between px-3 pt-2 pb-4 bg-violet-200 rounded-sm shadow-md">
 
+  <app-table-builder [config]="companiesTableConfig" *ngIf="companiesTableConfig" class="w-full">
+    <ng-template appColumnTemplate="actions" let-row>
 
-
-  <app-page-header header="Companies" icon="business">
-    <button mat-raised-button class="ml-4" (click)="openNewCompanyTmpl()">
-      <mat-icon>add</mat-icon>
-      Add Company
-    </button>
-  </app-page-header>
-  
-  <div class="flex flex-row items-center justify-between px-3 pt-2 pb-4 bg-violet-200 rounded-sm shadow-md">
-  
-    <app-table-builder [config]="companiesTableConfig" *ngIf="companiesTableConfig" class="w-full">
-      <ng-template appColumnTemplate="actions" let-row>
+      <div class="flex flex-row">
         <button mat-icon-button (click)="openEditCompanyDialog(row)">
           <mat-icon>edit</mat-icon>
         </button>
-      </ng-template>
-    </app-table-builder>
-  </div>
+
+        <button mat-icon-button (click)="openConfirmDeleteCompany(row)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
 
 
+    </ng-template>
+  </app-table-builder>
+</div>
 
 <!-- TEMPATES ---------------------------------------->
 
 <ng-template #previewCompanyTmpl>
-  
 
-  <mat-tab-group class="min-h-[80vh]" [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="selectedTabChange($event)" 
-  animationDuration="0">
+
+  <mat-tab-group class="min-h-[80vh]" [(selectedIndex)]="selectedTabIndex"
+    (selectedTabChange)="selectedTabChange($event)" animationDuration="0">
 
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon class="example-tab-icon">info</mat-icon>
         Info
       </ng-template>
-      <div class="overflow-hidden">
+      <div class="overflow-hidden p-4">
         <app-form-builder [config]="companyInfoFormConfig" [values]="companyInfoValues"
-          (submitHandler)="updateCompany($event)"></app-form-builder>
-        <div class="text-center mt-10">
-
-          <button mat-raised-button class="!bg-red-500 !text-white" (click)="deleteCompany()">
-            Delete
-          </button>
-        </div>
-
+          (submitHandler)="updateCompany($event)">
+        </app-form-builder>
       </div>
     </mat-tab>
 
@@ -53,8 +50,12 @@
         <mat-icon class="example-tab-icon">phone</mat-icon>
         Contacts
       </ng-template>
-      <app-form-builder [config]="companyContactsFormConfig" [values]="companyContactsValues"
-        (submitHandler)="updateCompanyContacts($event)"></app-form-builder>
+      <div class="overflow-hidden p-4">
+
+        <app-form-builder [config]="companyContactsFormConfig" [values]="companyContactsValues"
+          (submitHandler)="updateCompanyContacts($event)"></app-form-builder>
+      </div>
+
     </mat-tab>
 
     <mat-tab>
@@ -62,10 +63,8 @@
         <mat-icon class="example-tab-icon">folder</mat-icon>
         Assets
       </ng-template>
-      <div>
-        <app-folder-structure 
-          [dataSourceInput]="companyAssets" 
-          [pathPrefix]="'assets/' + companyInfoValues.id + '/'">
+      <div class="overflow-hidden p-4">
+        <app-folder-structure [dataSourceInput]="companyAssets" [pathPrefix]="'assets/' + companyInfoValues.id + '/'">
         </app-folder-structure>
       </div>
     </mat-tab>
@@ -76,17 +75,25 @@
         Deals
       </ng-template>
       <div class="p-4 text-center">
-        <button mat-raised-button (click)="openDealDialog({})">
+        <app-table-builder [config]="dealsTableConfig" *ngIf="dealsTableConfig">
+          <ng-template appColumnTemplate="actions" let-row>
+            <div class="flex flex-row">
+
+              <button mat-icon-button (click)="openDealDialog(row)">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button (click)="deleteDeal(companyInfoValues, row)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+          </ng-template>
+        </app-table-builder>
+        <button mat-raised-button (click)="openDealDialog({})" class="mt-4">
           <mat-icon>add</mat-icon>
           Add New Deal
         </button>
-        <app-table-builder [config]="dealsTableConfig" *ngIf="dealsTableConfig">
-          <ng-template appColumnTemplate="actions" let-row>
-            <button mat-icon-button (click)="openDealDialog(row)">
-              <mat-icon>edit</mat-icon>
-            </button>
-          </ng-template>
-        </app-table-builder>
       </div>
 
 
@@ -98,15 +105,11 @@
         Billing
       </ng-template>
       <div class="overflow-hidden p-4">
-  
-        
-  
-        <ng-container *ngIf="selectedTabIndex === 4 && (chartData?.categories?.length ?? 0) > 0">          
+
+        <ng-container *ngIf="selectedTabIndex === 4 && (chartData?.categories?.length ?? 0) > 0">
           <app-chart [data]="chartData" [config]="chartConfig"></app-chart>
         </ng-container>
- 
-  
-      
+
       </div>
     </mat-tab>
 
@@ -114,12 +117,17 @@
 </ng-template>
 
 <ng-template #dealTmpl>
-  <app-deal-form [companyInfo]="companyInfoValues" [dealFormValues]="dealFormValues" (onAfterSubmitDeal)="onAfterSubmitDeal($event)"></app-deal-form>
+  <div class="p-4">
+    <app-deal-form [companyInfo]="companyInfoValues" [dealFormValues]="dealFormValues"
+      (onAfterSubmitDeal)="onAfterSubmitDeal($event)"></app-deal-form>
+  </div>
 </ng-template>
 
 
 
 <ng-template #newCompanyTmpl>
-  <app-form-builder [config]="companyInfoFormConfig" (submitHandler)="addNewCompany($event)"></app-form-builder>
-</ng-template>
+  <div class="p-4">
 
+    <app-form-builder [config]="companyInfoFormConfig" (submitHandler)="addNewCompany($event)"></app-form-builder>
+  </div>
+</ng-template>
