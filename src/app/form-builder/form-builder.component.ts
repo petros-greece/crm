@@ -31,7 +31,7 @@ import { TextEditorFieldComponent } from './fields/text-editor-field.component';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatButtonModule, MatToolbar, MatIcon],
   template: `
-  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="flex flex-wrap gap-4 p-2" (keydown.enter)="$event.preventDefault()" [ngClass]="config.className"> 
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="flex flex-wrap gap-4" (keydown.enter)="$event.preventDefault()" [ngClass]="config.className"> 
     <mat-toolbar class="flex flex-grow justify-center mt-3" *ngIf="config.title"> 
       <h2>{{ config.title }}</h2>
       <mat-icon *ngIf="config.icon">{{ config.icon }}</mat-icon>   
@@ -247,27 +247,34 @@ export class FormBuilderComponent implements AfterViewInit {
     return new FormGroup(fg);
   }
 
-  private buildFields(config: FormConfig) {
-    this.gridItem.clear();
-    const gap = 1;
-    config.fields.forEach(field => {
-      const comp = this.resolveFieldComponent(field.type);
-      const ctrl = this.formGroup.get(field.name)!;
-      const ref = this.gridItem.createComponent(comp);
-      ref.instance.config = field;
-      ref.instance.control = ctrl;
+private buildFields(config: FormConfig) {
+  this.gridItem.clear();
+  const gap = 1;
+
+  config.fields.forEach(field => {
+    const comp = this.resolveFieldComponent(field.type);
+    const ctrl = this.formGroup.get(field.name)!;
+    const ref = this.gridItem.createComponent(comp);
+    ref.instance.config = field;
+    ref.instance.control = ctrl;
+
+    const el = ref.location.nativeElement as HTMLElement;
+
+    if (field.type === 'hidden') {
+      // Ensure it's rendered but doesn't occupy space
+      el.style.display = 'none';
+    } else {
       const cols = field.columns || 1;
       const basis = window.innerWidth < 700
         ? '100%'
         : `calc((100% - ${(cols - 1) * gap}rem) / ${cols})`;
-      const el = ref.location.nativeElement as HTMLElement;
+
       el.style.flex = `0 0 ${basis}`;
       el.style.maxWidth = basis;
-    });
+    }
+  });
+}
 
-
-
-  }
 
   private getValidators(field: FormFieldConfig) {
     const v: any[] = [];
