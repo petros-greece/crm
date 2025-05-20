@@ -88,6 +88,7 @@ export interface FormConfig {
   resetOnSubmit?:boolean;
   fields: FormFieldConfig[];
   hideSubmit?:boolean;
+  enabledOnPristine?:boolean;
 }
 
 export interface FieldComponent<T extends AbstractControl = FormControl> {

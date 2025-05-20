@@ -38,7 +38,7 @@ import { TextEditorFieldComponent } from './fields/text-editor-field.component';
     </mat-toolbar>  
     <ng-container #gridItem></ng-container>  
     <div class="flex flex-row justify-center w-full" *ngIf="config.hideSubmit === undefined">
-      <button mat-raised-button type="submit" [disabled]="formGroup.pristine">{{ config.submitText || 'Submit' }}</button>
+      <button mat-raised-button type="submit" [disabled]="formGroup.pristine && !config.enabledOnPristine">{{ config.submitText || 'Submit' }}</button>
     </div>  
   </form>
   `
