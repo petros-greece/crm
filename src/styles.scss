@@ -209,58 +209,84 @@ body {
 
 /** DND *****************************************/
 
-.dnd-preview-list {
-  border: solid 1px #ccc;
-  display: block;
-  background: white;
-  border-radius: 4px;
-  //overflow: hidden;
-}
-
-.dnd-preview-box {
-  // border-bottom: solid 1px #ccc;
-  color: rgba(0, 0, 0, 0.87);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-  background: white;
-  font-size: 14px;
-}
-
-.cdk-drag-preview {
-  box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12);
-}
-
-.cdk-drag-animating {
-  transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-// .dnd-preview-box:last-child {
-//   //border: none;
+// .dnd-preview-list {
+//   border: solid 1px #ccc;
+//   display: block;
+//   //background: white;
+//   border-radius: 4px;
+//   //overflow: hidden;
 // }
 
-.dnd-preview.cdk-drop-list-dragging .dnd-preview-box:not(.cdk-drag-placeholder) {
-  transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
-}
+// .dnd-preview-box {
+//   // border-bottom: solid 1px #ccc;
+//   color: rgba(0, 0, 0, 0.87);
+//   display: flex;
+//   flex-direction: row;
+//   align-items: center;
+//   justify-content: space-between;
+//   box-sizing: border-box;
+//   //background: white;
+//   font-size: 14px;
+// }
 
-.dnd-placeholder {
-  background: #ccc;
-  border: dotted 3px #999;
-  min-height: 45px;
-  transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
-}
+// .cdk-drag-preview {
+//   box-sizing: border-box;
+//   border-radius: 4px;
+//   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+//               0 8px 10px 1px rgba(0, 0, 0, 0.14),
+//               0 3px 14px 2px rgba(0, 0, 0, 0.12);
+// }
+
+// .cdk-drag-animating {
+//   transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
+// }
+
+// // .dnd-preview-box:last-child {
+// //   //border: none;
+// // }
+
+// .dnd-preview.cdk-drop-list-dragging .dnd-preview-box:not(.cdk-drag-placeholder) {
+//   transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
+// }
+
+// .dnd-placeholder {
+//   background: #ccc;
+//   border: dotted 3px #999;
+//   min-height: 45px;
+//   transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
+// }
 
 .dnd-placeholder-2 {
   background: #ccc;
   border: dotted 3px #999;
   transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
 }
+
+// /* Add these styles to your component's CSS or global styles */
+// .cdk-drag-animating {
+//   transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+// }
+
+// .dnd-preview-list.cdk-drop-list-dragging .mat-grid-tile:not(.cdk-drag-placeholder) {
+//   transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+// }
+
+.dnd-placeholder {
+  background: rgba(0, 0, 0, 0.1);
+  border: 2px dashed #64748b;
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+  height: 70px;
+  width: 100%;
+}
+
+// .cdk-drag-preview {
+//   box-sizing: border-box;
+//   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+//   opacity: 0.8;
+//   transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+// }
+
+
 
 /** SCROLLBAR *****************************************/
 
@@ -291,4 +317,51 @@ body {
 }
 
 
-/*******************************************/
+/** THEME *****************************************/
+
+mat-sidenav{
+   background: oklch(94.3% 0.029 294.588) !important;
+}
+
+.dark{
+  background: oklch(21% 0.034 264.665) !important;
+
+  mat-sidenav{
+      background: oklch(21% 0.034 264.665) !important;
+      color: oklch(96.7% 0.003 264.542) !important;
+  }
+
+  mat-nav-list .mdc-list-item__primary-text{
+        color: oklch(96.7% 0.003 264.542) !important;
+  }
+
+  table,
+  .mat-mdc-paginator-container
+  {
+    background:  oklch(27.8% 0.033 256.848) !important;
+  }
+  th,
+  td,
+  .mat-mdc-paginator-container{
+    color: oklch(96.7% 0.003 264.542) !important;
+  }
+
+  button:not(.mat-mdc-button-disabled) .mat-mdc-paginator-icon{
+    fill: oklch(96.7% 0.003 264.542) !important;    
+  }
+
+  button.mat-mdc-button-disabled .mat-mdc-paginator-icon{
+    fill:  oklch(55.1% 0.027 264.364) !important;    
+  } 
+
+  .mat-mdc-paginator-container mat-select{
+      color: oklch(96.7% 0.003 264.542) !important;  
+  }
+
+
+
+  
+
+
+
+}

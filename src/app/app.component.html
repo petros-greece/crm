@@ -1,5 +1,5 @@
-<mat-sidenav-container class="h-screen">
-  <mat-sidenav #sidenav mode="side" opened class="!w-[300px] !rounded-none !border-r-2 !border-gray-300 !bg-violet-100">
+<mat-sidenav-container class="h-screen" [ngClass]="theme">
+  <mat-sidenav #sidenav mode="side" opened class="!w-[300px] !rounded-none !border-r-2 !border-gray-300">
     <mat-toolbar>
       <h2 class="text-xl font-bold mb-4">CRM System</h2>
     </mat-toolbar>
@@ -23,6 +23,10 @@
         <mat-icon>menu</mat-icon>
       </button>
       <span class="flex flex-grow"></span>
+      <button mat-icon-button (click)="theme = theme === 'dark' ? '' : 'dark'">
+        <mat-icon>{{ theme === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
       <button mat-button [matMenuTriggerFor]="menu">
         <mat-icon>person</mat-icon>
       </button>

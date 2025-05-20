@@ -28,6 +28,9 @@ import { MatMenuModule } from '@angular/material/menu';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
+
+  theme:string = 'dark';
+
   routes:Routes = [];
   constructor(private router: Router) {
     
