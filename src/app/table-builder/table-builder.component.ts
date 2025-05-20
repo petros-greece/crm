@@ -36,7 +36,7 @@ export interface TableConfig {
   pagination?: boolean;
   pageSizeOptions?: number[];
   hideButtons?: boolean;
-  cacheOptionsProp?:string;
+  cacheOptionsProp?: string;
   noDataMessage?: string;
 }
 
@@ -97,11 +97,16 @@ export interface TableConfig {
         <table mat-table [dataSource]="dataSource" matSort class="min-w-full">
           <!-- Column Definitions -->
           <ng-container *ngFor="let col of config.columns" [matColumnDef]="col.key">
-            <th mat-header-cell *matHeaderCellDef 
-                [mat-sort-header]="col.sortable ? col.key : ''"
-                [style]="col.headerStyle">
-              {{ col.label }}
-            </th>
+            <ng-container *ngIf="col.sortable; else noSort">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header="{{ col.key }}" [style]="col.headerStyle">
+                {{ col.label }}
+              </th>
+            </ng-container>
+            <ng-template #noSort>
+              <th mat-header-cell *matHeaderCellDef [style]="col.headerStyle">
+                {{ col.label }}
+              </th>
+            </ng-template>
             <td mat-cell *matCellDef="let row" [style]="col.cellStyle">
               <ng-container [ngSwitch]="col.type">
                 <span *ngSwitchCase="'text'">{{ row[col.key] }}</span>
@@ -164,11 +169,11 @@ export class TableBuilderComponent implements OnInit, AfterViewInit, OnChanges {
   constructor(private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    if(!this.config.noDataMessage) {
+    if (!this.config.noDataMessage) {
       this.config.noDataMessage = 'No data available';
     }
     this.checkColumns();
-    this.dataSource.data = this.config.data;  
+    this.dataSource.data = this.config.data;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -195,15 +200,15 @@ export class TableBuilderComponent implements OnInit, AfterViewInit, OnChanges {
     this.cdr.detectChanges();
   }
 
-  private checkColumns(){
+  private checkColumns() {
     let cachedVisibility;
-    if(this.config.cacheOptionsProp){
+    if (this.config.cacheOptionsProp) {
       cachedVisibility = this.optionsService.getOption(this.config.cacheOptionsProp)
     }
-    if(cachedVisibility){
+    if (cachedVisibility) {
       this.columnVisibility = cachedVisibility;
     }
-    else{
+    else {
       this.initializeColumnVisibility();
     }
     this.updateDisplayedColumns();
@@ -223,7 +228,7 @@ export class TableBuilderComponent implements OnInit, AfterViewInit, OnChanges {
   toggleColumn(columnKey: string) {
     // No need to toggle here since we're using the event value
     this.updateDisplayedColumns();
-    if(this.config.cacheOptionsProp){
+    if (this.config.cacheOptionsProp) {
       this.optionsService.updateOption(this.config.cacheOptionsProp, this.columnVisibility)
     }
   }
@@ -234,11 +239,11 @@ export class TableBuilderComponent implements OnInit, AfterViewInit, OnChanges {
       .filter(col => this.columnVisibility[col.key])
       .map(col => col.key);
 
-      // Force table to update
-      if (!initial) {
-        this.dataSource.data = [...this.dataSource.data];
-        this.cdr.detectChanges();
-      }
+    // Force table to update
+    if (!initial) {
+      this.dataSource.data = [...this.dataSource.data];
+      this.cdr.detectChanges();
+    }
   }
 
 
