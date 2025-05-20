@@ -31,7 +31,32 @@
 
 
 <ng-template #dealTmpl>
-  <div class="p-4">
-    <app-form-builder [config]="dealFormConfig" [values]="dealFormValues" (submitHandler)="onSubmitDeal($event)"></app-form-builder>
-  </div>
+ 
+  <mat-tab-group>
+    <mat-tab label="Deal Type" >
+      <ng-template mat-tab-label>
+        <mat-icon class="mr-2">assignment</mat-icon>
+        Deal Type
+      </ng-template>
+      <div class="p-4">
+        <app-form-builder [config]="dealFormConfig" [values]="dealFormValues" (submitHandler)="onSubmitDeal($event)"></app-form-builder>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Fields">
+      <ng-template mat-tab-label>
+        <mat-icon class="mr-2">list_alt</mat-icon>
+        Fields
+      </ng-template>
+      <div class="p-4">
+        <app-form-builder-ui 
+          [outputFormConfig]="dealFormFieldsConfig" 
+          (onSubmitConfig)="onSubmitDealFieldConfig($event)"
+          [submitText]="'Update Field For Deal Type: ' + dealFormValues.label"></app-form-builder-ui>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+
+
 </ng-template>

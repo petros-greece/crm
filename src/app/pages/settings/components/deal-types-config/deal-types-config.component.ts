@@ -8,10 +8,21 @@ import { ColumnTemplateDirective, TableBuilderComponent, TableConfig } from '../
 import { DialogService } from '../../../../services/dialog.service';
 import { FormBuilderComponent } from '../../../../form-builder/form-builder.component';
 import { SnackbarService } from '../../../../services/snackbar.service';
+import { FormBuilderUiComponent } from '../../../../form-builder/components/form-builder-ui/form-builder-ui.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-deal-types-config',
-  imports: [CommonModule, TableBuilderComponent, MatIcon, MatButtonModule, ColumnTemplateDirective, FormBuilderComponent],
+  imports: [
+    CommonModule,
+    TableBuilderComponent,
+    MatIcon,
+    MatButtonModule,
+    MatTabsModule,
+    ColumnTemplateDirective,
+    FormBuilderComponent,
+    FormBuilderUiComponent
+  ],
   templateUrl: './deal-types-config.component.html',
   styleUrl: './deal-types-config.component.scss'
 })
@@ -35,10 +46,22 @@ export class DealTypesConfigComponent {
 
   dealsTableConfig: TableConfig = { data: [], columns: [] };
 
+  dealFormFieldsConfig: FormConfig = { fields: [] };
+
   ngOnInit() {
     this.entityFieldsService.getDealTypeOptions().subscribe((dealTypes) => {
       this.giveDealsTableConfig(dealTypes)
     })
+  }
+
+  onSubmitDealFieldConfig(data: any) {
+
+    this.entityFieldsService.addOrUpdateFieldsForDealType(this.dealFormValues.id, data.fields).subscribe((res) => {
+      console.log(res);
+      this.snackbarService.showSnackbar(`Deal Fields for type "${this.dealFormValues.label}" updated succesfully!`);
+      this.dialogService.closeAll();
+    });
+
   }
 
   private giveDealsTableConfig(data: any) {
@@ -58,11 +81,20 @@ export class DealTypesConfigComponent {
   }
 
   openDealDialog(data: any) {
-    this.dealFormValues = data;
-    this.dialogService.openTemplate({
-      content: this.dealTmpl,
-      header: data ? `Edit Deal Type` : `Add New Deal type`,
+
+    this.entityFieldsService.getDealFieldsForType(data.id, false).subscribe(fields => {
+
+      this.dealFormFieldsConfig = { fields: fields }
+      this.dealFormValues = data;
+      this.dialogService.openTemplate({
+        content: this.dealTmpl,
+        header: data ? `Edit Deal Type: ${data.label}` : `Add New Deal type`,
+        panelClass: 'big-dialog'
+      })
+
     })
+
+
   }
 
   onSubmitDeal(formData: any) {
