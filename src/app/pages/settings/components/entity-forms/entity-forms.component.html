@@ -1,0 +1,39 @@
+<button mat-raised-button (click)="openEntityFormDialog(false)">
+  <mat-icon>add</mat-icon>
+  Add New Form
+</button>
+
+<app-table-builder [config]="tableConfig">
+   <ng-template appColumnTemplate="icon" let-row>
+    <mat-icon>{{ row.icon }}</mat-icon>
+  </ng-template>
+  <ng-template appColumnTemplate="actions" let-row>
+    <div class="flex flex-row">
+      <button mat-icon-button (click)="openEntityFormDialog(row)">
+        <mat-icon>edit</mat-icon>
+      </button> 
+      <button mat-icon-button (click)="openConfirmDeleteFormDialog(row)">
+        <mat-icon>delete</mat-icon>
+      </button> 
+    </div>
+  </ng-template> 
+</app-table-builder>
+
+<!-- <div>
+  <p>Create new forms for core entities such as employees, companies, and departments</p>
+  <button mat-raised-button>View Forms</button>
+
+</div> -->
+
+<ng-template #entityFormFieldsTmpl>
+  <div class="min-h-[400px]">
+    <app-form-builder-ui [outputFormConfig]="outputFormConfig" (onSubmitConfig)="onSubmitFieldsConfig($event)"></app-form-builder-ui>
+  </div>
+</ng-template>
+
+
+<ng-template #entityFormConfigTmpl>
+  <div class="p-4">
+    <app-form-builder [config]="entityFormConfig" [values]="entityFormConfigValues" (submitHandler)="addOrUpdateEntityFields($event)"></app-form-builder>
+  </div>
+</ng-template>

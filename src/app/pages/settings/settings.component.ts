@@ -10,6 +10,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
 import { DealTypesConfigComponent } from './components/deal-types-config/deal-types-config.component';
 import { TaskTypesConfigComponent } from './components/task-types-config/task-types-config.component';
+import { EntityFormsComponent } from './components/entity-forms/entity-forms.component';
 
 
 
@@ -22,9 +23,10 @@ import { TaskTypesConfigComponent } from './components/task-types-config/task-ty
     RolesFormComponent,
     TransferComponent,
     DealTypesConfigComponent,
+    TaskTypesConfigComponent,
+    EntityFormsComponent,
     MatTabsModule,
     MatIcon,
-    TaskTypesConfigComponent
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'

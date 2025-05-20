@@ -5,17 +5,12 @@
 
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon>handshake</mat-icon>
-      Deals
+      <mat-icon>border_color</mat-icon>
+      Entity Forms
     </ng-template>
-    <div>
-      
-      <app-deal-types-config></app-deal-types-config>
+    <div class="p-4">
+      <app-entity-forms></app-entity-forms>
 
-
-
-
-      
     </div>
   </mat-tab>
 
@@ -25,21 +20,22 @@
       <mat-icon>assignment</mat-icon>
       Tasks
     </ng-template>
-    <div>
+    <div class="p-4">
       <app-task-types-config></app-task-types-config>
     </div>
   </mat-tab>
 
-
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon>border_color</mat-icon>
-      Forms
+      <mat-icon>handshake</mat-icon>
+      Deals
     </ng-template>
-    <div>
-      <app-form-builder-ui></app-form-builder-ui>
+    <div class="p-4">
+      <app-deal-types-config></app-deal-types-config>     
     </div>
   </mat-tab>
+
+
 
 
   <mat-tab>

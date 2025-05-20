@@ -521,8 +521,7 @@ export class EntityFieldsService {
     );
   }
 
-  createEntityFields(formData: any): Observable<any[]> {
-    const entityType = (formData.entityType).toLowerCase();
+  createEntityFields(entityType: string, formData: any): Observable<any[]> {
     delete formData.entityType;
 
     const stored = localStorage.getItem(this.entityFieldsStorageKey);
@@ -559,4 +558,66 @@ export class EntityFieldsService {
 
     return of(parsed[entityType] || []);
   }
+
+  getAllEntityFormConfigs(): Observable<any[]> {
+    const stored = localStorage.getItem(this.entityFieldsStorageKey);
+
+    if (stored) {
+      try {
+        const parsed: unknown = JSON.parse(stored);
+
+        if (this.isEntityFormsMap(parsed)) {
+          const result: any[] = [];
+
+          for (const [entity, forms] of Object.entries(parsed)) {
+            forms.forEach((form, index) => {
+              result.push({ ...form, entity, index:index });
+            });
+          }
+
+          return of(result);
+        }
+
+        console.error('Parsed data is not a valid entity forms map');
+        return of([]);
+      } catch (err) {
+        console.error('Error parsing stored entity fields', err);
+        return this.getAllEntityFormConfigsFromFile();
+      }
+    } else {
+      return this.getAllEntityFormConfigsFromFile();
+    }
+  }
+
+  private getAllEntityFormConfigsFromFile(): Observable<any[]> {
+    return this.http.get<unknown>(this.entityFieldsJsonFile).pipe(
+      catchError(err => {
+        console.error('Error loading entity fields JSON', err);
+        return of({});
+      }),
+      map(parsed => {
+        const result: any[] = [];
+
+        if (this.isEntityFormsMap(parsed)) {
+          for (const [entity, forms] of Object.entries(parsed)) {
+            forms.forEach((form, index) => {
+              result.push({ ...form, entity, index:index });
+            });
+          }
+        }
+
+        return result;
+      })
+    );
+  }
+
+  // ✅ Type guard to validate structure
+  private isEntityFormsMap(obj: unknown): obj is { [key: string]: any[] } {
+    if (typeof obj !== 'object' || obj === null) return false;
+
+    return Object.values(obj).every(val => Array.isArray(val));
+  }
+
+
+
 }
