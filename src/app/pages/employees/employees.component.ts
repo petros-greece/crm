@@ -58,9 +58,24 @@ export class EmployeesComponent {
   employeeData: any;
   taskData: any;
 
+  extraForms: any = [];
+
   ngOnInit() {
     this.dataService.getEmployees().subscribe(employees => {
       this.giveEmployeeTableConfig(employees);
+    })
+
+    this.entityFieldsService.getEntityFields('employee').subscribe((resp:any)=>{
+      this.extraForms = resp;
+    })
+  }
+
+  updateEmployeeExtraFields(formData:any, title:string){
+    //console.log(formData, title);
+    const id = this.employeeData.id;
+    this.dataService.updateEmployeeSection(id, title, formData).subscribe((res)=>{
+      this.giveEmployeeTableConfig(res);
+      this.dialogService.closeAll();     
     })
   }
 

@@ -10,10 +10,10 @@ import { TreeNodeI } from '../components/folder-structure/folder-structure.compo
 })
 export class DataService {
 
+  constructor(private http: HttpClient) { }
+
   private readonly employeesStorageKey = 'crm-employees';
   private readonly employeesJsonFile = 'assets/data/employees.json';
-
-  constructor(private http: HttpClient) { }
 
   getEmployees(): Observable<any[]> {
     // Try to get from localStorage first
@@ -138,6 +138,37 @@ export class DataService {
     );
   }
 
+  updateEmployeeSection(employeeId: string, sectionName: string, data: any): Observable<any> {
+    return this.getEmployees().pipe(
+      take(1),
+      map(employees => {
+        const index = employees.findIndex(emp => emp.id === employeeId);
+
+        if (index === -1) {
+          console.warn(`Employee with ID ${employeeId} not found.`);
+          return null;
+        }
+
+        const updatedEmployees = [...employees];
+
+        // Create or update the section
+        updatedEmployees[index] = {
+          ...updatedEmployees[index],
+          [sectionName]: data
+        };
+
+        // Save back to localStorage
+        localStorage.setItem(this.employeesStorageKey, JSON.stringify(updatedEmployees));
+        return updatedEmployees;
+        //return updatedEmployees[index];
+      }),
+      catchError(error => {
+        console.error('Error updating employee section', error);
+        return of(null);
+      })
+    );
+  }
+
   deleteEmployee(employeeId: string): Observable<any[]> {
     return this.getEmployees().pipe(
       take(1),
@@ -230,7 +261,7 @@ export class DataService {
       switchMap((taskColumns: any[]) => {
         // Clone the array to avoid mutation issues
         const updatedColumns = [...taskColumns];
-        
+
         // If no columns exist, create a new column with the task
         if (updatedColumns.length === 0) {
           updatedColumns.push({
@@ -238,15 +269,15 @@ export class DataService {
             title: 'To Do',
             tasks: [taskData]
           });
-        } 
+        }
         else {
           // Add to first column (assuming it's the "To Do" column)
           updatedColumns[0].tasks.unshift(taskData); // unshift adds to beginning
         }
-  
+
         // Save to localStorage
         localStorage.setItem(this.tasksStorageKey, JSON.stringify(updatedColumns));
-        
+
         return of(updatedColumns);
       }),
       catchError(error => {
@@ -255,7 +286,7 @@ export class DataService {
       })
     );
   }
-  
+
   updateTask(updatedTaskData: any): Observable<any> {
     return this.getTasks().pipe(
       switchMap((taskColumns: any[]) => {
@@ -270,11 +301,11 @@ export class DataService {
           });
           return { ...column, tasks: updatedTasks };
         });
-  
+
         if (!taskFound) {
           return throwError(() => new Error('Task not found'));
         }
-  
+
         localStorage.setItem(this.tasksStorageKey, JSON.stringify(updatedColumns));
         return of(updatedColumns);
       }),
@@ -296,7 +327,7 @@ export class DataService {
           ...column,
           tasks: column.tasks.filter((task: any) => task.data.id !== taskId)
         }));
-  
+
         localStorage.setItem(this.tasksStorageKey, JSON.stringify(updatedColumns));
         return updatedColumns;
       }),
@@ -634,7 +665,7 @@ export class DataService {
     return this.getDeals().pipe(
       map((dealsMap: { [key: string]: any[] }) => {
         const companyDeals = dealsMap[companyId] || [];
-        const index = companyDeals.findIndex((d: any) => d.id === updatedDeal.id);  
+        const index = companyDeals.findIndex((d: any) => d.id === updatedDeal.id);
         companyDeals[index] = updatedDeal;
         dealsMap[companyId] = companyDeals;
         localStorage.setItem(this.dealsStorageKey, JSON.stringify(dealsMap));
@@ -685,7 +716,7 @@ export class DataService {
       }),
       switchMap(companyAssets => {
         //if (companyAssets && companyAssets.length > 0) {
-          localStorage.setItem(this.companyAssetsStorageKey, JSON.stringify(companyAssets));
+        localStorage.setItem(this.companyAssetsStorageKey, JSON.stringify(companyAssets));
         //}
         return of(companyAssets);
       })
@@ -727,7 +758,7 @@ export class DataService {
     }).pipe(
       map(({ companies, assets }) => {
         return companies.map(company => {
-          const companyId = company.id?.toString(); 
+          const companyId = company.id?.toString();
           return {
             ...company,
             assets: assets[companyId] || []
@@ -746,7 +777,7 @@ export class DataService {
         return companies.map(company => {
           const companyId = company.id?.toString();
           const companyAssets = assets[companyId] || [];
-  
+
           return <TreeNodeI>{
             name: company.companyName,
             isFile: false,
@@ -756,25 +787,25 @@ export class DataService {
       })
     );
   }
-  
-  private mapAssetsToTree(assets: any[], companyId:string): TreeNodeI[] {
+
+  private mapAssetsToTree(assets: any[], companyId: string): TreeNodeI[] {
     return assets.map(asset => {
       const node: TreeNodeI = {
         name: asset.name,
         isFile: asset.isFile
       };
-  
+
       if (!asset.isFile && Array.isArray(asset.children)) {
         node.children = this.mapAssetsToTree(asset.children, companyId);
       }
-      else if(asset.isFile){
+      else if (asset.isFile) {
         node.name = `${asset.name}`;
         node.path = companyId;
       }
-  
+
       return node;
     });
-  }  
+  }
 
   /** ROLES ******************************************************************************** */
 
@@ -849,8 +880,8 @@ export class DataService {
     );
   }
 
-  addOrUpdateRole(role:any): Observable<any[]> {
-    if(role.id) return this.updateRole(role);
+  addOrUpdateRole(role: any): Observable<any[]> {
+    if (role.id) return this.updateRole(role);
     return this.addRole(role);
   }
 
