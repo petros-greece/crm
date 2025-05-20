@@ -352,16 +352,15 @@ export class FormBuilderUIVars {
     ];
 
 
-    outputFormConfig: FormConfig = { "fields": [ 
-      { "type": "group", "name": "nameandmonth", "label": "name and month", "fields": [ 
-        { "type": "text", "name": "name input", "label": "name", "required": false, "columns": 1 }, 
-        { "type": "select", "name": "month", "label": "month", "required": false, "columns": 1, "listName": "Month" } ,
-         {"type": "select", "name": "testselectgroup", label: "test select", "listName": "Month", multiple: false}
-      ] } ,
-      {"type": "select", "name": "testselect", label: "test select", "listName": "Month", multiple: false}
-     
-     ], "submitText": "Test Form" }
+    // outputFormConfig: FormConfig = { "fields": [ 
+    //   { "type": "group", "name": "nameandmonth", "label": "name and month", "fields": [ 
+    //     { "type": "text", "name": "name input", "label": "name", "required": false, 'columns': 1 }, 
+    //     { "type": "select", "name": "month", "label": "month", "required": false, 'columns': 1, "listName": "Month" } ,
+    //      {"type": "select", "name": "testselectgroup", label: "test select", "listName": "Month", multiple: false}
+    //   ] } ,
+    //   {"type": "select", "name": "testselect", label: "test select", "listName": "Month", multiple: false} 
+    //  ], "submitText": "Test Form" }
   
-          //outputFormConfig: FormConfig = { fields: [], submitText: "Test Form" }
+         
   
 }

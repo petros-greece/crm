@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, effect, inject, signal, Signal, TemplateRef, ViewChild, WritableSignal } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, EventEmitter, inject, Input, Output, signal, TemplateRef, ViewChild, WritableSignal } from '@angular/core';
 import { FieldFormConfig, FieldType, FormConfig, FormFieldConfig } from '../../form-builder.model';
 import { FormBuilderComponent } from '../../form-builder.component';
 import { CommonModule } from '@angular/common';
@@ -15,7 +15,6 @@ import {
   CdkDragHandle,
   CdkDragPlaceholder,
 } from '@angular/cdk/drag-drop';
-import { EntityFieldsService } from '../../../services/entity-fields.service';
 import { MatButtonModule } from '@angular/material/button';
 import { DialogService } from '../../../services/dialog.service';
 
@@ -39,17 +38,25 @@ import { DialogService } from '../../../services/dialog.service';
 })
 export class FormBuilderUiComponent extends FormBuilderUIVars {
 
-  private entityFieldsService = inject(EntityFieldsService);
+  @Input() outputFormConfig: FormConfig = { fields: [], submitText: "Test Form" };
+  @Input() submitText: string = 'Append Form To Entity';
+  @Output() onSubmitConfig = new EventEmitter<any>();
+
   private dialogService = inject(DialogService);
+
   private cdr = inject(ChangeDetectorRef)
   @ViewChild('fieldFormToOutputTmpl', { static: true }) fieldFormToOutputTmpl!: TemplateRef<any>;
   @ViewChild('groupFormToOutputTmpl', { static: true }) groupFormToOutputTmpl!: TemplateRef<any>;
+  @ViewChild('testFormTmpl', { static: true }) testFormTmpl!: TemplateRef<any>;
   @ViewChild('fieldSelect') fieldSelect!: MatSelect;
 
   readonly selectedConfig: WritableSignal<FieldFormConfig> = signal(this.fieldComponents[0]);
   readonly outputConfig: WritableSignal<FormConfig> = signal(this.outputFormConfig);
   groupConfig!: FormConfig;
   editingIndex = -1;
+  groupFieldEdititngIndex = -1;
+
+  testFormData: any = {};
 
   /******************************************************************************** */
 
@@ -67,8 +74,14 @@ export class FormBuilderUiComponent extends FormBuilderUIVars {
       //console.log('Selected field type is now →', this.selectedConfig());
     });
 
-    //this.outputConfig.set({fields: this.entityFieldsService.employeeFields})
+  }
 
+  ngOnInit() {
+    this.outputConfig.set(this.outputFormConfig)
+  }
+
+  submitConfig() {
+    this.onSubmitConfig.emit(this.outputConfig());
   }
 
   /**  GROUP AREA ***************************************************************************/
@@ -118,7 +131,8 @@ export class FormBuilderUiComponent extends FormBuilderUIVars {
     this.dialogService.openTemplate({
       content: this.groupFormToOutputTmpl,
       header: 'Group',
-      panelClass: 'responsive-dialog'
+      panelClass: 'responsive-dialog',
+      id: 'group-fields-dialog'
     })
   }
 
@@ -135,7 +149,7 @@ export class FormBuilderUiComponent extends FormBuilderUIVars {
     groupFields[2].value = type === 'group' ? false : true;
     groupFields[2].value = type === 'multi-row' ? field.addRow : '';
     this.groupConfig = { fields: groupFields }
-    
+
     this.openGroupDialog();
   }
 
@@ -148,7 +162,7 @@ export class FormBuilderUiComponent extends FormBuilderUIVars {
     const remainingFields: FormFieldConfig[] = [];
 
     currentFields.forEach((field, index) => {
-     
+
       if (index !== this.editingIndex) {
         if (addedFieldNames.has(field.name)) {
           groupedFields.push(field);
@@ -171,26 +185,45 @@ export class FormBuilderUiComponent extends FormBuilderUIVars {
     //debugger
     this.outputConfig.update(cfg => ({ ...cfg, fields: updatesFormFields }));
     this.cdr.detectChanges();
+    this.dialogService.closeDialogById('group-fields-dialog');
 
   }
 
   dropGroupField(event: CdkDragDrop<any[]>) {
-  const currentGroup = this.outputConfig().fields[this.editingIndex];
+    const currentGroup = this.outputConfig().fields[this.editingIndex];
 
-  if (currentGroup?.fields) {
-    const updatedFields = [...currentGroup.fields];
-    moveItemInArray(updatedFields, event.previousIndex, event.currentIndex);
+    if (currentGroup?.fields) {
+      const updatedFields = [...currentGroup.fields];
+      moveItemInArray(updatedFields, event.previousIndex, event.currentIndex);
 
-    // Update outputConfig signal
-    this.outputConfig.update(cfg => {
-      const updated = [...cfg.fields];
-      updated[this.editingIndex] = {
-        ...currentGroup,
-        fields: updatedFields
-      };
-      return { ...cfg, fields: updated };
-    });
+      // Update outputConfig signal
+      this.outputConfig.update(cfg => {
+        const updated = [...cfg.fields];
+        updated[this.editingIndex] = {
+          ...currentGroup,
+          fields: updatedFields
+        };
+        return { ...cfg, fields: updated };
+      });
+    }
   }
+
+  removeFieldFromGroup(fieldIndex: number) {
+    const currentGroup = this.outputConfig().fields[this.editingIndex];
+
+    if (currentGroup?.fields) {
+      const updatedFields = currentGroup.fields.filter((_, index) => index !== fieldIndex);
+
+      // Update outputConfig signal
+      this.outputConfig.update(cfg => {
+        const updated = [...cfg.fields];
+        updated[this.editingIndex] = {
+          ...currentGroup,
+          fields: updatedFields
+        };
+        return { ...cfg, fields: updated };
+      });
+    }
   }
 
   /** SELECT ****************************************************************************** */
@@ -210,7 +243,8 @@ export class FormBuilderUiComponent extends FormBuilderUIVars {
     this.dialogService.openTemplate({
       content: this.fieldFormToOutputTmpl,
       header: FieldFormConfig.config.title || '',
-      panelClass: 'responsive-dialog'
+      panelClass: 'responsive-dialog',
+      id: 'form-builder-field-dialog'
     })
   }
 
@@ -223,9 +257,10 @@ export class FormBuilderUiComponent extends FormBuilderUIVars {
     }));
   }
 
-  editField(field: FormFieldConfig, index: number) {
+  editField(field: FormFieldConfig, index: number, groupFieldIndex: number = -1) {
 
     this.editingIndex = index;
+    this.groupFieldEdititngIndex = groupFieldIndex;
     const type = field.type === 'number' || field.type === 'password' || field.type === 'email' ? 'text' : field.type;
     if ((type === 'group' || type === 'multi-row')) {
       this.openEditGroupDialog(field, type);
@@ -247,7 +282,8 @@ export class FormBuilderUiComponent extends FormBuilderUIVars {
     this.dialogService.openTemplate({
       content: this.fieldFormToOutputTmpl,
       header: fieldComponent.config.title || '',
-      panelClass: 'responsive-dialog'
+      panelClass: 'responsive-dialog',
+      id: 'form-builder-field-dialog'
     })
 
   }
@@ -361,13 +397,19 @@ export class FormBuilderUiComponent extends FormBuilderUIVars {
       fieldConfig.acceptedTypes = data.acceptedTypes.join(', ');
     }
 
-
-
-    if (this.editingIndex > -1) {
+    if (this.groupFieldEdititngIndex > -1) {
+      const currentConfig = this.outputConfig();
+      if (currentConfig.fields[this.editingIndex].fields) {
+        currentConfig.fields[this.editingIndex].fields![this.groupFieldEdititngIndex] = fieldConfig;
+      }
+      this.outputConfig.update(config => ({
+        ...config,
+        fields: currentConfig.fields
+      }))
+    }
+    else if (this.editingIndex > -1) {
       const currentConfig = this.outputConfig();
       currentConfig.fields[this.editingIndex] = fieldConfig;
-      //moveItemInArray(updatedFields, event.previousIndex, event.currentIndex);
-
       this.outputConfig.update(config => ({
         ...config,
         fields: currentConfig.fields
@@ -380,7 +422,15 @@ export class FormBuilderUiComponent extends FormBuilderUIVars {
       }));
     }
 
-    this.dialogService.closeAll();
+    this.dialogService.closeDialogById('form-builder-field-dialog');
+  }
+
+  testForm(formData: any) {
+    this.testFormData = formData;
+    this.dialogService.openTemplate({
+      content: this.testFormTmpl,
+      header: 'Form Data'
+    })
   }
 
   /** HELPERS ****************************************************************************** */
@@ -412,6 +462,7 @@ export class FormBuilderUiComponent extends FormBuilderUIVars {
 
     return prefix + randomPart;
   }
+
 
 }
 
