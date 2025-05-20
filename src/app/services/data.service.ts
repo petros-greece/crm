@@ -505,6 +505,34 @@ export class DataService {
     );
   }
 
+  updateDepartmentSection(departmentId: string, sectionName: string, data: any): Observable<any> {
+  return this.getDepartments().pipe(
+    take(1),
+    map(departments => {
+      const index = departments.findIndex(dept => dept.id === departmentId);
+
+      if (index === -1) {
+        console.warn(`Department with ID ${departmentId} not found.`);
+        return null;
+      }
+
+      const updatedDepartments = [...departments];
+      updatedDepartments[index] = {
+        ...updatedDepartments[index],
+        [sectionName]: data
+      };
+
+      localStorage.setItem(this.departmentsStorageKey, JSON.stringify(updatedDepartments));
+      return updatedDepartments[index];
+    }),
+    catchError(error => {
+      console.error('Error updating department section', error);
+      return of(null);
+    })
+  );
+}
+
+
   /** COMPANY ******************************************************************************** */
 
   private readonly companiesStorageKey = 'crm-companies';
@@ -599,6 +627,33 @@ export class DataService {
         const updatedCompanies = companies.filter(company => company.id !== companyId);
         localStorage.setItem(this.companiesStorageKey, JSON.stringify(updatedCompanies));
         return updatedCompanies;
+      })
+    );
+  }
+
+  updateCompanySection(companyId: string, sectionName: string, data: any): Observable<any> {
+    return this.getCompanies().pipe(
+      take(1),
+      map(companies => {
+        const index = companies.findIndex(company => company.id === companyId);
+
+        if (index === -1) {
+          console.warn(`Company with ID ${companyId} not found.`);
+          return null;
+        }
+
+        const updatedCompanies = [...companies];
+        updatedCompanies[index] = {
+          ...updatedCompanies[index],
+          [sectionName]: data
+        };
+
+        localStorage.setItem(this.companiesStorageKey, JSON.stringify(updatedCompanies));
+        return updatedCompanies[index];
+      }),
+      catchError(error => {
+        console.error('Error updating company section', error);
+        return of(null);
       })
     );
   }

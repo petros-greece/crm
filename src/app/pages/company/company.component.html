@@ -96,7 +96,6 @@
         </button>
       </div>
 
-
     </mat-tab>
 
     <mat-tab>
@@ -113,6 +112,22 @@
       </div>
     </mat-tab>
 
+    <mat-tab *ngFor="let extraForm of extraForms;index as i">
+      <ng-template mat-tab-label>
+        <mat-icon class="mr-1">{{extraForm.icon}}</mat-icon>
+        {{extraForm.title}}
+      </ng-template>
+
+      <div class="p-4 overflow-hidden">
+        <app-form-builder
+          [config]="{fields: extraForm.fields}"
+          [values]="companyInfoValues[extraForm.title] || {}"
+          (submitHandler)="updateCompanyExtraFields($event, extraForm.title)">
+        </app-form-builder>
+      </div>
+    </mat-tab>
+
+
   </mat-tab-group>
 </ng-template>
 
@@ -127,7 +142,6 @@
 
 <ng-template #newCompanyTmpl>
   <div class="p-4">
-
     <app-form-builder [config]="companyInfoFormConfig" (submitHandler)="addNewCompany($event)"></app-form-builder>
   </div>
 </ng-template>

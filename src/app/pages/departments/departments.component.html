@@ -71,6 +71,20 @@
       </div>
     </mat-tab>
 
+    <mat-tab *ngFor="let extraForm of extraForms;index as i">
+      <ng-template mat-tab-label>
+        <mat-icon class="mr-1">{{extraForm.icon}}</mat-icon>
+        {{extraForm.title}}
+      </ng-template>
+
+      <div class="p-4 overflow-hidden">
+        <app-form-builder [config]="{fields: extraForm.fields}" [values]="departmentFormValues[extraForm.title] || {}"
+          (submitHandler)="updateDepartmentExtraFields($event, extraForm.title)">
+        </app-form-builder>
+      </div>
+    </mat-tab>
+
+
   </mat-tab-group>
 </ng-template>
 

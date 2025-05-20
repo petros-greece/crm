@@ -10,6 +10,7 @@ import { DataService } from '../../services/data.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { PageHeaderComponent } from '../../components/page-header/page-header.component';
 import { SnackbarService } from '../../services/snackbar.service';
+import { EntityFieldsService } from '../../services/entity-fields.service';
 
 @Component({
   selector: 'app-departments',
@@ -29,6 +30,8 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
   dialogService = inject(DialogService);
   dataService = inject(DataService);
   snackbarService = inject(SnackbarService);
+  entityFieldsService = inject(EntityFieldsService);
+
   @ViewChild('departmentPreviewTmpl', { static: true }) departmentPreviewTmpl!: TemplateRef<any>;
   @ViewChild('departmentFormTmpl', { static: true }) departmentFormTmpl!: TemplateRef<any>;
 
@@ -46,6 +49,8 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
   isEditDepartment = false;
   showForm: { [role: string]: boolean } = {};
 
+  extraForms: any = [];
+
   toggleForm(role: string): void {
     this.showForm[role] = !this.showForm[role];
     Object.keys(this.showForm).forEach(key => {
@@ -55,6 +60,11 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
 
   ngOnInit(): void {
     this.dataService.getDepartments().subscribe(d=>this.departments=d);
+
+    this.entityFieldsService.getEntityFields('department').subscribe((resp: any) => {
+      this.extraForms = resp;
+    })
+
   }
 
   addEmployeeToRole(event:any, role:string){
@@ -172,6 +182,14 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
           })
         }
       });
+  }
+
+  updateDepartmentExtraFields(formData: any, title: string) {
+    //console.log(formData, title);
+    const id = this.departmentFormValues.id;
+    this.dataService.updateDepartmentSection(id, title, formData).subscribe((res) => {
+      //this.onAfterSubmitEmployee(res, `Employee section "${title}" updated successfully`);
+    })
   }
 
   /** HELPERS ****************************************************************************** */
