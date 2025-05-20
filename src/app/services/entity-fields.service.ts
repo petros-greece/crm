@@ -226,17 +226,37 @@ export class EntityFieldsService {
     );
   }
 
-  getTaskFieldsForType(taskType: TaskTypeT): Observable<FormFieldConfig[]> {
-    console.log(taskType)
+  getTaskFieldsForType(taskType: string, withBase = true): Observable<FormFieldConfig[]> {
     return this.getTaskFields().pipe(
       map(taskData => {
         const baseFields = taskData.baseFields || [];
-        console.log(baseFields)
         const typeFields = taskData.typeFields?.[taskType] || [];
-        return [...baseFields, ...typeFields];
+        return withBase ? [...baseFields, ...typeFields] : typeFields;
       })
     );
   }
+
+  addOrUpdateFieldsForTaskType(taskType: string, fields: FormFieldConfig[]): Observable<{ baseFields: FormFieldConfig[], typeFields: { [key: string]: FormFieldConfig[] } }> {
+    const stored = localStorage.getItem(this.taskTypesStorageKey);
+    let taskConfig: { baseFields: FormFieldConfig[], typeFields: { [key: string]: FormFieldConfig[] } } = {
+      baseFields: [],
+      typeFields: {}
+    };
+
+    try {
+      taskConfig = stored ? JSON.parse(stored) : taskConfig;
+    } catch (error) {
+      console.error('Error parsing stored task field config:', error);
+    }
+
+    taskConfig.typeFields = taskConfig.typeFields || {};
+    taskConfig.typeFields[taskType] = fields;
+
+    localStorage.setItem(this.taskTypesStorageKey, JSON.stringify(taskConfig));
+    return of(taskConfig);
+  }
+
+
 
   /** TASK-TYPES ******************************************************************************** */
 
@@ -288,34 +308,34 @@ export class EntityFieldsService {
     }
   }
 
-addOrUpdateTaskType(taskData: any): Observable<TaskTypeI[]> {
-  const stored = localStorage.getItem(this.taskTypeOptionsStorageKey);
-  let parsed: TaskTypeI[] = [];
+  addOrUpdateTaskType(taskData: any): Observable<TaskTypeI[]> {
+    const stored = localStorage.getItem(this.taskTypeOptionsStorageKey);
+    let parsed: TaskTypeI[] = [];
 
-  try {
-    parsed = stored ? JSON.parse(stored) : [];
-  } catch (error) {
-    console.error('Error parsing stored task types:', error);
-    parsed = [];
-  }
-
-  if (taskData.value) {
-    // Update existing
-    const index = parsed.findIndex(task => task.value === taskData.value);
-    if (index !== -1) {
-      parsed[index] = taskData;
-    } else {
-      parsed.push(taskData); // Fallback: add if not found
+    try {
+      parsed = stored ? JSON.parse(stored) : [];
+    } catch (error) {
+      console.error('Error parsing stored task types:', error);
+      parsed = [];
     }
-  } else {
-    // Create new
-    taskData.value = Date.now().toString(); // Generate new ID
-    parsed.push(taskData);
-  }
 
-  localStorage.setItem(this.taskTypeOptionsStorageKey, JSON.stringify(parsed));
-  return of(parsed);
-}
+    if (taskData.value) {
+      // Update existing
+      const index = parsed.findIndex(task => task.value === taskData.value);
+      if (index !== -1) {
+        parsed[index] = taskData;
+      } else {
+        parsed.push(taskData); // Fallback: add if not found
+      }
+    } else {
+      // Create new
+      taskData.value = Date.now().toString(); // Generate new ID
+      parsed.push(taskData);
+    }
+
+    localStorage.setItem(this.taskTypeOptionsStorageKey, JSON.stringify(parsed));
+    return of(parsed);
+  }
 
 
 
@@ -354,14 +374,34 @@ addOrUpdateTaskType(taskData: any): Observable<TaskTypeI[]> {
     );
   }
 
-  getDealFieldsForType(dealTypeId: string): Observable<FormFieldConfig[]> {
+  getDealFieldsForType(dealTypeId: string, withBase = true): Observable<FormFieldConfig[]> {
     return this.getDealFields().pipe(
       map(dealData => {
         const baseFields = dealData.baseFields || [];
         const typeFields = dealData.typeFields?.[dealTypeId] || [];
-        return [...baseFields, ...typeFields];
+        return withBase ? [...baseFields, ...typeFields] : typeFields;
       })
     );
+  }
+
+  addOrUpdateFieldsForDealType(dealTypeId: string, fields: FormFieldConfig[]): Observable<{ baseFields: FormFieldConfig[], typeFields: { [key: string]: FormFieldConfig[] } }> {
+    const stored = localStorage.getItem(this.dealFieldsStorageKey);
+    let dealConfig: { baseFields: FormFieldConfig[], typeFields: { [key: string]: FormFieldConfig[] } } = {
+      baseFields: [],
+      typeFields: {}
+    };
+
+    try {
+      dealConfig = stored ? JSON.parse(stored) : dealConfig;
+    } catch (error) {
+      console.error('Error parsing stored deal field config:', error);
+    }
+
+    dealConfig.typeFields = dealConfig.typeFields || {};
+    dealConfig.typeFields[dealTypeId] = fields;
+
+    localStorage.setItem(this.dealFieldsStorageKey, JSON.stringify(dealConfig));
+    return of(dealConfig);
   }
 
   /** DEAL-TYPES ******************************************************************************** */

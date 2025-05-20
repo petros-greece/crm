@@ -8,31 +8,47 @@
     <mat-icon>{{ row.icon }}</mat-icon>
   </ng-template>
   <ng-template appColumnTemplate="actions" let-row>
-    <!-- <div class="flex flex-row">
+    <div class="flex flex-row">
       <button mat-icon-button (click)="openTaskTypeDialog(row)">
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-icon-button (click)="openConfirmDeleteDealTypeDialog(row)">
+      <button mat-icon-button (click)="openConfirmDeleteTaskTypeDialog(row)">
         <mat-icon>delete</mat-icon>
       </button> 
-    </div> -->
+    </div> 
   </ng-template>
 </app-table-builder>
 
 
-<!-- <div class="flex flex-row">
-      <button mat-icon-button (click)="openTaskDialog(row)">
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button mat-icon-button (click)="openConfirmDeleteTaskDialog(row)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div> -->
-
 
 <ng-template #taskTmpl>
-  <div class="p-4">
-    <app-form-builder [config]="taskFormConfig" [values]="taskFormValues" (submitHandler)="onSubmitTaskType($event)"></app-form-builder>
-  </div>
+  <mat-tab-group>
+    <mat-tab label="Task Type" >
+      <ng-template mat-tab-label>
+        <mat-icon class="mr-2">assignment</mat-icon>
+        Task Type
+      </ng-template>
+      <div class="p-4">
+        <app-form-builder 
+          [config]="taskFormConfig" 
+          [values]="taskFormValues" 
+          (submitHandler)="onSubmitTaskType($event)">
+        </app-form-builder>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Fields">
+      <ng-template mat-tab-label>
+        <mat-icon class="mr-2">list_alt</mat-icon>
+        Fields
+      </ng-template>
+      <div class="p-4">
+        <app-form-builder-ui 
+          [outputFormConfig]="taskFormFieldsConfig" 
+          (onSubmitConfig)="onSubmitTaskFieldConfig($event)"
+          [submitText]="'Update Field For Task Type: ' + taskFormValues.label"></app-form-builder-ui>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </ng-template>
 

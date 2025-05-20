@@ -8,10 +8,21 @@ import { ColumnTemplateDirective, TableBuilderComponent, TableConfig } from '../
 import { DialogService } from '../../../../services/dialog.service';
 import { FormBuilderComponent } from '../../../../form-builder/form-builder.component';
 import { SnackbarService } from '../../../../services/snackbar.service';
+import { FormBuilderUiComponent } from '../../../../form-builder/components/form-builder-ui/form-builder-ui.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-task-types-config',
-  imports: [CommonModule, TableBuilderComponent, MatIcon, MatButtonModule, ColumnTemplateDirective, FormBuilderComponent],
+  imports: [
+    CommonModule, 
+    TableBuilderComponent, 
+    MatIcon, 
+    MatButtonModule, 
+    MatTabsModule,
+    ColumnTemplateDirective, 
+    FormBuilderComponent,
+    FormBuilderUiComponent
+  ],
   templateUrl: './task-types-config.component.html',
   styleUrl: './task-types-config.component.scss'
 })
@@ -25,21 +36,32 @@ export class TaskTypesConfigComponent {
   taskFormConfig: FormConfig = {
     fields: [
       { type: 'hidden', label: 'value', name: 'value' },
-      { type: 'text', label: 'Label', name: 'label' },
-      { type: 'icon', label: 'Icon', name: 'icon' },
+      { type: 'text', label: 'Label', name: 'label', columns: 2 },
+      { type: 'icon', label: 'Icon', name: 'icon', columns: 2 },
     ]
   }
   taskFormValues: any = {};
 
   taskTableConfig: TableConfig = { data: [], columns: [] };
 
+  taskFormFieldsConfig: FormConfig = {fields: []};
+
   ngOnInit() {
-    this.entityFieldsService.getTaskTypeOptions().subscribe((dealTypes) => {
-      this.giveTaskTypesTableConfig(dealTypes)
+    this.entityFieldsService.getTaskTypeOptions().subscribe((taskTypes) => {
+      this.giveTaskTypesTableConfig(taskTypes)
     })
   }
 
+  onSubmitTaskFieldConfig(data:any){
+    //console.log(this.taskFormValues.value, data.fields)
 
+    this.entityFieldsService.addOrUpdateFieldsForTaskType(this.taskFormValues.value, data.fields).subscribe((res)=>{
+      console.log(res);
+      this.snackbarService.showSnackbar(`Task Fields for type "${this.taskFormValues.label}" updated succesfully!`);
+      this.dialogService.closeAll();
+    });
+
+  }
 
   private giveTaskTypesTableConfig(data: any) {
     const columns: any = this.taskFormConfig.fields
@@ -59,11 +81,36 @@ export class TaskTypesConfigComponent {
 
 
   openTaskTypeDialog(data: any) {
-    this.taskFormValues = data;
-    this.dialogService.openTemplate({
-      content: this.taskTmpl,
-      header: data ? `Edit Deal Type` : `Add New Deal type`,
+
+    this.entityFieldsService.getTaskFieldsForType(data.value, false).subscribe(fields=>{
+console.log(fields);
+
+this.taskFormFieldsConfig = {fields: fields}
+
+      // this.taskFormConfig = {
+      //   title: !this.taskData ? task?.label : '',
+      //   icon: !this.taskData ? task?.icon : '',
+      //   fields: fields,
+      //   submitText: this.taskData? 'Update Task' : 'Add Task'
+      // }
+      // if(this.assignee){
+      //   this.values.assignee = this.assignee;
+      // }
+
+      this.taskFormValues = data;
+      this.dialogService.openTemplate({
+        content: this.taskTmpl,
+        header: data ? `Edit Task Type: ${data.label}` : `Add New Task type`,
+        panelClass: 'big-dialog'
+      })
+
     })
+
+    // this.taskFormValues = data;
+    // this.dialogService.openTemplate({
+    //   content: this.taskTmpl,
+    //   header: data ? `Edit Task Type: ${data.label}` : `Add New Task type`,
+    // })
   }
 
   onSubmitTaskType(formData: any) {
@@ -79,7 +126,7 @@ export class TaskTypesConfigComponent {
     this.dialogService.openConfirm({
       content: `Are you sure you want to delete the task type "${rowData.label}"? 
       Any tasks assigned by this label will be left without a type!`,
-      header: 'Delete Deal Type?',
+      header: 'Delete Task Type?',
       cls: 'bg-red-500 !text-white'
     }).subscribe(confirmed => {
       if (confirmed === true) {
