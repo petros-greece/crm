@@ -15,17 +15,17 @@ import { EntityFieldsService } from '../../services/entity-fields.service';
 @Component({
   selector: 'app-departments',
   imports: [
-    CommonModule, 
-    MatButtonModule, 
-    MatIcon, 
-    FormBuilderComponent, 
+    CommonModule,
+    MatButtonModule,
+    MatIcon,
+    FormBuilderComponent,
     MatTabsModule,
     PageHeaderComponent,
   ],
   templateUrl: './departments.component.html',
   styleUrl: './departments.component.scss'
 })
-export class DepartmentsComponent extends DepartmentsVars implements OnInit{
+export class DepartmentsComponent extends DepartmentsVars implements OnInit {
 
   dialogService = inject(DialogService);
   dataService = inject(DataService);
@@ -41,25 +41,18 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
 
   selectEmployeeFormConfig: FormConfig = {
     hideSubmit: false,
-    fields: [{ type: 'autocomplete', name: 'employee', label: 'Add Employee', dynamicOptions: this.dataService.getEmployeeOptions(),columns: 1, }],  
+    fields: [{ type: 'autocomplete', name: 'employee', label: 'Add Employee', dynamicOptions: this.dataService.getEmployeeOptions(), columns: 1, }],
   }
 
-  departmentFormValues:any = {};
-  departmentRoles:any = [];
+  departmentFormValues: any = {};
+  departmentRoles: any = [];
   isEditDepartment = false;
   showForm: { [role: string]: boolean } = {};
 
   extraForms: any = [];
 
-  toggleForm(role: string): void {
-    this.showForm[role] = !this.showForm[role];
-    Object.keys(this.showForm).forEach(key => {
-      if (key !== role) this.showForm[key] = false;
-    });
-  }
-
   ngOnInit(): void {
-    this.dataService.getDepartments().subscribe(d=>this.departments=d);
+    this.dataService.getDepartments().subscribe(d => this.departments = d);
 
     this.entityFieldsService.getEntityFields('department').subscribe((resp: any) => {
       this.extraForms = resp;
@@ -67,28 +60,28 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
 
   }
 
-  addEmployeeToRole(event:any, role:string){
+  addEmployeeToRole(event: any, role: string) {
     //console.log(event.employee, this.departmentFormValues.id, role);
-    this.dataService.updateEmployeeRole(event.employee, this.departmentFormValues.id, role).subscribe(e=>{
+    this.dataService.updateEmployeeRole(event.employee, this.departmentFormValues.id, role).subscribe(e => {
 
       Object.keys(this.showForm).forEach(key => {
         this.showForm[key] = false;
       });
 
       let foundInAnotherDepartment = false;
-      this.departmentRoles.forEach((rObj:any) => {
+      this.departmentRoles.forEach((rObj: any) => {
 
-        if(!foundInAnotherDepartment){
-          for(let i=0, len = rObj.employees.length; i < len; i+=1){
+        if (!foundInAnotherDepartment) {
+          for (let i = 0, len = rObj.employees.length; i < len; i += 1) {
             let empl = rObj.employees[i];
-            if(empl.id === event.employee){
+            if (empl.id === event.employee) {
               rObj.employees.splice(i, 1);
               foundInAnotherDepartment = true;
             }
           }
         }
 
-        if( rObj.role === role){
+        if (rObj.role === role) {
           rObj.employees.push(e);
         }
       });
@@ -98,8 +91,8 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
 
   }
 
-  openAddDepartmentDialog(){
-    this.departmentFormValues = {};  
+  openAddDepartmentDialog() {
+    this.departmentFormValues = {};
     this.departmentFormConfig = {
       fields: this.departmentBaseFields,
       submitText: 'Add'
@@ -113,23 +106,23 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
     })
   }
 
-  openPreviewDepartmentDialog(index:number){
-    const department = this.departments[index]; 
-    this.departmentFormValues = department;  
+  openPreviewDepartmentDialog(index: number) {
+    const department = this.departments[index];
+    this.departmentFormValues = department;
     this.departmentFormConfig = {
       fields: this.departmentBaseFields,
       submitText: 'Update'
     };
     this.departmentRoles = [...this.departmentFormValues.roles];
 
-    this.dataService.getEmployeesForDepartment(this.departments[index].label).subscribe(employees=>{
-      this.departmentRoles.forEach((rObj:any) => {
-        rObj.employees = employees.filter((e)=> e.role === rObj.role);
+    this.dataService.getEmployeesForDepartment(this.departments[index].label).subscribe(employees => {
+      this.departmentRoles.forEach((rObj: any) => {
+        rObj.employees = employees.filter((e) => e.role === rObj.role);
       });
       this.dialogService.openTemplate({
         panelClass: 'responsive-dialog',
         header: `Department: ${department.label}`,
-        icon:  department.icon,
+        icon: department.icon,
         content: this.departmentPreviewTmpl,
         cls: 'bg-violet-800 !text-white',
       })
@@ -137,32 +130,31 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
 
   }
 
-  addOrUpdateDepartment(formData:any){
-    console.log('addOrUpdateDepartment', formData);
+  addOrUpdateDepartment(formData: any) {
     formData.value = this.toCamelCaseMachineName(formData.label);
     formData.id ? this.updateDepartment(formData) : this.addDepartment(formData);
   }
 
-  private addDepartment(formData:any){
-    if(!formData.icon) formData.icon = 'store';
+  private addDepartment(formData: any) {
+    if (!formData.icon) formData.icon = 'store';
     formData.id = `${new Date().getTime()}`
-    this.dataService.addDepartment(formData).subscribe((res)=>{
-      this.departments = res;
+    this.dataService.addDepartment(formData).subscribe((res) => {
+      this.onAfterSubmit(res, `Department ${this.departmentFormValues.label} added succesfully`);
     })
   }
 
-  private updateDepartment(formData:any){
-    this.dataService.updateDepartment(formData).subscribe((res)=>{
-      this.departments = res;
+  private updateDepartment(formData: any) {
+    this.dataService.updateDepartment(formData).subscribe((res) => {
+      this.onAfterSubmit(res, `Department ${this.departmentFormValues.label} updated succesfully`);
     })
   }
 
   private get canDeleteDepartment(): boolean {
-    return this.departmentRoles.every((role:any) => role.employees.length === 0);
+    return this.departmentRoles.every((role: any) => role.employees.length === 0);
   }
 
-  openConfirmDeleteDepartmentDialog(){
-  
+  openConfirmDeleteDepartmentDialog() {
+
     this.dialogService.openConfirm({
       cls: 'bg-red-500',
       header: 'Remove Department?',
@@ -170,15 +162,13 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
     })
       .subscribe(confirmed => {
         if (confirmed === true) {
-          if(!this.canDeleteDepartment){
+          if (!this.canDeleteDepartment) {
             this.snackbarService.showSnackbar(`Department "${this.departmentFormValues.label}" cannot be deleted because it has employees.`);
             return;
           }
 
-          this.dataService.deleteDepartment(this.departmentFormValues.id).subscribe((res)=>{
-            this.departments = res;
-            this.dialogService.closeAll();
-            this.snackbarService.showSnackbar(`Department ${this.departmentFormValues.label} deleted succesfully`);
+          this.dataService.deleteDepartment(this.departmentFormValues.id).subscribe((res) => {
+            this.onAfterSubmit(res, `Department ${this.departmentFormValues.label} deleted succesfully`);
           })
         }
       });
@@ -188,11 +178,17 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
     //console.log(formData, title);
     const id = this.departmentFormValues.id;
     this.dataService.updateDepartmentSection(id, title, formData).subscribe((res) => {
-      //this.onAfterSubmitEmployee(res, `Employee section "${title}" updated successfully`);
+      this.onAfterSubmit(res, `Department section "${title}" updated successfully`);
     })
   }
 
   /** HELPERS ****************************************************************************** */
+
+  private onAfterSubmit(res: any, message: string) {
+    this.dialogService.closeAll();
+    this.departments = res;
+    this.snackbarService.showSnackbar(message);
+  }
 
   private toCamelCaseMachineName(input: string): string {
     if (!input) return this.generateRandomName();
@@ -221,5 +217,13 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit{
 
     return prefix + randomPart;
   }
+
+  toggleForm(role: string): void {
+    this.showForm[role] = !this.showForm[role];
+    Object.keys(this.showForm).forEach(key => {
+      if (key !== role) this.showForm[key] = false;
+    });
+  }
+
 
 }

@@ -242,10 +242,9 @@ export class CompanyComponent {
   }
 
   updateCompanyExtraFields(formData: any, title: string) {
-    //console.log(formData, title);
     const id = this.companyInfoValues.id;
     this.dataService.updateCompanySection(id, title, formData).subscribe((res) => {
-      //this.onAfterSubmitEmployee(res, `Employee section "${title}" updated successfully`);
+      this.snackbarService.showSnackbar(`EmpCompanyloyee section "${title}" updated successfully`);
     })
   }
 
