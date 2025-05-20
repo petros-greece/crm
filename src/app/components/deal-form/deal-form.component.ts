@@ -46,14 +46,14 @@ export class DealFormComponent {
     })
 
     if(this.dealFormValues.dealType){
-    this.entityFieldsService.getDealFieldsForType(this.dealFormValues.dealType).subscribe((fields: FormFieldConfig[]) => {
-      this.dealFormConfig = {
-        title: '',
-        icon: '',
-        fields: fields,
-        submitText: 'Update Deal'
-      }
-    })
+      this.entityFieldsService.getDealFieldsForType(this.dealFormValues.dealType).subscribe((fields: FormFieldConfig[]) => {
+        this.dealFormConfig = {
+          title: '',
+          icon: '',
+          fields: fields,
+          submitText: 'Update Deal'
+        }
+      })
     }
 
 

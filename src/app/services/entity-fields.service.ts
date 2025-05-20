@@ -186,7 +186,9 @@ export class EntityFieldsService {
     cols.push({
       key: 'actions',
       label: 'Actions',
-      type: 'custom'
+      type: 'custom',
+      headerStyle: {'text-align': 'center'},
+      sortable: false
     });
 
     return cols;
