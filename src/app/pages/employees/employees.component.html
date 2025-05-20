@@ -62,7 +62,6 @@
         <app-form-builder
           [config]="employeeFormConfig"
           [values]="employeeData"
-          (formValuesChange)="checkDepartment($event)"
           (submitHandler)="updateEmployee($event)">
         </app-form-builder>
       </div>
@@ -91,7 +90,7 @@
 
 <ng-template #addEmployeeTmpl>
   <div class="p-4">
-    <app-form-builder [config]="employeeFormConfig" [values]="employeeData" (formValuesChange)="checkDepartment($event)"
+    <app-form-builder [config]="employeeFormConfig" [values]="employeeData" 
       (submitHandler)="addNewEmployee($event)"></app-form-builder>
   </div>
 </ng-template>

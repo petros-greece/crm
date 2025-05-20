@@ -65,27 +65,37 @@ export class EmployeesComponent {
       this.giveEmployeeTableConfig(employees);
     })
 
-    this.entityFieldsService.getEntityFields('employee').subscribe((resp:any)=>{
+    this.entityFieldsService.getEntityFields('employee').subscribe((resp: any) => {
       this.extraForms = resp;
     })
   }
 
-  updateEmployeeExtraFields(formData:any, title:string){
-    //console.log(formData, title);
-    const id = this.employeeData.id;
-    this.dataService.updateEmployeeSection(id, title, formData).subscribe((res)=>{
-      this.giveEmployeeTableConfig(res);
-      this.dialogService.closeAll();     
-    })
+  private giveEmployeeTableConfig(data: any) {
+    this.tableConfig = {
+      columns: this.entityFieldsService.buildEntityTableConfigColumns('employee'),
+      data: data,
+      pageSizeOptions: [5, 10],
+      cacheOptionsProp: 'employees-table',
+      pagination: true,
+    };
+  }
+
+  private giveEmployeeFormConfig(submitText: string = 'Add') {
+    this.employeeFormConfig = {
+      fields: this.entityFieldsService.employeeFields,
+      submitText: submitText
+    };
+  }
+
+  private onAfterSubmitEmployee(res:any, message:string) {
+    this.dialogService.closeAll();
+    this.giveEmployeeTableConfig(res);
+    this.snackbarService.showSnackbar(message);
   }
 
   openNewEmployeeDialog() {
     this.employeeData = {};
-    this.employeeFormConfig = {
-      title: '',
-      fields: this.entityFieldsService.employeeFields,
-      submitText: 'Add'
-    };
+    this.giveEmployeeFormConfig('Add');
 
     this.dialogService.openTemplate({
       panelClass: 'responsive-dialog',
@@ -97,12 +107,7 @@ export class EmployeesComponent {
 
   openEditEmployeeDialog(row?: any) {
     this.employeeData = row;
-    this.employeeFormConfig = {
-      title: '',
-      fields: this.entityFieldsService.employeeFields,
-      submitText: `Update`
-    };
-
+    this.giveEmployeeFormConfig('Update');
     this.getTasksForEmployee(this.employeeData.id);
 
     this.dialogService.openTemplate({
@@ -116,30 +121,15 @@ export class EmployeesComponent {
   addNewEmployee(formData: any) {
     formData.id = `${this.tableConfig.data.length + 1}`
     this.dataService.addEmployee(formData).subscribe(res => {
-      this.giveEmployeeTableConfig(res);
-      this.dialogService.closeAll();
+      this.onAfterSubmitEmployee(res, `Employee Added succesfully!`);
     })
   }
 
   updateEmployee(formData: any) {
-    this.dataService.updateEmployee(formData).subscribe(res => {
-      this.giveEmployeeTableConfig(res);
-      this.dialogService.closeAll();
+    const data = {...this.employeeData, ...formData};
+    this.dataService.updateEmployee(data).subscribe(res => {
+      this.onAfterSubmitEmployee(res, `Employee Updated succesfully!`);
     })
-  }
-
-  checkDepartment(formData: any) {
-    console.log('check department', formData);
-  }
-
-  private giveEmployeeTableConfig(data: any) {
-    this.tableConfig = {
-      columns: this.entityFieldsService.buildEntityTableConfigColumns('employee'),
-      data: data,
-      pageSizeOptions: [5, 10],
-      cacheOptionsProp: 'employees-table',
-      pagination: true,
-    };
   }
 
   openConfirmDeleteEmployee(employeeData: any) {
@@ -156,19 +146,24 @@ export class EmployeesComponent {
           this.snackbarService.showSnackbar(`Please reassign ${name}'s tasks before proceeding with deletion.`);
           return;
         }
-
         this.dataService.deleteEmployee(employeeData.id).subscribe(res => {
-          this.snackbarService.showSnackbar(`Employee "${name}" deleted successfully`);
-          this.dialogService.closeAll();
-          this.giveEmployeeTableConfig(res);
+          this.onAfterSubmitEmployee(res, `Employee "${name}" deleted successfully`);
         });
       }
     });
   }
 
+  updateEmployeeExtraFields(formData: any, title: string) {
+    //console.log(formData, title);
+    const id = this.employeeData.id;
+    this.dataService.updateEmployeeSection(id, title, formData).subscribe((res) => {
+      this.onAfterSubmitEmployee(res, `Employee section "${title}" updated successfully`);
+    })
+  }
+
   /** TASKS ****************************************************************************** */
 
-  private findTaskById(taskId: number):any {
+  private findTaskById(taskId: number): any {
     for (const column of this.originalTaskColumns) {
       const task = column.tasks.find(t => t.data.id === taskId);
       if (task) {
@@ -176,6 +171,41 @@ export class EmployeesComponent {
       }
     }
     return null;
+  }
+
+  private giveTasksTableConfig(data: any) {
+    this.tasksTableConfig = {
+      columns: [
+        { key: 'id', label: 'ID', type: 'text' },
+        { key: 'type', label: 'Type', type: 'text' },
+        { key: 'subject', label: 'Subject', type: 'text' },
+        { key: 'status', label: 'Status', type: 'text' },
+        { key: 'actions', label: 'Actions', type: 'custom' }
+      ],
+      data: data,
+      pagination: true,
+      pageSizeOptions: [5, 10],
+      hideButtons: true,
+    };
+  }
+
+  private getTasksForEmployee(employeeId: string) {
+    this.dataService.getTasksForEmployee(employeeId).pipe(
+      tap((columns: TaskColumnI[]) => {
+        this.originalTaskColumns = columns;
+      }),
+      map(columns => columns.filter((column: TaskColumnI) => column.tasks.length > 0)),
+      map(columns => columns.flatMap((column: TaskColumnI) =>
+        column.tasks.map(task => ({
+          id: task.data.id,
+          type: task.type.label,
+          status: column.title,
+          subject: task.data.subject
+        }))
+      ))
+    ).subscribe((tasks) => {
+      this.giveTasksTableConfig(tasks);
+    });
   }
 
   openTaskDialog(taskData: any) {
@@ -213,39 +243,6 @@ export class EmployeesComponent {
     });
   }
 
-  private giveTasksTableConfig(data: any) {
-    this.tasksTableConfig = {
-      columns: [
-        { key: 'id', label: 'ID', type: 'text' },
-        { key: 'type', label: 'Type', type: 'text' },
-        { key: 'subject', label: 'Subject', type: 'text' },
-        { key: 'status', label: 'Status', type: 'text' },
-        { key: 'actions', label: 'Actions', type: 'custom' }
-      ],
-      data: data,
-      pagination: true,
-      pageSizeOptions: [5, 10],
-      hideButtons: true,
-    };
-  }
-  
-  private getTasksForEmployee(employeeId: string) {
-    this.dataService.getTasksForEmployee(employeeId).pipe(
-      tap((columns: TaskColumnI[]) => {
-        this.originalTaskColumns = columns; 
-      }),
-      map(columns => columns.filter((column: TaskColumnI) => column.tasks.length > 0)),
-      map(columns => columns.flatMap((column: TaskColumnI) =>
-        column.tasks.map(task => ({
-          id: task.data.id,
-          type: task.type.label,
-          status: column.title,
-          subject: task.data.subject
-        }))
-      ))
-    ).subscribe((tasks) => {
-      this.giveTasksTableConfig(tasks);
-    });
-  }
+
 
 }
