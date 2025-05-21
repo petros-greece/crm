@@ -27,6 +27,7 @@ export type ChartConfig = Partial<{
   legend: ApexLegend;
   tooltip: ApexTooltip;
   plotOptions: ApexPlotOptions;
+  colors: string[]; 
 }>;
 export type ChartData = { categories?: any[]; series?: ApexAxisChartSeries }
 
@@ -53,6 +54,7 @@ export class ChartComponentWrapper implements OnInit, OnChanges {
   legend!: ApexLegend;
   tooltip!: ApexTooltip;
   plotOptions!: ApexPlotOptions;
+  colors!: string[];
 
   private defaults: Required<ChartConfig> = {
     chart: { type: 'line', height: 350, width: '100%', zoom: { enabled: true }, toolbar: { show: true } },
@@ -64,7 +66,8 @@ export class ChartComponentWrapper implements OnInit, OnChanges {
     dataLabels: { enabled: false },
     legend: { position: 'top' },
     tooltip: { enabled: true },
-    plotOptions: {}
+    plotOptions: {},
+    colors: []
   };
 
   ngOnInit(): void {
@@ -105,5 +108,6 @@ export class ChartComponentWrapper implements OnInit, OnChanges {
     this.legend = cfg.legend!;
     this.tooltip = cfg.tooltip!;
     this.plotOptions = cfg.plotOptions!;
+    this.colors = cfg.colors!;
   }
 }
