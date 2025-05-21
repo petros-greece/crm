@@ -12,6 +12,7 @@ import {
   ApexDataLabels,
   ApexLegend,
   ApexTooltip,
+  ApexPlotOptions
 } from 'ng-apexcharts';
 
 
@@ -25,6 +26,7 @@ export type ChartConfig = Partial<{
   dataLabels: ApexDataLabels;
   legend: ApexLegend;
   tooltip: ApexTooltip;
+  plotOptions: ApexPlotOptions;
 }>;
 export type ChartData = { categories?: any[]; series?: ApexAxisChartSeries }
 
@@ -50,6 +52,7 @@ export class ChartComponentWrapper implements OnInit, OnChanges {
   dataLabels!: ApexDataLabels;
   legend!: ApexLegend;
   tooltip!: ApexTooltip;
+  plotOptions!: ApexPlotOptions;
 
   private defaults: Required<ChartConfig> = {
     chart: { type: 'line', height: 350, width: '100%', zoom: { enabled: true }, toolbar: { show: true } },
@@ -60,7 +63,8 @@ export class ChartComponentWrapper implements OnInit, OnChanges {
     stroke: { curve: 'smooth' },
     dataLabels: { enabled: false },
     legend: { position: 'top' },
-    tooltip: { enabled: true }
+    tooltip: { enabled: true },
+    plotOptions: {}
   };
 
   ngOnInit(): void {
@@ -100,5 +104,6 @@ export class ChartComponentWrapper implements OnInit, OnChanges {
     this.dataLabels = cfg.dataLabels!;
     this.legend = cfg.legend!;
     this.tooltip = cfg.tooltip!;
+    this.plotOptions = cfg.plotOptions!;
   }
 }
