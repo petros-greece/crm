@@ -77,7 +77,6 @@ html {
 /* Header styling */
 .calendar-header {
   background: rgb(95, 0, 192);
-  color: white;
   padding: 12px 16px;
   
   button {
@@ -91,6 +90,7 @@ html {
   .header-title {
     font-weight: 500;
     font-size: 1.2rem;
+    color: oklch(96.7% 0.003 264.542) !important;
   }
 }
 
@@ -142,7 +142,7 @@ mwl-calendar-month-cell.cal-has-events {
 .cal-day-badge {
   background: rgb(95, 0, 192) !important;
   color: white !important;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 /* Calendar events */
@@ -336,7 +336,9 @@ mat-sidenav{
   }
 
   table,
-  .mat-mdc-paginator-container
+  .mat-mdc-paginator-container,
+  .cal-cell-top,
+  .cal-events
   {
     background:  oklch(27.8% 0.033 256.848) !important;
   }
@@ -346,6 +348,7 @@ mat-sidenav{
     color: oklch(96.7% 0.003 264.542) !important;
   }
 
+  .mat-sort-header-arrow svg,
   button:not(.mat-mdc-button-disabled) .mat-mdc-paginator-icon{
     fill: oklch(96.7% 0.003 264.542) !important;    
   }
@@ -353,15 +356,23 @@ mat-sidenav{
   button.mat-mdc-button-disabled .mat-mdc-paginator-icon{
     fill:  oklch(55.1% 0.027 264.364) !important;    
   } 
-
+  .cal-day-number,
+  .mdc-tab__text-label,
   .mat-mdc-paginator-container mat-select{
       color: oklch(96.7% 0.003 264.542) !important;  
   }
+  .cal-events{
+    margin: 0px;
+    padding: 3px;
+  }
+  .cal-header{
+    background: #5f00c0 !important;
+    color: white;
+  }
 
 
+}
 
-  
-
-
-
+.apexcharts-menu-icon > svg {
+  fill: rgb(55, 61, 63) !important;
 }

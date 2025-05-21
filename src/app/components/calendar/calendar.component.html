@@ -1,20 +1,19 @@
 <div class="calendar-container">
 
 
-    <div class="flex flex-row items-center">
+    <div class="flex flex-row items-center justify-center gap-2 bg-violet-800 !color-gray-300 calendar-header">
 
-      <!-- <button mat-icon-button (click)="previous()"> -->
-        <mat-icon class="cursor-pointer" (click)="previous()">chevron_left</mat-icon>
-      <!-- </button> -->
+      <button mat-icon-button (click)="previous()" style="line-height: 23px;"> 
+        <mat-icon>chevron_left</mat-icon>
+      </button> 
       
       <span class="header-title">{{ viewDate | date:'MMMM y' }}</span>
       
-      <!-- <button mat-icon-button (click)="next()"> -->
-        <mat-icon class="cursor-pointer" (click)="next()">chevron_right</mat-icon>
-      <!-- </button> -->
+      <button mat-icon-button (click)="next()" style="line-height: 23px;">
+        <mat-icon class="cursor-pointer">chevron_right</mat-icon>
+      </button>
 
-
-
+      <!-- 
       <button mat-button (click)="view = CalendarView.Month">
         <mat-icon>calendar_view_month</mat-icon>
         Month
@@ -26,7 +25,9 @@
       <button mat-button (click)="view = CalendarView.Day">
         <mat-icon>calendar_view_day</mat-icon>
         Day
-      </button>
+      </button> 
+      -->
+
     </div>
 
 
