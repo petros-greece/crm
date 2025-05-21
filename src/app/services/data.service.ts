@@ -559,6 +559,17 @@ export class DataService {
     }
   }
 
+  getCompanyOptions(): Observable<{ id: string; companyName: string }[]> {
+  return this.getCompanies().pipe(
+    map(companies =>
+      companies.map(company => ({
+        id: company.id,
+        companyName: company.companyName
+      }))
+    )
+  );
+}
+
   private getCompaniesFromFile(): Observable<any[]> {
     return this.http.get<any[]>(this.companiesJsonFile).pipe(
       catchError(error => {
