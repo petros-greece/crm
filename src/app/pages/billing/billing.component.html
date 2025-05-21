@@ -1,1 +1,21 @@
+
+
 <app-table-builder [config]="dealsTableConfig"></app-table-builder>
+
+<div *ngIf="totalChartData && totalChartConfig" 
+  class="bg-gray-300/50 shadow-md rounded-2xl p-6 mb-6 backdrop-blur-sm">
+  <app-chart [data]="totalChartData" [config]="totalChartConfig"></app-chart>
+</div>
+
+
+<div *ngIf="totalPerCompanyChartData && totalPerCompanyChartConfig" 
+  class="bg-gray-300/50 shadow-md rounded-2xl p-6 mb-6 backdrop-blur-sm">
+  <app-chart [data]="totalPerCompanyChartData" [config]="totalPerCompanyChartConfig"></app-chart>
+</div>
+
+<div *ngIf="totalPerDealTypeChartData && totalPerDealTypeChartConfig" 
+  class="bg-gray-300/50 shadow-md rounded-2xl p-6 mb-6 backdrop-blur-sm">
+  <app-chart [data]="totalPerDealTypeChartData" [config]="totalPerDealTypeChartConfig"></app-chart>
+</div>
+
+
