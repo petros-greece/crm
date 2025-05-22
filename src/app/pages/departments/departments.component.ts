@@ -11,6 +11,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { PageHeaderComponent } from '../../components/page-header/page-header.component';
 import { SnackbarService } from '../../services/snackbar.service';
 import { EntityFieldsService } from '../../services/entity-fields.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-departments',
@@ -26,6 +27,8 @@ import { EntityFieldsService } from '../../services/entity-fields.service';
   styleUrl: './departments.component.scss'
 })
 export class DepartmentsComponent extends DepartmentsVars implements OnInit {
+
+  private destroy$ = new Subject<void>();
 
   dialogService = inject(DialogService);
   dataService = inject(DataService);
@@ -52,12 +55,21 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit {
   extraForms: any = [];
 
   ngOnInit(): void {
-    this.dataService.getDepartments().subscribe(d => this.departments = d);
+    this.dataService.getDepartments()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(d => this.departments = d);
 
-    this.entityFieldsService.getEntityFields('department').subscribe((resp: any) => {
-      this.extraForms = resp;
-    })
+    this.entityFieldsService.getEntityFields('department')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((resp: any) => {
+        this.extraForms = resp;
+      });
 
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   addEmployeeToRole(event: any, role: string) {
@@ -115,18 +127,19 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit {
     };
     this.departmentRoles = [...this.departmentFormValues.roles];
 
-    this.dataService.getEmployeesForDepartment(this.departments[index].label).subscribe(employees => {
-      this.departmentRoles.forEach((rObj: any) => {
-        rObj.employees = employees.filter((e) => e.role === rObj.role);
+    this.dataService.getEmployeesForDepartment(this.departments[index].label)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(employees => {
+        this.departmentRoles.forEach((rObj: any) => {
+          rObj.employees = employees.filter((e) => e.role === rObj.role);
+        });
+        this.dialogService.openTemplate({
+          panelClass: 'responsive-dialog',
+          header: `Department: ${department.label}`,
+          icon: department.icon,
+          content: this.departmentPreviewTmpl,
+        })
       });
-      this.dialogService.openTemplate({
-        panelClass: 'responsive-dialog',
-        header: `Department: ${department.label}`,
-        icon: department.icon,
-        content: this.departmentPreviewTmpl,
-        cls: 'bg-violet-800 !text-white',
-      })
-    });
 
   }
 
@@ -156,9 +169,9 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit {
   openConfirmDeleteDepartmentDialog() {
 
     this.dialogService.openConfirm({
-      cls: 'bg-red-500',
+      cls: 'bg-red-500 !text-white',
       header: 'Remove Department?',
-      content: `Are you sure you want to remove the department: ${this.departmentFormValues.label}?`,
+      content: `Are you sure you want to remove the department: "${this.departmentFormValues.label}"?`,
     })
       .subscribe(confirmed => {
         if (confirmed === true) {

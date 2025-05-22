@@ -7,13 +7,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DialogService } from '../../services/dialog.service';
-import { TasksVarsComponent } from './tasks.vars';
-import { TaskColumnI, TaskI, TaskItemI, TaskTypeT } from './tasks.model';
+import { TaskColumnI, TaskI, TaskItemI } from './tasks.model';
 import { MatSelectModule } from '@angular/material/select';
 import { FormConfig } from '../../form-builder/form-builder.model';
 import { TaskFormComponent } from '../../components/task-form/task-form.component';
 import { PriorityWidgetComponent } from '../../components/priority-widget.component';
 import { SnackbarService } from '../../services/snackbar.service';
+import { DataService } from '../../services/data.service';
+import { Subject, takeUntil } from 'rxjs';
 
 
 
@@ -35,20 +36,25 @@ import { SnackbarService } from '../../services/snackbar.service';
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss'
 })
-export class TasksComponent extends TasksVarsComponent implements OnInit{
+export class TasksComponent implements OnInit {
+
+  private destroy$ = new Subject<void>();
 
   @ViewChild('addTaskTmpl', { static: true }) addTaskTmpl!: TemplateRef<any>;
 
   private dialogService = inject(DialogService);
   private snackbarService = inject(SnackbarService);
-  
+  private dataService = inject(DataService);
+
+  columns: TaskColumnI[] = [];
+
   newColumnTitle = '';
-  newTaskType:TaskTypeT | null = null;
-  taskFormConfig:FormConfig = {
+  newTaskType: string | null = null;
+  taskFormConfig: FormConfig = {
     fields: []
   }
 
-  selectedTaskData:any;
+  selectedTaskData: any;
   selectedTaskPosition = {
     column: -1,
     row: -1
@@ -58,18 +64,25 @@ export class TasksComponent extends TasksVarsComponent implements OnInit{
     return this.columns.map(c => 'list-' + c.id);
   }
 
-  ngOnInit(){
-    this.dataService.getTasks().subscribe(tasks=>{
-      if(tasks.length){
-        this.columns = tasks;
-      }
-    })
+  ngOnInit() {
+    this.dataService.getTasks()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(tasks => {
+        if (tasks.length) {
+          this.columns = tasks;
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   addColumn() {
     const title = this.newColumnTitle.trim();
     if (!title) return;
-    this.columns = [...this.columns, { id: this.columns.length+1, title, tasks: [] }];
+    this.columns = [...this.columns, { id: this.columns.length + 1, title, tasks: [] }];
     this.newColumnTitle = '';
   }
 
@@ -79,10 +92,9 @@ export class TasksComponent extends TasksVarsComponent implements OnInit{
   }
 
   dropTask(event: CdkDragDrop<TaskI[]>) {
-    console.log(event);
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-      
+
     } else {
       transferArrayItem(
         event.previousContainer.data,
@@ -92,15 +104,15 @@ export class TasksComponent extends TasksVarsComponent implements OnInit{
       );
     }
 
-    this.dataService.updateTaskColumns(this.columns).subscribe(t=>{
+    this.dataService.updateTaskColumns(this.columns).subscribe(t => {
       this.snackbarService.showSnackbar('Tasks Updated');
     })
   }
 
-  dropColumn(event: CdkDragDrop<any>){
+  dropColumn(event: CdkDragDrop<any>) {
     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-      this.dataService.updateTaskColumns(this.columns).subscribe(t=>{
-        this.snackbarService.showSnackbar('Tasks Updated');
+    this.dataService.updateTaskColumns(this.columns).subscribe(t => {
+      this.snackbarService.showSnackbar('Tasks Updated');
       //console.log('Tasks Updated')
     })
   }
@@ -111,19 +123,19 @@ export class TasksComponent extends TasksVarsComponent implements OnInit{
       header: 'Remove Column',
       content: `Are you sure you want to remove this column?`,
     }).subscribe(confirmed => {
-        if (confirmed === true) {
-          this.removeColumn(index);
-          this.columns.splice(index, 1);
-            this.dataService.updateTaskColumns(this.columns).subscribe(t=>{
-              this.snackbarService.showSnackbar('Tasks Updated');
-            })
-        }
-      });
+      if (confirmed === true) {
+        this.removeColumn(index);
+        this.columns.splice(index, 1);
+        this.dataService.updateTaskColumns(this.columns).subscribe(t => {
+          this.snackbarService.showSnackbar('Tasks Updated');
+        })
+      }
+    });
   }
 
   /******************** */
 
-  openTaskDialog(task?:any) {
+  openTaskDialog(task?: any) {
     task ? null : this.selectedTaskData = null;
     this.dialogService.openConfirm({
       panelClass: 'responsive-dialog',
@@ -135,7 +147,7 @@ export class TasksComponent extends TasksVarsComponent implements OnInit{
     });
   }
 
-  onAfterSubmitTask(taskCols:any){
+  onAfterSubmitTask(taskCols: any) {
     console.log('taskCols', taskCols);
     this.columns = taskCols;
   }
@@ -145,7 +157,7 @@ export class TasksComponent extends TasksVarsComponent implements OnInit{
     if (idx > -1) col.tasks.splice(idx, 1);
   }
 
-  openEditTaskDialog(task:any, selectedTaskPosition:any){
+  openEditTaskDialog(task: any, selectedTaskPosition: any) {
     this.selectedTaskData = task;
     console.log(task);
     this.selectedTaskPosition = selectedTaskPosition;
