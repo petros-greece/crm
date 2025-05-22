@@ -13,7 +13,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { DataService } from '../../services/data.service';
 import { TaskFormComponent } from '../../components/task-form/task-form.component';
 import { SnackbarService } from '../../services/snackbar.service';
-import { map, tap } from 'rxjs';
+import { map, Subject, takeUntil, tap } from 'rxjs';
 import { PageHeaderComponent } from '../../components/page-header/page-header.component';
 import { CommonModule } from '@angular/common';
 
@@ -34,6 +34,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './employees.component.scss'
 })
 export class EmployeesComponent {
+
+  private destroy$ = new Subject<void>();
 
   @ViewChild('previewEmployeeTmpl', { static: true }) previewEmployeeTmpl!: TemplateRef<any>;
   @ViewChild('addEmployeeTmpl', { static: true }) addEmployeeTmpl!: TemplateRef<any>;
@@ -61,13 +63,18 @@ export class EmployeesComponent {
   extraForms: any = [];
 
   ngOnInit() {
-    this.dataService.getEmployees().subscribe(employees => {
-      this.giveEmployeeTableConfig(employees);
-    })
+    this.dataService.getEmployees()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(employees => this.giveEmployeeTableConfig(employees));
 
-    this.entityFieldsService.getEntityFields('employee').subscribe((resp: any) => {
-      this.extraForms = resp;
-    })
+    this.entityFieldsService.getEntityFields('employee')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((resp: any) => this.extraForms = resp);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private giveEmployeeTableConfig(data: any) {
@@ -190,22 +197,23 @@ export class EmployeesComponent {
   }
 
   private getTasksForEmployee(employeeId: string) {
-    this.dataService.getTasksForEmployee(employeeId).pipe(
-      tap((columns: TaskColumnI[]) => {
-        this.originalTaskColumns = columns;
-      }),
-      map(columns => columns.filter((column: TaskColumnI) => column.tasks.length > 0)),
-      map(columns => columns.flatMap((column: TaskColumnI) =>
-        column.tasks.map(task => ({
-          id: task.data.id,
-          type: task.type.label,
-          status: column.title,
-          subject: task.data.subject
-        }))
-      ))
-    ).subscribe((tasks) => {
-      this.giveTasksTableConfig(tasks);
-    });
+    this.dataService.getTasksForEmployee(employeeId)
+      .pipe(
+        takeUntil(this.destroy$),
+        tap((columns: TaskColumnI[]) => {
+          this.originalTaskColumns = columns;
+        }),
+        map(columns => columns.filter(column => column.tasks.length > 0)),
+        map(columns => columns.flatMap(column =>
+          column.tasks.map(task => ({
+            id: task.data.id,
+            type: task.type.label,
+            status: column.title,
+            subject: task.data.subject
+          }))
+        ))
+      )
+      .subscribe(tasks => this.giveTasksTableConfig(tasks));
   }
 
   openTaskDialog(taskData: any) {
