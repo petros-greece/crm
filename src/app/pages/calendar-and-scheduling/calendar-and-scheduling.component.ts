@@ -9,6 +9,7 @@ import { MatIcon } from '@angular/material/icon';
 import { ColumnTemplateDirective, TableBuilderComponent, TableConfig } from '../../table-builder/table-builder.component';
 import { MatButtonModule } from '@angular/material/button';
 import { SnackbarService } from '../../services/snackbar.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-calendar-and-scheduling',
@@ -26,6 +27,8 @@ import { SnackbarService } from '../../services/snackbar.service';
 })
 export class CalendarAndSchedulingComponent implements OnInit {
 
+  private destroy$ = new Subject<void>();
+
   @ViewChild('dayTmpl', { static: true }) dayTmpl!: TemplateRef<any>;
   @ViewChild('eventTmpl', { static: true }) eventTmpl!: TemplateRef<any>;
 
@@ -38,9 +41,16 @@ export class CalendarAndSchedulingComponent implements OnInit {
   dayEventsTableConfig!: TableConfig; 
 
   ngOnInit(): void {
-    this.dataService.getTasks().subscribe((taskColumns: any[]) => {
-      this.calendarEvents =  this.transformTaskColumnsToCalendarEvents(taskColumns);
-    })
+    this.dataService.getTasks()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((taskColumns: any[]) => {
+        this.calendarEvents = this.transformTaskColumnsToCalendarEvents(taskColumns);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private transformTaskColumnsToCalendarEvents(taskColumns: any[]): CalendarEvent[] {

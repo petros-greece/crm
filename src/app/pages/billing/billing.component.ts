@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { TableBuilderComponent, TableConfig } from '../../table-builder/table-builder.component';
 import { EntityFieldsService } from '../../services/entity-fields.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { ChartComponentWrapper } from '../../components/chart/chart.component';
 import { BillingVars } from './billing.vars';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,8 @@ import { CommonModule } from '@angular/common';
 })
 export class BillingComponent extends BillingVars {
 
+  private destroy$ = new Subject<void>();
+
   dataService = inject(DataService);
   entityFieldsService = inject(EntityFieldsService);
 
@@ -25,7 +27,8 @@ export class BillingComponent extends BillingVars {
     forkJoin({
       deals: this.dataService.getDeals(),
       companies: this.dataService.getCompanyOptions()
-    }).subscribe(({ deals, companies }) => {
+    }).pipe(takeUntil(this.destroy$))
+    .subscribe(({ deals, companies }) => {
       // Assert the expected shape of deals: Record<string, any[]>
       const typedDeals = deals as Record<string, any[]>;
 
@@ -41,9 +44,14 @@ export class BillingComponent extends BillingVars {
       this.giveDealsTableConfig(tableData);
 
       this.giveTotalChart(tableData);
-this.giveTotalPerCompanyChart(tableData);
-this.giveTotalPerDealTypeChart(tableData)
+      this.giveTotalPerCompanyChart(tableData);
+      this.giveTotalPerDealTypeChart(tableData)
     });
+  }
+
+    ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private giveDealsTableConfig(tableData: any) {

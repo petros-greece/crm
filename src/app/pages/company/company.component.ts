@@ -42,12 +42,13 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './company.component.scss'
 })
 export class CompanyComponent {
+
+  private destroy$ = new Subject<void>();
+
   @ViewChild('previewCompanyTmpl', { static: true }) previewCompanyTmpl!: TemplateRef<any>;
   @ViewChild('dealTmpl', { static: true }) dealTmpl!: TemplateRef<any>;
   @ViewChild('updateDealTmpl', { static: true }) updateDealTmpl!: TemplateRef<any>;
   @ViewChild('newCompanyTmpl', { static: true }) newCompanyTmpl!: TemplateRef<any>;
-
-  private destroy$ = new Subject<void>();
 
   entityFieldsService = inject(EntityFieldsService);
   dataService = inject(DataService);

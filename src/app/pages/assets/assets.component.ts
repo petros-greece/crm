@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { PreviewAssetComponent } from '../../components/preview-asset.component';
 import { FolderStructureComponent } from '../../components/folder-structure/folder-structure.component';
 import { DataService } from '../../services/data.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-assets',
@@ -20,7 +21,9 @@ import { DataService } from '../../services/data.service';
   `,
   styleUrl: './assets.component.scss'
 })
-export class AssetsComponent implements OnInit{
+export class AssetsComponent implements OnInit {
+
+  private destroy$ = new Subject<void>();
 
   @ViewChild('previewAssetTmpl', { static: true }) previewAssetTmpl!: TemplateRef<any>;
   dialogService = inject(DialogService);
@@ -29,14 +32,21 @@ export class AssetsComponent implements OnInit{
   assetsTree: TreeNodeI[] = [];
 
   ngOnInit(): void {
-    this.dataService.getCompaniesWithAssetsTree().subscribe((data) => {
-      console.log('data', data);
-      this.assetsTree = data;
-    })
+    this.dataService.getCompaniesWithAssetsTree()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        console.log('data', data);
+        this.assetsTree = data;
+      })
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   previewAsset(node: TreeNodeI) {
-    if(node.children){ return }
+    if (node.children) { return }
 
     this.assetPath = node.name;
     this.dialogService.openTemplate({
@@ -44,7 +54,7 @@ export class AssetsComponent implements OnInit{
       content: this.previewAssetTmpl,
       panelClass: 'responsive-dialog'
     })
-  
+
   }
 
 
