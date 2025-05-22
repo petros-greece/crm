@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
-import { TaskItemI, TaskTypeT } from '../../pages/tasks/tasks.model';
 import { MatIcon } from '@angular/material/icon';
 import { FormBuilderComponent } from '../../form-builder/form-builder.component';
 import { FormConfig } from '../../form-builder/form-builder.model';
@@ -41,7 +40,7 @@ export class TaskFormComponent implements OnInit{
   entityFieldsService = inject(EntityFieldsService);
 
   values:any = {};
-  taskType:TaskTypeT | null = null;
+  taskType:any = null;
   taskFormConfig:FormConfig = {
     fields: [],
   }
@@ -60,11 +59,11 @@ export class TaskFormComponent implements OnInit{
 
   }
 
-  getTaskFields(value: TaskTypeT | null): TaskTypeI | undefined {
+  getTaskFields(value: any): TaskTypeI | undefined {
     return this.tasks.find(task => task.value === value);
   }
 
-  onSelectTaskType(taskType:TaskTypeT){
+  onSelectTaskType(taskType:any){
     const task = this.getTaskFields(taskType);
     this.taskType = taskType;
 

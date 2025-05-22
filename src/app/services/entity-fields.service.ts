@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { FormFieldConfig } from '../form-builder/form-builder.model';
 import { TableColumn } from '../table-builder/table-builder.component';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
-import { TaskTypeT } from '../pages/tasks/tasks.model';
 import { DataService } from './data.service';
 import { DepartmentI } from '../pages/departments/departments.vars';
 import { HttpClient } from '@angular/common/http';
