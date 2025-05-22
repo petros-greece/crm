@@ -19,6 +19,7 @@ import { FolderStructureComponent } from '../../components/folder-structure/fold
 import { TreeNodeI } from '../../components/tree/tree.component';
 import { PageHeaderComponent } from '../../components/page-header/page-header.component';
 import { DealFormComponent } from '../../components/deal-form/deal-form.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-company',
@@ -45,6 +46,8 @@ export class CompanyComponent {
   @ViewChild('dealTmpl', { static: true }) dealTmpl!: TemplateRef<any>;
   @ViewChild('updateDealTmpl', { static: true }) updateDealTmpl!: TemplateRef<any>;
   @ViewChild('newCompanyTmpl', { static: true }) newCompanyTmpl!: TemplateRef<any>;
+
+  private destroy$ = new Subject<void>();
 
   entityFieldsService = inject(EntityFieldsService);
   dataService = inject(DataService);
@@ -85,14 +88,22 @@ export class CompanyComponent {
   extraForms: any = [];
 
   ngOnInit() {
-    this.dataService.getCompanies().subscribe(companies => {
-      this.giveCompaniesTableConfig(companies);
-    })
+    this.dataService.getCompanies()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(companies => {
+        this.giveCompaniesTableConfig(companies);
+      });
 
-    this.entityFieldsService.getEntityFields('company').subscribe((resp:any)=>{
-      this.extraForms = resp;
-    })
+    this.entityFieldsService.getEntityFields('company')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((resp: any) => {
+        this.extraForms = resp;
+      });
+  }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private giveCompaniesTableConfig(companies: any) {
@@ -107,7 +118,7 @@ export class CompanyComponent {
 
   /** DEAL *************************************************************** */
 
-  openDealDialog(dealData: any){
+  openDealDialog(dealData: any) {
     this.dealFormValues = dealData;
     const header = dealData.id ? `Deal with ${this.companyInfoValues.companyName}` : `Add New Deal with ${this.companyInfoValues.companyName}`;
     this.dialogService.openTemplate({
@@ -133,17 +144,17 @@ export class CompanyComponent {
       header: `Delete deal?`,
       content: `Are you sure you want to delete the deal: "${dealData.dealName}" with the company ${companyData.companyName}?`,
     }).subscribe(confirmed => {
-        if (confirmed === true) {
-          console.log(companyData.id, dealData.id)
-          this.dataService.deleteDeal(companyData.id, dealData.id).subscribe((data: any) => {
-            this.dealsTableConfig = {
-              data: data,
-              columns: this.entityFieldsService.buildEntityTableConfigColumns('deal')
-            }
-            this.dialogService.closeDialogById('deal-dialog');
-          })
-        }
-      });
+      if (confirmed === true) {
+        console.log(companyData.id, dealData.id)
+        this.dataService.deleteDeal(companyData.id, dealData.id).subscribe((data: any) => {
+          this.dealsTableConfig = {
+            data: data,
+            columns: this.entityFieldsService.buildEntityTableConfigColumns('deal')
+          }
+          this.dialogService.closeDialogById('deal-dialog');
+        })
+      }
+    });
 
   }
 
@@ -163,7 +174,6 @@ export class CompanyComponent {
       panelClass: 'big-dialog',
       header: `Company: ${row.companyName}`,
       content: this.previewCompanyTmpl,
-      cls: '!bg-violet-800 !text-white',
     })
   }
 
@@ -172,81 +182,85 @@ export class CompanyComponent {
       panelClass: 'big-dialog',
       header: `Add New company`,
       content: this.newCompanyTmpl,
-      cls: '!bg-violet-800 !text-white',
     })
   }
 
   addNewCompany(formData: any) {
-    console.log('formData', formData);
-    this.dataService.addCompany(formData).subscribe(companies => {
-      this.giveCompaniesTableConfig(companies);
-      this.dialogService.closeAll();
-    })
+    this.dataService.addCompany(formData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(companies => {
+        this.giveCompaniesTableConfig(companies);
+        this.dialogService.closeAll();
+      });
   }
 
   updateCompany(formData: any) {
-    this.dataService.updateCompany(formData).subscribe(companies => {
-      this.giveCompaniesTableConfig(companies);
-      //this.dialogService.closeAll();
-      this.snackbarService.showSnackbar('Company updated succesfully');
-    })
+    this.dataService.updateCompany(formData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(companies => {
+        this.giveCompaniesTableConfig(companies);
+        this.snackbarService.showSnackbar('Company updated successfully');
+      });
   }
 
   updateCompanyContacts(formData: any) {
-    this.dataService.updateCompanyContacts(this.companyInfoValues.id, formData.contacts).subscribe(companies => {
-      //this.dialogService.closeAll();
-      this.snackbarService.showSnackbar('Company contacts updated succesfully');
-    })
+    this.dataService.updateCompanyContacts(this.companyInfoValues.id, formData.contacts)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((companies) => {
+        this.giveCompaniesTableConfig(companies);
+        this.snackbarService.showSnackbar('Company contacts updated successfully');
+      });
   }
 
+  updateCompanyExtraFields(formData: any, title: string) {
+    this.dataService.updateCompanySection(this.companyInfoValues.id, title, formData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((companies) => {
+        this.giveCompaniesTableConfig(companies);
+        this.snackbarService.showSnackbar(`Company section "${title}" updated successfully`);
+      });
+  }
 
-  //CHECK IF IS THE DEALS TAB TO GET THE DEALS
   selectedTabChange(event: any) {
-    //this.selectedTabIndex = event.index;
     if ((event.index === 3 || event.index === 4) && !this.companyDeals) {
-      this.dataService.getDealsForCompany(this.companyInfoValues.id).subscribe((deals) => {
-        console.log('gotten into dels', deals)
-        this.companyDeals = deals;
-        this.dealsTableConfig = {
-          data: deals,
-          columns: this.entityFieldsService.buildEntityTableConfigColumns('deal')
-        }
-        this.chartData = this.chartService.dealsToChartData(deals);
-      })
-    }
-    else if (event.index === 2 && !this.companyAssets.length) {
-      this.dataService.getAssetsForCompany(this.companyInfoValues.id).subscribe((assets) => {
-        console.log('gotten into assets', assets)
-        this.companyAssets = assets;
-      })
-
+      this.dataService.getDealsForCompany(this.companyInfoValues.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((deals) => {
+          this.companyDeals = deals;
+          this.dealsTableConfig = {
+            data: deals,
+            columns: this.entityFieldsService.buildEntityTableConfigColumns('deal')
+          };
+          this.chartData = this.chartService.dealsToChartData(deals);
+        });
+    } else if (event.index === 2 && !this.companyAssets.length) {
+      this.dataService.getAssetsForCompany(this.companyInfoValues.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((assets) => {
+          this.companyAssets = assets;
+        });
     }
   }
 
-  openConfirmDeleteCompany(companyData:any) {
+  openConfirmDeleteCompany(companyData: any) {
 
     this.dialogService.openConfirm({
       cls: 'bg-red-500 !text-white',
       header: `Delete company?`,
       content: `Are you sure you want to delete the company ${companyData.companyName}?`,
-    }).subscribe(confirmed => {
-        if (confirmed === true) {
-          this.dataService.deleteCompany(companyData.id).subscribe((companies: any) => {
+    }).pipe(takeUntil(this.destroy$)).subscribe(confirmed => {
+      if (confirmed) {
+        this.dataService.deleteCompany(companyData.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((companies: any) => {
             this.giveCompaniesTableConfig(companies);
             this.dialogService.closeAll();
-            this.snackbarService.showSnackbar(`Company ${companyData.companyName} was deleted succesfully`);
-          })
-        }
-      });
-
+            this.snackbarService.showSnackbar(`Company ${companyData.companyName} was deleted successfully`);
+          });
+      }
+    });
   }
 
-  updateCompanyExtraFields(formData: any, title: string) {
-    const id = this.companyInfoValues.id;
-    this.dataService.updateCompanySection(id, title, formData).subscribe((res) => {
-      this.snackbarService.showSnackbar(`EmpCompanyloyee section "${title}" updated successfully`);
-    })
-  }
 
   /***************************************************** */
 

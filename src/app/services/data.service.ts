@@ -660,7 +660,7 @@ export class DataService {
         };
 
         localStorage.setItem(this.companiesStorageKey, JSON.stringify(updatedCompanies));
-        return updatedCompanies[index];
+        return updatedCompanies//updatedCompanies[index];
       }),
       catchError(error => {
         console.error('Error updating company section', error);
