@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
   user: any;
   hasRedirected = false;
 
-  constructor(private router: Router, private optionsService: OptionsService, private cdr: ChangeDetectorRef) {}
+  constructor(private router: Router, private optionsService: OptionsService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.initializeUserAndRoutes();
@@ -46,14 +46,14 @@ export class AppComponent implements OnInit {
       this.initializeUserAndRoutes();
 
       if (event.urlAfterRedirects === '/') {
-this.hasRedirected = false;
+        this.hasRedirected = false;
       }
-        // Redirect to first available route if any
-        if (!this.hasRedirected) {
-          this.router.navigate([this.routes[0].path]);
-          this.hasRedirected = true;
-        }
-      
+      // Redirect to first available route if any
+      if (!this.hasRedirected) {
+        this.router.navigate([this.routes[0].path]);
+        this.hasRedirected = true;
+      }
+
     });
   }
 
@@ -85,6 +85,7 @@ this.hasRedirected = false;
   }
 
   logout() {
+    this.user = null;
     this.optionsService.deleteOption('user');
     this.optionsService.deleteOption('userRole');
     this.router.navigate(['/']);
