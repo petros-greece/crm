@@ -1,12 +1,12 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BaseFieldComponent } from './base-field/base-field.component';
+import { BaseFieldComponent } from '../base-field/base-field.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { DialogComponent } from '../../components/dialog/dialog.component';
-import { FormBuilderService } from '../form-builder.service';
+import { DialogComponent } from '../../../components/dialog/dialog.component';
+import { FormBuilderService } from '../../form-builder.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
