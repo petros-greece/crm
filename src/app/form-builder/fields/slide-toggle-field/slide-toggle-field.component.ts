@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { BaseFieldComponent } from './base-field.component';
+import { BaseFieldComponent } from '../base-field/base-field.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
 

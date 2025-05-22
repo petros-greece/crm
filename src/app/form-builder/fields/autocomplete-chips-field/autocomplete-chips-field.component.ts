@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
-import { BaseFieldComponent } from './base-field.component';
+import { BaseFieldComponent } from '../base-field/base-field.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -78,6 +78,7 @@ export class AutocompleteChipFieldComponent extends BaseFieldComponent implement
   private destroy$ = new Subject<void>();
 
   override ngOnInit() {
+    this.filteredOptions = [...(this.config.options || [])];
     this.initializeOptions();
     this.setupFiltering();
     this.syncInitialValues();
@@ -94,8 +95,8 @@ export class AutocompleteChipFieldComponent extends BaseFieldComponent implement
     this.optionsSubject.next(staticOptions);
 
     if (this.config.dynamicOptions) {
-      const dynamic$ = this.config.dynamicOptions instanceof Observable 
-        ? this.config.dynamicOptions 
+      const dynamic$ = this.config.dynamicOptions instanceof Observable
+        ? this.config.dynamicOptions
         : from(this.config.dynamicOptions());
 
       dynamic$.pipe(takeUntil(this.destroy$)).subscribe(opts => {
@@ -137,12 +138,12 @@ export class AutocompleteChipFieldComponent extends BaseFieldComponent implement
   filterOptions(value: string) {
     const filterValue = value.toLowerCase();
     const options = this.optionsSubject.getValue();
-    
+
     this.filteredOptions = options.filter(option =>
       option.label.toLowerCase().includes(filterValue) &&
       !this.selectedItems.includes(option.value)
     );
-    
+
     // Trigger change detection
     this.filteredOptions = [...this.filteredOptions];
   }

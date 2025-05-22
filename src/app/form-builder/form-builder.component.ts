@@ -5,19 +5,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbar } from '@angular/material/toolbar';
 import { FieldType, FormConfig, FormFieldConfig, Option } from './form-builder.model';
 import { SelectFieldComponent } from './fields/select-field.component';
-import { AutocompleteFieldComponent } from './fields/autocomplete-field.component';
+import { AutocompleteFieldComponent } from './fields/autocomplete-field/autocomplete-field.component';
 import { DatepickerFieldComponent } from './fields/datepicker-field.component';
-import { RadioGroupFieldComponent } from './fields/radio-group-field.component';
-import { SliderFieldComponent } from './fields/slider-field.component';
+import { RadioGroupFieldComponent } from './fields/radio-group-field/radio-group-field.component';
+import { SliderFieldComponent } from './fields/slider-field/slider-field.component';
 import { InputFieldComponent } from './fields/input-field.component';
 import { MultiRowFieldComponent } from './fields/multi-row-field.component';
-import { SlideToggleFieldComponent } from './fields/slide-toggle-field.component';
+import { SlideToggleFieldComponent } from './fields/slide-toggle-field/slide-toggle-field.component';
 import { DateRangeFieldComponent } from './fields/date-range-field.component';
-import { SliderRangeFieldComponent } from './fields/slider-range-field.component';
-import { AutocompleteChipFieldComponent } from './fields/autocomplete-chips-field.component';
+import { SliderRangeFieldComponent } from './fields/slider-range-field/slider-range-field.component';
+import { AutocompleteChipFieldComponent } from './fields/autocomplete-chips-field/autocomplete-chips-field.component';
 import { FileUploadComponent } from './fields/file-upload-field.component';
-import { ColorPickerFieldComponent } from './fields/colorpicker-field.component';
-import { TextareaFieldComponent } from './fields/textarea-field.component';
+import { ColorPickerFieldComponent } from './fields/colorpicker-field/colorpicker-field.component';
+import { TextareaFieldComponent } from './fields/textarea-field/textarea-field.component';
 import { IconPickerFieldComponent } from './fields/icon-picker-field.component';
 import { FormBuilderService } from './form-builder.service';
 import { MatIcon } from '@angular/material/icon';
@@ -25,7 +25,7 @@ import { GroupFieldComponent } from './fields/group-field.component';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 import { InputHiddenFieldComponent } from './fields/input-hidden-field.component';
-import { TextEditorFieldComponent } from './fields/text-editor-field.component';
+import { TextEditorFieldComponent } from './fields/text-editor-field/text-editor-field.component';
 @Component({
   selector: 'app-form-builder',
   standalone: true,

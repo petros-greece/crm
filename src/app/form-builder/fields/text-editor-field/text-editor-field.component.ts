@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
-import { BaseFieldComponent } from './base-field.component';
+import { BaseFieldComponent } from '../base-field/base-field.component';
 
 @Component({
   selector: 'app-text-editor-field',

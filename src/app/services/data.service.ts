@@ -977,10 +977,5 @@ export class DataService {
     );
   }
 
-  /** FORMS ******************************************************************************** */
-
-  private readonly formsStorageKey = 'crm-forms';
-  private readonly formsJsonFile = 'assets/data/forms.json';
-
 }
 

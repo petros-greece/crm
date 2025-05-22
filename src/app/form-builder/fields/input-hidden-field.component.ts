@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BaseFieldComponent } from './base-field.component';
+import { BaseFieldComponent } from './base-field/base-field.component';
 
 
 @Component({

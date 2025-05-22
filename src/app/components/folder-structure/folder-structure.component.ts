@@ -103,7 +103,7 @@ export class FolderStructureComponent implements OnChanges{
       cls: 'bg-violet-800 !text-white',
       confirmText: 'OK'
     }).subscribe(confirmed=>{
-      console.log(this.currentNodes)
+      //console.log(this.currentNodes)
       if(confirmed === true && this.newFolderName){
         this.currentNodes.push({name: this.newFolderName, isFile: false, children: []})
       }

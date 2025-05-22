@@ -7,20 +7,20 @@ import {
   FormControl,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
-import { BaseFieldComponent } from './base-field.component';
+import { BaseFieldComponent } from './base-field/base-field.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { InputFieldComponent } from './input-field.component';
 import { SelectFieldComponent } from './select-field.component';
 import { DatepickerFieldComponent } from './datepicker-field.component';
-import { TextareaFieldComponent } from './textarea-field.component';
-import { SlideToggleFieldComponent } from './slide-toggle-field.component';
-import { RadioGroupFieldComponent } from './radio-group-field.component';
-import { ColorPickerFieldComponent } from './colorpicker-field.component';
-import { AutocompleteFieldComponent } from './autocomplete-field.component';
-import { AutocompleteChipFieldComponent } from './autocomplete-chips-field.component';
-import { SliderFieldComponent } from './slider-field.component';
-import { SliderRangeFieldComponent } from './slider-range-field.component';
+import { TextareaFieldComponent } from './textarea-field/textarea-field.component';
+import { SlideToggleFieldComponent } from './slide-toggle-field/slide-toggle-field.component';
+import { RadioGroupFieldComponent } from './radio-group-field/radio-group-field.component';
+import { ColorPickerFieldComponent } from './colorpicker-field/colorpicker-field.component';
+import { AutocompleteFieldComponent } from './autocomplete-field/autocomplete-field.component';
+import { AutocompleteChipFieldComponent } from './autocomplete-chips-field/autocomplete-chips-field.component';
+import { SliderFieldComponent } from './slider-field/slider-field.component';
+import { SliderRangeFieldComponent } from './slider-range-field/slider-range-field.component';
 import { IconPickerFieldComponent } from './icon-picker-field.component';
 import { FileUploadComponent } from './file-upload-field.component';
 

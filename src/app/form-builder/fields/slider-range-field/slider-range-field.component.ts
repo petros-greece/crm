@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatInputModule } from '@angular/material/input';
-import { BaseFieldComponent } from './base-field.component';
+import { BaseFieldComponent } from '../base-field/base-field.component';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({

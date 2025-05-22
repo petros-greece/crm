@@ -15,7 +15,6 @@ import { NgIf } from '@angular/common';
       <ng-content></ng-content>
     </div>
   `,
-  styleUrl: './page-header.component.scss'
 })
 export class PageHeaderComponent {
   @Input() header: string = '';

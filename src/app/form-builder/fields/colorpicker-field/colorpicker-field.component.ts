@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
-import { BaseFieldComponent } from './base-field.component'; // Ensure this is correctly imported
+import { BaseFieldComponent } from '../base-field/base-field.component'; // Ensure this is correctly imported
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -45,6 +45,7 @@ import { ColorPickerModule } from '@iplab/ngx-color-picker';
   `,
 })
 export class ColorPickerFieldComponent extends BaseFieldComponent<FormControl> {
+
   onColorChange(color: string) {
     this.control.setValue(color);
     this.control.markAsTouched();

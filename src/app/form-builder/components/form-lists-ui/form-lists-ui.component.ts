@@ -40,7 +40,6 @@ export class FormListsUiComponent {
 
   ngOnInit() {
     this.formBuilderService.getLists().subscribe((data) => {
-      console.log('Lists:', data);
       this.lists = data;
     }, (error) => {
       console.error('Error fetching lists:', error);

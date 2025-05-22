@@ -99,7 +99,7 @@ export class TaskFormComponent implements OnInit{
     }
 
 
-    console.log('Task submitted:', task);
+    //console.log('Task submitted:', task);
 
     // console.log('Task submitted:', task);
     // return

@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BaseFieldComponent } from './base-field.component';
+import { BaseFieldComponent } from '../base-field/base-field.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIcon } from '@angular/material/icon';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-radio-group-field',
@@ -55,7 +55,8 @@ import { Observable } from 'rxjs';
   `
 })
 export class RadioGroupFieldComponent extends BaseFieldComponent {
-
+  
+  private subscription?: Subscription;
   availableOptions: { label: string; value: any }[] = [];
   override ngOnInit() {
     if (this.config.options) {
@@ -63,7 +64,7 @@ export class RadioGroupFieldComponent extends BaseFieldComponent {
     }
   
     if (this.config.dynamicOptions instanceof Observable) {
-      this.config.dynamicOptions.subscribe(opts => this.availableOptions = opts);
+      this.subscription = this.config.dynamicOptions.subscribe(opts => this.availableOptions = opts);
     }
     else if (typeof this.config.dynamicOptions === 'function') {
       this.config.dynamicOptions()
@@ -71,6 +72,9 @@ export class RadioGroupFieldComponent extends BaseFieldComponent {
     }
   }
 
+  ngOnDestroy() {
+    this.subscription?.unsubscribe();
+  }
 
   markAsTouched() {
     if (!this.control.touched) {
