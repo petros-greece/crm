@@ -207,6 +207,10 @@ body {
   }
 }
 
+.crm-table-con{
+  background: oklch(89.4% 0.057 293.283);
+}
+
 /** DND *****************************************/
 
 // .dnd-preview-list {
@@ -334,6 +338,13 @@ mat-sidenav{
 
   mat-nav-list .mdc-list-item__primary-text{
         color: oklch(96.7% 0.003 264.542) !important;
+  }
+
+  .crm-table-con{
+    background: oklch(37.3% 0.034 259.733); //bg-gray-700
+    button{
+       color: oklch(96.7% 0.003 264.542) !important;   
+    }
   }
 
   table,

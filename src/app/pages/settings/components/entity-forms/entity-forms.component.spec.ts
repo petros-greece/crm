@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
 import { EntityFormsComponent } from './entity-forms.component';
 
 describe('EntityFormsComponent', () => {
@@ -8,7 +8,10 @@ describe('EntityFormsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EntityFormsComponent]
+      imports: [EntityFormsComponent],
+            providers: [
+              provideHttpClient()
+            ]
     })
     .compileComponents();
 

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
 import { AssetsComponent } from './assets.component';
 
 describe('AssetsComponent', () => {
@@ -8,9 +8,12 @@ describe('AssetsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AssetsComponent]
+      imports: [AssetsComponent],
+      providers: [
+        provideHttpClient()
+      ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(AssetsComponent);
     component = fixture.componentInstance;
