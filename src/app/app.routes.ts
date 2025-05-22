@@ -9,8 +9,10 @@ import { CalendarAndSchedulingComponent } from './pages/calendar-and-scheduling/
 import { DepartmentsComponent } from './pages/departments/departments.component';
 import { CompanyComponent } from './pages/company/company.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
+  { path: '', component: HomeComponent, title: 'Home' },
   { path: 'employees', component: EmployeesComponent, title: 'Employees', data: { icon: 'manage_accounts' }, canActivate: [AuthGuard] },
   { path: 'companies', component: CompanyComponent, title: 'Companies', data: { icon: 'business' }, canActivate: [AuthGuard] },
   { path: 'departments', component: DepartmentsComponent, title: 'Departments', data: { icon: 'store' }, canActivate: [AuthGuard] },

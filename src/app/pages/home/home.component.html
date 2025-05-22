@@ -1,0 +1,11 @@
+<div class="p-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    <div *ngFor="let user of users" (click)="loginAsGuest(user)"
+         class="bg-white rounded-lg shadow-md p-4 border border-transparent
+                transition-all duration-200 ease-in-out
+                hover:shadow-lg hover:-translate-y-1 hover:border-blue-200 hover:scale-[1.02] cursor-pointer">
+      <div class="font-medium text-lg text-gray-800">{{ user.fullName }}</div>
+      <div class="text-gray-600 mt-1">{{ user.crmRole }}</div>
+    </div>
+  </div>
+</div>

@@ -506,31 +506,31 @@ export class DataService {
   }
 
   updateDepartmentSection(departmentId: string, sectionName: string, data: any): Observable<any> {
-  return this.getDepartments().pipe(
-    take(1),
-    map(departments => {
-      const index = departments.findIndex(dept => dept.id === departmentId);
+    return this.getDepartments().pipe(
+      take(1),
+      map(departments => {
+        const index = departments.findIndex(dept => dept.id === departmentId);
 
-      if (index === -1) {
-        console.warn(`Department with ID ${departmentId} not found.`);
-        return null;
-      }
+        if (index === -1) {
+          console.warn(`Department with ID ${departmentId} not found.`);
+          return null;
+        }
 
-      const updatedDepartments = [...departments];
-      updatedDepartments[index] = {
-        ...updatedDepartments[index],
-        [sectionName]: data
-      };
+        const updatedDepartments = [...departments];
+        updatedDepartments[index] = {
+          ...updatedDepartments[index],
+          [sectionName]: data
+        };
 
-      localStorage.setItem(this.departmentsStorageKey, JSON.stringify(updatedDepartments));
-      return updatedDepartments[index];
-    }),
-    catchError(error => {
-      console.error('Error updating department section', error);
-      return of(null);
-    })
-  );
-}
+        localStorage.setItem(this.departmentsStorageKey, JSON.stringify(updatedDepartments));
+        return updatedDepartments[index];
+      }),
+      catchError(error => {
+        console.error('Error updating department section', error);
+        return of(null);
+      })
+    );
+  }
 
 
   /** COMPANY ******************************************************************************** */
@@ -560,15 +560,15 @@ export class DataService {
   }
 
   getCompanyOptions(): Observable<{ id: string; companyName: string }[]> {
-  return this.getCompanies().pipe(
-    map(companies =>
-      companies.map(company => ({
-        id: company.id,
-        companyName: company.companyName
-      }))
-    )
-  );
-}
+    return this.getCompanies().pipe(
+      map(companies =>
+        companies.map(company => ({
+          id: company.id,
+          companyName: company.companyName
+        }))
+      )
+    );
+  }
 
   private getCompaniesFromFile(): Observable<any[]> {
     return this.http.get<any[]>(this.companiesJsonFile).pipe(
@@ -973,6 +973,16 @@ export class DataService {
         const updatedRoles = roles.filter(role => role.id !== roleId);
         localStorage.setItem(this.rolesStorageKey, JSON.stringify(updatedRoles));
         return updatedRoles;
+      })
+    );
+  }
+
+  getRoleByName(name: string): Observable<any | undefined> {
+    return this.getRoles().pipe(
+      map((roles: any[]) => roles.find(role => role.roleName === name)),
+      catchError(error => {
+        console.error('Error finding role by name', error);
+        return of(undefined);
       })
     );
   }

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive, Router, Routes } from '@angular/router';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router, Routes, NavigationEnd } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
@@ -9,6 +9,7 @@ import { routes } from './app.routes';
 import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { OptionsService } from './services/options.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -26,68 +27,42 @@ import { OptionsService } from './services/options.service';
     RouterLinkActive
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  theme = '';
+  routes: Routes = [];
+  user: any;
+  hasRedirected = false;
 
-  theme:string = '';
+  constructor(private router: Router, private optionsService: OptionsService, private cdr: ChangeDetectorRef) {}
 
-  routes:Routes = [];
-  constructor(private router: Router, private optionsService: OptionsService) {
-    
-    this.routes = this.filterRoutesByRole({
-      "roleName": "Super Admin",
-      "employees": ["r", "c", "u", "d"],
-      "companies": ["r", "c", "u", "d"],
-      "departments": ["r", "c", "u", "d"],
-      "tasks": ["r", "c", "u", "d"],
-      "billing": ["r", "c", "u", "d"],
-      "assets": ["r", "c", "u", "d"],
-      "calendar": ["r", "c", "u", "d"],
-      "settings": ["r", "c", "u", "d"],
-      "id": "1"
-    }, routes);
+  ngOnInit(): void {
+    this.initializeUserAndRoutes();
 
-    this.theme = this.optionsService.getOption('theme');
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      this.initializeUserAndRoutes();
 
-    // localStorage.setItem('user', JSON.stringify({
-    //   "id": "2",
-    //   "fullName": "Bob Smith",
-    //   "email": "bob.smith@company.com",
-    //   "phoneNumber": "+15555550124",
-    //   "birthDate": "1992-11-02",
-    //   "address": "456 Oak Avenue",
-    //   "city": "Gotham",
-    //   "zipCode": "54321",
-    //   "hireDate": "2018-07-01",
-    //   "role": "Software Engineer",
-    //   "department": "Engineering",
-    //   "isActive": true,
-    //   "tasks": [],
-    //   "crmRole": "Super Admin"
-    // }));
-
-    // localStorage.setItem('userRole', JSON.stringify({
-    //   "roleName": "Super Admin",
-    //   "employees": ["r", "c", "u", "d"],
-    //   "companies": ["r", "c", "u", "d"],
-    //   "departments": ["r", "c", "u", "d"],
-    //   "tasks": ["r", "c", "u", "d"],
-    //   "billing": ["r", "c", "u", "d"],
-    //   "assets": ["r", "c", "u", "d"],
-    //   "calendar": ["r", "c", "u", "d"],
-    //   "settings": ["r", "c", "u", "d"],
-    //   "id": "1"
-    // }));
-
-
-
-
+      if (event.urlAfterRedirects === '/') {
+this.hasRedirected = false;
+      }
+        // Redirect to first available route if any
+        if (!this.hasRedirected) {
+          this.router.navigate([this.routes[0].path]);
+          this.hasRedirected = true;
+        }
+      
+    });
   }
 
-  toggleTheme(){
-    this.theme = this.theme === 'dark' ? '' : 'dark';
-    this.optionsService.updateOption('theme', this.theme);
+  private initializeUserAndRoutes() {
+    this.theme = this.optionsService.getOption('theme');
+    this.user = this.optionsService.getOption('user');
+    const role = this.optionsService.getOption('userRole');
+    this.routes = this.filterRoutesByRole(role, routes);
+    this.cdr.detectChanges();
   }
 
   filterRoutesByRole(role: any, routes: Routes): Routes {
@@ -96,12 +71,22 @@ export class AppComponent {
         return false;
       }
       const key = route.path
-        .replace('-and-scheduling', '') // special case
-        .replace(/-/g, '')              // remove dashes for keys like "calendar-and-scheduling"
+        .replace('-and-scheduling', '')
+        .replace(/-/g, '')
         .toLowerCase();
 
-      return role[key] && role[key].includes('r');
+      return role?.[key] && role[key].includes('r');
     });
   }
-  
+
+  toggleTheme() {
+    this.theme = this.theme === 'dark' ? '' : 'dark';
+    this.optionsService.updateOption('theme', this.theme);
+  }
+
+  logout() {
+    this.optionsService.deleteOption('user');
+    this.optionsService.deleteOption('userRole');
+    this.router.navigate(['/']);
+  }
 }
