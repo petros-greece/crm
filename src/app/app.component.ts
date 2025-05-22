@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { routes } from './app.routes';
 import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
+import { OptionsService } from './services/options.service';
 
 @Component({
   selector: 'app-root',
@@ -29,10 +30,10 @@ import { MatMenuModule } from '@angular/material/menu';
 })
 export class AppComponent {
 
-  theme:string = 'dark';
+  theme:string = '';
 
   routes:Routes = [];
-  constructor(private router: Router) {
+  constructor(private router: Router, private optionsService: OptionsService) {
     
     this.routes = this.filterRoutesByRole({
       "roleName": "Super Admin",
@@ -46,6 +47,8 @@ export class AppComponent {
       "settings": ["r", "c", "u", "d"],
       "id": "1"
     }, routes);
+
+    this.theme = this.optionsService.getOption('theme');
 
     // localStorage.setItem('user', JSON.stringify({
     //   "id": "2",
@@ -80,6 +83,11 @@ export class AppComponent {
 
 
 
+  }
+
+  toggleTheme(){
+    this.theme = this.theme === 'dark' ? '' : 'dark';
+    this.optionsService.updateOption('theme', this.theme);
   }
 
   filterRoutesByRole(role: any, routes: Routes): Routes {

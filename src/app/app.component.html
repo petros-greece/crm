@@ -23,7 +23,7 @@
         <mat-icon>menu</mat-icon>
       </button>
       <span class="flex flex-grow"></span>
-      <button mat-icon-button (click)="theme = theme === 'dark' ? '' : 'dark'">
+      <button mat-icon-button (click)="toggleTheme()">
         <mat-icon>{{ theme === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
       </button>
 
