@@ -8,6 +8,7 @@ import { TasksComponent } from './pages/tasks/tasks.component';
 import { CalendarAndSchedulingComponent } from './pages/calendar-and-scheduling/calendar-and-scheduling.component';
 import { DepartmentsComponent } from './pages/departments/departments.component';
 import { CompanyComponent } from './pages/company/company.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 export const routes: Routes = [
   { path: 'employees', component: EmployeesComponent, title: 'Employees', data: { icon: 'manage_accounts' }, canActivate: [AuthGuard] },
@@ -18,4 +19,5 @@ export const routes: Routes = [
   { path: 'assets', component: AssetsComponent, title: 'Assets', data: { icon: 'folder' }, canActivate: [AuthGuard] },
   { path: 'calendar-and-scheduling', component: CalendarAndSchedulingComponent, title: 'Calendar', data: { icon: 'calendar_month' }, canActivate: [AuthGuard] },
   { path: 'settings', component: SettingsComponent, title: 'Settings', data: { icon: 'settings' }, canActivate: [AuthGuard] },
+  { path: '**', component: NotFoundComponent, title: 'Not Found' },
 ];
