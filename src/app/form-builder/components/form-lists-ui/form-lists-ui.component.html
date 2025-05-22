@@ -22,23 +22,27 @@
 <!---------------------------------------------------->
 
 <ng-template #listTmpl>
-  <app-form-builder 
-    [config]="listFormConfig"
-    (submitHandler)="onSubmitList($event)">
-  </app-form-builder> 
-
-  <div *ngIf="!isNewList" class="mt-64 text-center">
-    <button mat-raised-button class="!bg-red-500 !text-white" (click)="deleteList()">
-      Delete
-    </button>
+  <div class="p-4">
+    <app-form-builder 
+      [config]="listFormConfig"
+      (submitHandler)="onSubmitList($event)">
+    </app-form-builder> 
+  
+    <div *ngIf="!isNewList" class="mt-64 text-center">
+      <button mat-raised-button class="!bg-red-500 !text-white" (click)="deleteList()">
+        Delete
+      </button>
+    </div>
   </div>
 
 
 </ng-template>
 
 <ng-template #importlistTmpl>
-  <app-form-builder 
-    [config]="importListFormConfig"
-    (submitHandler)="onImportList($event)">
-  </app-form-builder> 
+  <div class="p-4"> 
+    <app-form-builder 
+      [config]="importListFormConfig"
+      (submitHandler)="onImportList($event)">
+    </app-form-builder> 
+  </div>
 </ng-template>

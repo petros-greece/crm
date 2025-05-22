@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { TreeComponent, TreeNodeI } from '../../components/tree/tree.component';
+import { TreeNodeI } from '../../components/tree/tree.component';
 import { DialogService } from '../../services/dialog.service';
 import { CommonModule } from '@angular/common';
 import { PreviewAssetComponent } from '../../components/preview-asset.component';
@@ -8,10 +8,12 @@ import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-assets',
-  imports: [CommonModule, TreeComponent, PreviewAssetComponent, FolderStructureComponent],
+  imports: [CommonModule, PreviewAssetComponent, FolderStructureComponent],
   template: `
-  <app-folder-structure [dataSourceInput]="assetsTree" pathPrefix="assets/"></app-folder-structure>
-  <!-- <app-tree [dataSourceInput]="assetsTree" (nodeClicked)="previewAsset($event)"></app-tree> -->
+  <div class="crm-assets-con">
+    <app-folder-structure [dataSourceInput]="assetsTree" pathPrefix="assets/"></app-folder-structure>
+    <!-- <app-tree [dataSourceInput]="assetsTree" (nodeClicked)="previewAsset($event)"></app-tree> -->
+  </div>
   <ng-template #previewAssetTmpl>
     <app-preview-asset [assetPath]="assetPath"></app-preview-asset>
   </ng-template>

@@ -317,6 +317,7 @@ body {
 }
 
 
+
 /** THEME *****************************************/
 
 mat-sidenav{
@@ -356,6 +357,9 @@ mat-sidenav{
   button.mat-mdc-button-disabled .mat-mdc-paginator-icon{
     fill:  oklch(55.1% 0.027 264.364) !important;    
   } 
+  .crm-assets-con .mat-mdc-list-item-title,
+  .crm-task-col h2,
+  .crm-task-col .crm-drag-handle,
   .cal-day-number,
   .mdc-tab__text-label,
   .mat-mdc-paginator-container mat-select{
@@ -370,9 +374,19 @@ mat-sidenav{
     color: white;
   }
 
+  .crm-task-col{
+    background: oklch(37.3% 0.034 259.733); //bg-grey-700
+    //color: oklch(96.7% 0.003 264.542) !important;  
+  }
 
 }
 
 .apexcharts-menu-icon > svg {
   fill: rgb(55, 61, 63) !important;
+}
+
+/**************************************************************/
+
+.crm-task-col{
+  @apply bg-gray-200;
 }

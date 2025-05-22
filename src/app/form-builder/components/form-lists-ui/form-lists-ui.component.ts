@@ -64,7 +64,7 @@ export class FormListsUiComponent {
 
     this.dialogService.openTemplate({
       content: this.listTmpl,
-      header: item ? `Edit List: ${item.key}` : `Add List`,
+      header: item ? `List: ${item.key}` : `Add List`,
     })
   }
 
