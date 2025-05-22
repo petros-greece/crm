@@ -45,7 +45,8 @@ export class BillingComponent extends BillingVars {
 
       this.giveTotalChart(tableData);
       this.giveTotalPerCompanyChart(tableData);
-      this.giveTotalPerDealTypeChart(tableData)
+      this.giveTotalPerDealTypeChart(tableData);
+      this.giveTotalPerDealStageChart(tableData);
     });
   }
 

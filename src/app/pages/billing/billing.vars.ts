@@ -177,5 +177,45 @@ export class BillingVars {
     };
   }
 
+  totalPerDealStageChartData: ChartData | null = null;
+  totalPerDealStageChartConfig: ChartConfig | null = null;
+
+  giveTotalPerDealStageChart(deals: any[]): void {
+    const stageMap = new Map<string, number>();
+
+    for (const deal of deals) {
+      const stage = deal.dealStage || 'Unknown';
+      const value = Number(deal.dealValue) || 0;
+      stageMap.set(stage, (stageMap.get(stage) || 0) + value);
+    }
+
+    const labels = Array.from(stageMap.keys());
+    const values:any = Array.from(stageMap.values());
+
+    this.totalPerDealStageChartData = {
+      series: values
+    };
+
+    this.totalPerDealStageChartConfig = {
+      chart: {
+        type: 'donut',
+        height: 350
+      },
+      labels: labels,
+      title: {
+        text: 'Total Value per Deal Stage',
+        style: chartTitleStyle
+      },
+      tooltip: {
+        y: {
+          formatter: (value: number) => `$${value.toLocaleString()}`
+        }
+      },
+      legend: {
+        position: 'bottom'
+      }
+    };
+  }
+
 
 }

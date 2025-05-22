@@ -60,7 +60,7 @@ export interface TableConfig {
   <div>
 
     <div *ngIf="config.data.length > 0">
-      <div class="flex flex-row justify-end" *ngIf="config.hideButtons !== true">
+      <div class="table-btn-con flex flex-row justify-end" *ngIf="config.hideButtons !== true">
 
         <button mat-button (click)="xlsxService.exportTableToExcel(dataSource.data)">
           EXCEL
@@ -166,6 +166,7 @@ export class TableBuilderComponent implements OnInit, AfterViewInit, OnChanges {
   displayedColumns: string[] = [];
   templateMap = new Map<string, TemplateRef<any>>();
   columnVisibility: { [key: string]: boolean } = {};
+  
   constructor(private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
