@@ -60,8 +60,12 @@ export interface TableConfig {
   <div>
 
     <div *ngIf="config.data.length > 0">
-      <div class="table-btn-con flex flex-row justify-end" *ngIf="config.hideButtons !== true">
-
+      <div class="table-btn-con flex flex-row items-center" *ngIf="config.hideButtons !== true">
+        <div class="crm-table-main-header">
+          <ng-content></ng-content>
+        </div>
+        <span class="flex flex-grow"></span>
+        
         <button mat-button (click)="xlsxService.exportTableToExcel(dataSource.data)">
           EXCEL
           <mat-icon>download</mat-icon>
