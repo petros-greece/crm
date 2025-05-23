@@ -4,7 +4,7 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { XlsxService } from '../services/xlsx.service';
+import { XlsxService } from '../services/xlsx/xlsx.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';

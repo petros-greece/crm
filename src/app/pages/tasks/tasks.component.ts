@@ -11,7 +11,7 @@ import { TaskColumnI, TaskI, TaskItemI } from './tasks.model';
 import { MatSelectModule } from '@angular/material/select';
 import { FormConfig } from '../../form-builder/form-builder.model';
 import { TaskFormComponent } from '../../components/task-form/task-form.component';
-import { PriorityWidgetComponent } from '../../components/priority-widget.component';
+import { PriorityWidgetComponent } from '../../components/priority-widget/priority-widget.component';
 import { SnackbarService } from '../../services/snackbar.service';
 import { DataService } from '../../services/data.service';
 import { Subject, takeUntil } from 'rxjs';

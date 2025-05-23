@@ -14,7 +14,6 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
       [ngClass]="_priorityColor"
     ></div>
   </div>
-  <!-- <span class="text-sm w-20 text-left">{{priority}}</span> -->
 </div>
   `,
   styles: ``

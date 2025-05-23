@@ -9,7 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-import { XlsxService } from '../services/xlsx.service';
+import { XlsxService } from '../services/xlsx/xlsx.service';
 import { OptionsService } from '../services/options.service';
 import { DatePipe, CommonModule } from '@angular/common';
 
