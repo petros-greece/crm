@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { OptionsService } from './services/options.service';
 import { filter } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -45,11 +46,11 @@ export class AppComponent implements OnInit {
     ).subscribe((event: NavigationEnd) => {
       this.initializeUserAndRoutes();
 
-      if (event.urlAfterRedirects === '/') {
-        this.hasRedirected = false;
-      }
-      // Redirect to first available route if any
-      if (!this.hasRedirected) {
+      // if (event.urlAfterRedirects === '/') {
+      //   this.hasRedirected = false;
+      // }
+      // // Redirect to first available route if any
+      if (!this.hasRedirected && environment.production) {
         this.router.navigate([this.routes[0].path]);
         this.hasRedirected = true;
       }
