@@ -1,5 +1,5 @@
 {
-  "employee": [{"title": "test", "icon": "check", "fields": [], "submitText": ""}],
-  "company": [{"title": "test", "icon": "check", "fields": [], "submitText": ""}],
-  "department": [{"title": "test", "icon": "check", "fields": [], "submitText": ""}]
+  "employee": [],
+  "company": [],
+  "department": []
 }
