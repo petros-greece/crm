@@ -77,13 +77,6 @@ describe('DepartmentsComponent', () => {
     expect(result.startsWith('random')).toBeTrue();
   });
 
-  it('should toggle form visibility per role', () => {
-    component.showForm = { manager: false, assistant: true };
-    component.toggleForm('manager');
-    expect(component.showForm['manager']).toBeTrue();
-    expect(component.showForm['assistant']).toBeFalse();
-  });
-
   it('should call dialogService.openTemplate when adding a department', () => {
     component.openAddDepartmentDialog();
     expect(mockDialogService.openTemplate).toHaveBeenCalled();

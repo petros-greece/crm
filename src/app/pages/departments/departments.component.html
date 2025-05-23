@@ -37,14 +37,17 @@
         <div *ngFor="let departmentRole of departmentRoles">
           <div class="flex flex-row items-center h-16">
             <b>{{ departmentRole.role }}</b>
-            <button mat-icon-button (click)="toggleForm(departmentRole.role)">
-              <mat-icon>{{ showForm[departmentRole.role] ? 'remove_circle' : 'add_circle' }}</mat-icon>
+            <button mat-icon-button [matMenuTriggerFor]="employeeMenu" #menuTrigger="matMenuTrigger">
+              <mat-icon>add_circle</mat-icon>
             </button>
-            <div class="pt-4" *ngIf="showForm[departmentRole.role]">
-              <app-form-builder [config]="selectEmployeeFormConfig"
-                (formValuesChange)="addEmployeeToRole($event, departmentRole.role)">
-              </app-form-builder>
-            </div>
+
+            <mat-menu #employeeMenu="matMenu">
+              <div class="p-4" (click)="$event.stopPropagation()">
+                <app-form-builder [config]="selectEmployeeFormConfig"
+                  (submitHandler)="addEmployeeToRole($event, departmentRole.role);menuTrigger.closeMenu()">
+                </app-form-builder>
+              </div>
+            </mat-menu>
           </div>
           <div *ngFor="let employee of departmentRole.employees">
             {{ employee.fullName }}

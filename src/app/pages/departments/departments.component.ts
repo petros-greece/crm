@@ -12,7 +12,8 @@ import { PageHeaderComponent } from '../../components/page-header/page-header.co
 import { SnackbarService } from '../../services/snackbar.service';
 import { EntityFieldsService } from '../../services/entity-fields.service';
 import { Subject, takeUntil } from 'rxjs';
-
+import { MatMenuModule } from '@angular/material/menu';
+import { MatMenuTrigger } from '@angular/material/menu';
 @Component({
   selector: 'app-departments',
   imports: [
@@ -21,6 +22,7 @@ import { Subject, takeUntil } from 'rxjs';
     MatIcon,
     FormBuilderComponent,
     MatTabsModule,
+    MatMenuModule,
     PageHeaderComponent,
   ],
   templateUrl: './departments.component.html',
@@ -34,7 +36,7 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit {
   dataService = inject(DataService);
   snackbarService = inject(SnackbarService);
   entityFieldsService = inject(EntityFieldsService);
-
+  @ViewChild('menuTrigger') menuTrigger!: MatMenuTrigger;
   @ViewChild('departmentPreviewTmpl', { static: true }) departmentPreviewTmpl!: TemplateRef<any>;
   @ViewChild('departmentFormTmpl', { static: true }) departmentFormTmpl!: TemplateRef<any>;
 
@@ -43,14 +45,15 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit {
   }
 
   selectEmployeeFormConfig: FormConfig = {
-    hideSubmit: false,
-    fields: [{ type: 'autocomplete', name: 'employee', label: 'Add Employee', dynamicOptions: this.dataService.getEmployeeOptions(), columns: 1, }],
+    fields: [
+      { type: 'autocomplete', name: 'employee', label: 'Add Employee', dynamicOptions: this.dataService.getEmployeeOptions(), columns: 1, }
+    ],
+    submitText: 'Add'
   }
 
   departmentFormValues: any = {};
   departmentRoles: any = [];
   isEditDepartment = false;
-  showForm: { [role: string]: boolean } = {};
 
   extraForms: any = [];
 
@@ -73,12 +76,15 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit {
   }
 
   addEmployeeToRole(event: any, role: string) {
-    //console.log(event.employee, this.departmentFormValues.id, role);
-    this.dataService.updateEmployeeRole(event.employee, this.departmentFormValues.id, role).subscribe(e => {
 
-      Object.keys(this.showForm).forEach(key => {
-        this.showForm[key] = false;
-      });
+    setTimeout(() => {
+      if (this.menuTrigger.menuOpen) {
+        this.menuTrigger.closeMenu();
+      }
+    }, 0);
+    console.log(event.employee, this.departmentFormValues.label, role);
+    this.dataService.updateEmployeeRole(event.employee, this.departmentFormValues.label, role).subscribe(e => {
+
 
       let foundInAnotherDepartment = false;
       this.departmentRoles.forEach((rObj: any) => {
@@ -231,12 +237,7 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit {
     return prefix + randomPart;
   }
 
-  toggleForm(role: string): void {
-    this.showForm[role] = !this.showForm[role];
-    Object.keys(this.showForm).forEach(key => {
-      if (key !== role) this.showForm[key] = false;
-    });
-  }
+
 
 
 }
