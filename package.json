@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",
-    "build": "ng build --base-href=/tools/crm/",
+    "build": "ng build --base-href /tools/crm/ --deploy-url /tools/crm/",
     "watch": "ng build --watch --configuration development",
     "cnotest": "ng generate component --skip-tests",
     "cinline": "ng generate component --inline-template --inline-style --skip-tests",

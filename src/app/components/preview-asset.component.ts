@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { XLSXTableComponent } from './xlsx-table.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { AssetResponseType, AssetsService } from '../pages/assets/assets.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-preview-asset',

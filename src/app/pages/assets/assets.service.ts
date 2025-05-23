@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export type AssetResponseType = 'json' | 'arraybuffer' | 'blob' | 'text' | 'pdfBlob';
 
@@ -28,31 +29,31 @@ export class AssetsService {
   constructor(private http: HttpClient) {}
 
   private getJson<T>(path: string): Observable<{ type: 'json'; data: T }> {
-    return this.http.get<T>(`/assets/${path}`).pipe(
+    return this.http.get<T>(`${environment.baseUrl}/assets/${path}`).pipe(
       map(data => ({ type: 'json' as const, data }))
     );
   }
 
   private getArrayBuffer(path: string): Observable<{ type: 'arraybuffer'; data: ArrayBuffer }> {
-    return this.http.get(`/assets/${path}`, { responseType: 'arraybuffer' }).pipe(
+    return this.http.get(`${environment.baseUrl}/assets/${path}`, { responseType: 'arraybuffer' }).pipe(
       map(buffer => ({ type: 'arraybuffer' as const, data: buffer }))
     );
   }
 
   private getBlob(path: string): Observable<{ type: 'blob'; data: Blob }> {
-    return this.http.get(`/assets/${path}`, { responseType: 'blob' }).pipe(
+    return this.http.get(`${environment.baseUrl}/assets/${path}`, { responseType: 'blob' }).pipe(
       map(blob => ({ type: 'blob' as const, data: blob }))
     );
   }
 
   private getPdfBlob(path: string): Observable<{ type: 'pdfBlob'; data: Blob }> {
-    return this.http.get(`/assets/${path}`, { responseType: 'blob' }).pipe(
+    return this.http.get(`${environment.baseUrl}/assets/${path}`, { responseType: 'blob' }).pipe(
       map(blob => ({ type: 'pdfBlob' as const, data: blob }))
     );
   }
 
   private getText(path: string): Observable<{ type: 'text'; data: string }> {
-    return this.http.get(`/assets/${path}`, { responseType: 'text' }).pipe(
+    return this.http.get(`${environment.baseUrl}/assets/${path}`, { responseType: 'text' }).pipe(
       map(text => ({ type: 'text' as const, data: text }))
     );
   }

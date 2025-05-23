@@ -1,1 +1,6 @@
-export const environment = {};
+export const environment = {
+  production: false,
+  appBaseHref: '',
+  baseUrl: ''
+};
+
