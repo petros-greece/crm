@@ -13,7 +13,7 @@
 <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
   <li
     *ngFor="let item of lists | keyvalue"
-    class="p-4 bg-white dark:bg-gray-800 shadow rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+    class="crm-list-btn p-4 shadow rounded cursor-pointer hover:bg-gray-100 transition-colors"
     (click)="openListDialog(item)">
     {{ item.key }}
   </li>

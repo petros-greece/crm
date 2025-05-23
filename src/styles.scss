@@ -224,6 +224,10 @@ body {
   background: #fff;
 }
 
+.crm-list-btn {
+  background: #fff;
+}
+
 /** DND *****************************************/
 
 // .dnd-preview-list {
@@ -362,8 +366,8 @@ mat-sidenav {
   }
 
   table button {
-      color: oklch(96.7% 0.003 264.542) !important;
-    }
+    color: oklch(96.7% 0.003 264.542) !important;
+  }
 
   table,
   .mat-mdc-paginator-container,
@@ -378,7 +382,7 @@ mat-sidenav {
     color: oklch(96.7% 0.003 264.542) !important;
   }
 
-  .crm-table-main-header{
+  .crm-table-main-header {
     color: white !important;
   }
 
@@ -419,7 +423,14 @@ mat-sidenav {
     background: oklch(21% 0.034 264.665) !important;
   }
 
+  .crm-list-btn {
+    background: oklch(37.3% 0.034 259.733); //bg-grey-700
+    color: oklch(96.7% 0.003 264.542) !important;
+  }
+
 }
+
+
 
 .apexcharts-menu-icon>svg {
   fill: rgb(55, 61, 63) !important;
