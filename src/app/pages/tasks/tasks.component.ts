@@ -87,6 +87,10 @@ export class TasksComponent implements OnInit {
   }
 
   dropTask(event: CdkDragDrop<TaskI[]>) {
+    if (event.previousContainer === event.container && event.previousIndex === event.currentIndex) {
+      return
+    }
+
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
 
@@ -105,6 +109,9 @@ export class TasksComponent implements OnInit {
   }
 
   dropColumn(event: CdkDragDrop<any>) {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     this.dataService.updateTaskColumns(this.columns).subscribe(t => {
       this.snackbarService.showSnackbar('Tasks Updated');

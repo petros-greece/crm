@@ -97,7 +97,7 @@ export interface TableConfig {
         </mat-menu>
       </div>
 
-      <div class="rounded-sm overflow-auto">
+      <div class="rounded-sm overflow-auto my-scrollbar">
         <table mat-table [dataSource]="dataSource" matSort class="min-w-full">
           <!-- Column Definitions -->
           <ng-container *ngFor="let col of config.columns" [matColumnDef]="col.key">

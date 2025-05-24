@@ -274,12 +274,7 @@ body {
 //   transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
 // }
 
-// .dnd-placeholder {
-//   background: #ccc;
-//   border: dotted 3px #999;
-//   min-height: 45px;
-//   transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
-// }
+
 
 .dnd-placeholder-2 {
   background: #ccc;
@@ -297,11 +292,9 @@ body {
 // }
 
 .dnd-placeholder {
-  background: rgba(0, 0, 0, 0.1);
   border: 2px dashed #64748b;
+  border-radius: 5px;
   transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
-  height: 70px;
-  width: 100%;
 }
 
 // .cdk-drag-preview {
@@ -315,42 +308,29 @@ body {
 
 /** SCROLLBAR *****************************************/
 
-.my-scrollbar {
-  overflow: auto;
-  /* Make sure scrolling is enabled */
-}
+// .my-scrollbar::-webkit-scrollbar-track {
+//   background: #101828;
+// }
 
-/* WebKit-based browsers (Chrome, Edge, Safari) */
-.my-scrollbar::-webkit-scrollbar {
-  width: 16px;
-  height: 16px;
-}
+// .my-scrollbar::-webkit-scrollbar-thumb {
+//   background-color: #5f00c0;
+//   border-radius: 8px;
+//   border: 3px solid #f0f0f0;
+// }
 
-.my-scrollbar::-webkit-scrollbar-track {
-  background: #f0f0f0;
-  /* Track background */
-}
-
-.my-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #5f00c0;
-  /* Scroll thumb color */
-  border-radius: 8px;
-  border: 3px solid #f0f0f0;
-  /* Creates padding around thumb */
-}
-
-/* Firefox */
-.my-scrollbar {
-  scrollbar-width: auto;
-  scrollbar-color: #5f00c0 #f0f0f0;
-}
-
-
+// .my-scrollbar {
+//   scrollbar-width: auto;
+//   scrollbar-color: #5f00c0 #101828;
+// }
 
 /** THEME *****************************************/
 
 mat-sidenav {
   background: oklch(94.3% 0.029 294.588) !important;
+}
+
+.crm-task-col {
+  @apply bg-gray-200;
 }
 
 .dark {
@@ -432,6 +412,21 @@ mat-sidenav {
     color: oklch(96.7% 0.003 264.542) !important;
   }
 
+  .my-scrollbar::-webkit-scrollbar-track {
+    background: #101828;
+  }
+
+  .my-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #5f00c0;
+    border-radius: 8px;
+    border: 3px solid #f0f0f0;
+  }
+
+  .my-scrollbar {
+    scrollbar-width: auto;
+    scrollbar-color: #5f00c0 #101828;
+  }
+
 }
 
 
@@ -441,7 +436,3 @@ mat-sidenav {
 }
 
 /**************************************************************/
-
-.crm-task-col {
-  @apply bg-gray-200;
-}
