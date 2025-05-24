@@ -14,12 +14,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 @Component({
   selector: 'app-task-types-config',
   imports: [
-    CommonModule, 
-    TableBuilderComponent, 
-    MatIcon, 
-    MatButtonModule, 
+    CommonModule,
+    TableBuilderComponent,
+    MatIcon,
+    MatButtonModule,
     MatTabsModule,
-    ColumnTemplateDirective, 
+    ColumnTemplateDirective,
     FormBuilderComponent,
     FormBuilderUiComponent
   ],
@@ -43,8 +43,7 @@ export class TaskTypesConfigComponent {
   taskFormValues: any = {};
 
   taskTableConfig: TableConfig = { data: [], columns: [] };
-
-  taskFormFieldsConfig: FormConfig = {fields: []};
+  taskFormFieldsConfig: FormConfig = { fields: [] };
 
   ngOnInit() {
     this.entityFieldsService.getTaskTypeOptions().subscribe((taskTypes) => {
@@ -52,11 +51,8 @@ export class TaskTypesConfigComponent {
     })
   }
 
-  onSubmitTaskFieldConfig(data:any){
-    //console.log(this.taskFormValues.value, data.fields)
-
-    this.entityFieldsService.addOrUpdateFieldsForTaskType(this.taskFormValues.value, data.fields).subscribe((res)=>{
-      console.log(res);
+  onSubmitTaskFieldConfig(data: any) {
+    this.entityFieldsService.addOrUpdateFieldsForTaskType(this.taskFormValues.value, data.fields).subscribe((res) => {
       this.snackbarService.showSnackbar(`Task Fields for type "${this.taskFormValues.label}" updated succesfully!`);
       this.dialogService.closeAll();
     });
@@ -82,20 +78,8 @@ export class TaskTypesConfigComponent {
 
   openTaskTypeDialog(data: any) {
 
-    this.entityFieldsService.getTaskFieldsForType(data.value, false).subscribe(fields=>{
-console.log(fields);
-
-this.taskFormFieldsConfig = {fields: fields}
-
-      // this.taskFormConfig = {
-      //   title: !this.taskData ? task?.label : '',
-      //   icon: !this.taskData ? task?.icon : '',
-      //   fields: fields,
-      //   submitText: this.taskData? 'Update Task' : 'Add Task'
-      // }
-      // if(this.assignee){
-      //   this.values.assignee = this.assignee;
-      // }
+    this.entityFieldsService.getTaskFieldsForType(data.value, false).subscribe(fields => {
+      this.taskFormFieldsConfig = { fields: fields }
 
       this.taskFormValues = data;
       this.dialogService.openTemplate({
@@ -103,14 +87,8 @@ this.taskFormFieldsConfig = {fields: fields}
         header: data ? `Edit Task Type: ${data.label}` : `Add New Task type`,
         panelClass: 'big-dialog'
       })
-
     })
 
-    // this.taskFormValues = data;
-    // this.dialogService.openTemplate({
-    //   content: this.taskTmpl,
-    //   header: data ? `Edit Task Type: ${data.label}` : `Add New Task type`,
-    // })
   }
 
   onSubmitTaskType(formData: any) {
@@ -121,8 +99,6 @@ this.taskFormFieldsConfig = {fields: fields}
   }
 
   openConfirmDeleteTaskTypeDialog(rowData: any) {
-    console.log(rowData)
-
     this.dialogService.openConfirm({
       content: `Are you sure you want to delete the task type "${rowData.label}"? 
       Any tasks assigned by this label will be left without a type!`,

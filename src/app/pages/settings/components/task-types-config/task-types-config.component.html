@@ -34,10 +34,12 @@
           [values]="taskFormValues" 
           (submitHandler)="onSubmitTaskType($event)">
         </app-form-builder>
+
+       
       </div>
     </mat-tab>
 
-    <mat-tab label="Fields">
+    <mat-tab label="Fields" *ngIf="taskFormValues">
       <ng-template mat-tab-label>
         <mat-icon class="mr-2">list_alt</mat-icon>
         Fields
