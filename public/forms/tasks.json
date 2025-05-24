@@ -14,7 +14,7 @@
       ],
       "email": [
         { "type": "email", "name": "emailAddress", "label": "Email Address", "required": true, "validators": { "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" }, "columns": 1 },
-        { "type": "textarea", "name": "emailBody", "label": "Email Body", "required": true, "columns": 1 }
+        { "type": "text-editor", "name": "emailBody", "label": "Email Body", "required": true, "columns": 1 }
       ],
       "meeting": [
         { "type": "text", "name": "location", "label": "Location/Link", "required": false, "columns": 2 },
