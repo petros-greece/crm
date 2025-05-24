@@ -56,9 +56,9 @@ export class BillingComponent extends BillingVars {
   }
 
   private giveDealsTableConfig(tableData: any) {
-    console.log(tableData)
     const columns = this.entityFieldsService.buildEntityTableConfigColumns('deal');
     columns.splice(1, 1, { key: 'company', label: 'Company', type: 'text', sortable: true })
+    columns.pop()//remove actions
     this.dealsTableConfig = {
       columns: columns,
       data: tableData,
