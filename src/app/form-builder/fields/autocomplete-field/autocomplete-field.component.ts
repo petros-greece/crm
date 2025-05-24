@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BaseFieldComponent } from '../base-field/base-field.component';
@@ -38,7 +38,7 @@ import { BehaviorSubject, debounceTime, distinctUntilChanged, Observable, take }
         [matAutocomplete]="auto"
       >
 
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="optionSelected($event)">
         <mat-option *ngFor="let opt of filteredOptions" [value]="opt.value">
           {{ opt.label }}
         </mat-option>
@@ -58,11 +58,20 @@ export class AutocompleteFieldComponent extends BaseFieldComponent {
   filteredOptions: { label: string, value: any }[] = [];
   displayLabel = '';
   private optionsSubject = new BehaviorSubject<any[]>([]); // Add this
+
+  constructor(private cdr: ChangeDetectorRef) {
+    super();
+  }
+
   override ngOnInit() {
     this.filteredOptions = [...(this.config.options || [])];
     this.initializeOptions();
     this.setupInitialValue();
     this.setupFiltering();
+  }
+
+  optionSelected(e: any) {
+    console.log(e)
   }
 
   private initializeOptions() {
@@ -84,7 +93,6 @@ export class AutocompleteFieldComponent extends BaseFieldComponent {
     }
   }
 
-  // Add this method
   private setupFiltering() {
     this.control.valueChanges.pipe(
       debounceTime(300),
@@ -93,51 +101,53 @@ export class AutocompleteFieldComponent extends BaseFieldComponent {
       if (typeof value === 'string') {
         this.filterOptions(value);
       }
+      this.cdr.markForCheck();
     });
   }
 
   private setupInitialValue() {
     const initialValue = this.control.value;
     if (initialValue) {
-      const selectedOption = (this.config.options || [])
-        .find(opt => opt.value === initialValue);
-      this.displayLabel = selectedOption?.label || '';
+      this.optionsSubject.pipe(take(1)).subscribe(options => {
+        const selectedOption = options.find(opt => opt.value === initialValue);
+        this.displayLabel = selectedOption?.label || '';
+        this.cdr.markForCheck();
+      });
     }
 
     this.control.valueChanges.subscribe(value => {
-      const option = (this.config.options || [])
-        .find(opt => opt.value === value);
-      this.displayLabel = option?.label || '';
+      this.optionsSubject.pipe(take(1)).subscribe(options => {
+        const option = options.find(opt => opt.value === value);
+        this.displayLabel = option?.label || '';
+        this.cdr.markForCheck();
+      });
     });
   }
 
 
   displayFn = (value: any): string => {
     if (!value) return '';
-    let label = '';
-    this.optionsSubject.pipe(take(1)).subscribe(options => {
-      const option = options.find(opt => opt.value === value);
-      label = option?.label || value;
-    });
-    return label;
+    const option = this.filteredOptions.find(opt => opt.value === value);
+    return option?.label || value;
   };
 
   filterOptions(value: string) {
     const filterValue = value.toLowerCase();
     this.optionsSubject.pipe(take(1)).subscribe(options => {
-      this.filteredOptions = options.filter(option => 
+      this.filteredOptions = options.filter(option =>
         option.label.toLowerCase().includes(filterValue)
       );
-      // Create new array reference to trigger change detection
-      this.filteredOptions = [...this.filteredOptions];
+      this.cdr.markForCheck();
     });
   }
 
   ngOnChanges() {
-    // Update display when options change
-    const currentValue = this.control.value;
-    const selectedOption = (this.config.options || [])
-      .find(opt => opt.value === currentValue);
-    this.displayLabel = selectedOption?.label || '';
+    this.optionsSubject.pipe(take(1)).subscribe(options => {
+      const currentValue = this.control.value;
+      const selectedOption = options.find(opt => opt.value === currentValue);
+      this.displayLabel = selectedOption?.label || '';
+      this.cdr.markForCheck();
+    });
   }
+
 }
