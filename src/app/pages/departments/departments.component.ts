@@ -14,6 +14,9 @@ import { EntityFieldsService } from '../../services/entity-fields.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { MatExpansionModule } from '@angular/material/expansion';
+
+
 @Component({
   selector: 'app-departments',
   imports: [
@@ -24,6 +27,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
     MatTabsModule,
     MatMenuModule,
     PageHeaderComponent,
+    MatExpansionModule
   ],
   templateUrl: './departments.component.html',
   styleUrl: './departments.component.scss'
@@ -44,18 +48,25 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit {
     fields: this.departmentBaseFields,
   }
 
-  selectEmployeeFormConfig: FormConfig = {
+  formConfig: FormConfig = {
     fields: [
-      { type: 'autocomplete', name: 'employee', label: 'Add Employee', dynamicOptions: this.dataService.getEmployeeOptions(), columns: 1, }
+      { type: 'autocomplete', name: 'employee', label: 'Select employee', dynamicOptions: this.dataService.getEmployeeOptions(), columns: 1, defaultValue: ''}
     ],
-    submitText: 'Add'
+    submitText: 'Add',
+    resetOnSubmit: true
   }
+
+  selectEmployeeFormConfig: FormConfig = {...this.formConfig};
 
   departmentFormValues: any = {};
   departmentRoles: any = [];
   isEditDepartment = false;
 
   extraForms: any = [];
+
+  resetForm(){
+    this.selectEmployeeFormConfig = {...this.formConfig};   
+  }
 
   ngOnInit(): void {
     this.dataService.getDepartments()
@@ -77,20 +88,19 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit {
 
   addEmployeeToRole(event: any, role: string) {
 
-    setTimeout(() => {
-      if (this.menuTrigger.menuOpen) {
-        this.menuTrigger.closeMenu();
-      }
-    }, 0);
     console.log(event.employee, this.departmentFormValues.label, role);
     this.dataService.updateEmployeeRole(event.employee, this.departmentFormValues.label, role).subscribe(e => {
 
+      if(!e || !e.id){
+        return;
+      }
 
       let foundInAnotherDepartment = false;
       this.departmentRoles.forEach((rObj: any) => {
 
         if (!foundInAnotherDepartment) {
           for (let i = 0, len = rObj.employees.length; i < len; i += 1) {
+
             let empl = rObj.employees[i];
             if (empl.id === event.employee) {
               rObj.employees.splice(i, 1);
@@ -103,6 +113,7 @@ export class DepartmentsComponent extends DepartmentsVars implements OnInit {
           rObj.employees.push(e);
         }
       });
+
 
 
     });
