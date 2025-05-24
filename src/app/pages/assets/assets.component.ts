@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TreeNodeI } from '../../components/tree/tree.component';
-import { DialogService } from '../../services/dialog.service';
+import { DialogService } from './../../components/dialog/dialog.service';
 import { CommonModule } from '@angular/common';
 import { PreviewAssetComponent } from '../../components/preview-asset.component';
 import { FolderStructureComponent } from '../../components/folder-structure/folder-structure.component';

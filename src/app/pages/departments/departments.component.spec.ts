@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DepartmentsComponent } from './departments.component';
-import { DialogService } from '../../services/dialog.service';
+import { DialogService } from './../../components/dialog/dialog.service';
 import { DataService } from '../../services/data.service';
 import { SnackbarService } from '../../services/snackbar.service';
 import { EntityFieldsService } from '../../services/entity-fields.service';

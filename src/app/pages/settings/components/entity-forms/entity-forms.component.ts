@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { FormBuilderUiComponent } from '../../../../form-builder/components/form-builder-ui/form-builder-ui.component';
-import { DialogService } from '../../../../services/dialog.service';
+import { DialogService } from '../../../../components/dialog/dialog.service';
 import { ColumnTemplateDirective, TableBuilderComponent, TableConfig } from '../../../../table-builder/table-builder.component';
 import { EntityFieldsService } from '../../../../services/entity-fields.service';
 import { MatIcon } from '@angular/material/icon';

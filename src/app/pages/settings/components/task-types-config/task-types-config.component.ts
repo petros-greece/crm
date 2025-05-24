@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { EntityFieldsService } from '../../../../services/entity-fields.service';
 import { FormConfig } from '../../../../form-builder/form-builder.model';
 import { ColumnTemplateDirective, TableBuilderComponent, TableConfig } from '../../../../table-builder/table-builder.component';
-import { DialogService } from '../../../../services/dialog.service';
+import { DialogService } from '../../../../components/dialog/dialog.service';
 import { FormBuilderComponent } from '../../../../form-builder/form-builder.component';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { FormBuilderUiComponent } from '../../../../form-builder/components/form-builder-ui/form-builder-ui.component';

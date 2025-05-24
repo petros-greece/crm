@@ -1,7 +1,7 @@
 import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
 import { DealTypeI, EntityFieldsService } from '../../services/entity-fields.service';
 import { DataService } from '../../services/data.service';
-import { DialogService } from '../../services/dialog.service';
+import { DialogService } from './../../components/dialog/dialog.service';
 import { ColumnTemplateDirective, TableBuilderComponent, TableConfig } from '../../table-builder/table-builder.component';
 import { FormBuilderComponent } from '../../form-builder/form-builder.component';
 import { MatTabsModule } from '@angular/material/tabs';

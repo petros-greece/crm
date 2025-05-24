@@ -3,7 +3,7 @@ import { CalendarComponent } from '../../components/calendar/calendar.component'
 import { DataService } from '../../services/data.service';
 import { CalendarEvent, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { CommonModule } from '@angular/common';
-import { DialogService } from '../../services/dialog.service';
+import { DialogService } from './../../components/dialog/dialog.service';
 import { TaskFormComponent } from '../../components/task-form/task-form.component';
 import { MatIcon } from '@angular/material/icon';
 import { ColumnTemplateDirective, TableBuilderComponent, TableConfig } from '../../table-builder/table-builder.component';

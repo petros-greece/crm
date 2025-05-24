@@ -145,10 +145,10 @@ import { FileUploadComponent } from '../file-upload-field/file-upload-field.comp
 
             </ng-container>
           </div>
-</div>
+        </div>
 
           <button mat-icon-button 
-                  color="warn" 
+                  type="button"
                   (click)="removeRow(i)"
                   [disabled]="!canRemove">
             <mat-icon>delete</mat-icon>

@@ -4,7 +4,7 @@ import { FormConfig } from '../../../../form-builder/form-builder.model';
 import { DataService } from '../../../../services/data.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { DialogService } from '../../../../services/dialog.service';
+import { DialogService } from '../../../../components/dialog/dialog.service';
 import { MatIcon } from '@angular/material/icon';
 
 type Perm = 'r' | 'c' | 'u' | 'd';

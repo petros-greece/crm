@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TasksComponent } from './tasks.component';
 import { of, Subject } from 'rxjs';
-import { DialogService } from '../../services/dialog.service';
+import { DialogService } from './../../components/dialog/dialog.service';
 import { SnackbarService } from '../../services/snackbar.service';
 import { DataService } from '../../services/data.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';

@@ -16,7 +16,7 @@ import {
   CdkDragPlaceholder,
 } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
-import { DialogService } from '../../../services/dialog.service';
+import { DialogService } from '../../../components/dialog/dialog.service';
 
 
 @Component({

@@ -3,7 +3,7 @@ import { FormBuilderService } from '../../form-builder.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilderComponent } from '../../form-builder.component';
 import { FormConfig } from '../../form-builder.model';
-import { DialogService } from '../../../services/dialog.service';
+import { DialogService } from '../../../components/dialog/dialog.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 

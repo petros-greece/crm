@@ -3,7 +3,7 @@ import { EmployeesComponent } from './employees.component';
 import { of, Subject } from 'rxjs';
 import { EntityFieldsService } from '../../services/entity-fields.service';
 import { DataService } from '../../services/data.service';
-import { DialogService } from '../../services/dialog.service';
+import { DialogService } from './../../components/dialog/dialog.service';
 import { SnackbarService } from '../../services/snackbar.service';
 
 describe('EmployeesComponent', () => {

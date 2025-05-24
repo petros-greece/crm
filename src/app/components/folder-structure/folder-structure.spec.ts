@@ -1,6 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FolderStructureComponent, TreeNodeI } from './folder-structure.component';
-import { DialogService } from '../../services/dialog.service';
+import { DialogService } from './../../components/dialog/dialog.service';
 import { of, Subject } from 'rxjs';
 
 describe('FolderStructureComponent', () => {

@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { DialogService } from '../../services/dialog.service';
+import { DialogService } from './../../components/dialog/dialog.service';
 import { TaskColumnI, TaskI, TaskItemI } from './tasks.model';
 import { MatSelectModule } from '@angular/material/select';
 import { FormConfig } from '../../form-builder/form-builder.model';
@@ -86,11 +86,6 @@ export class TasksComponent implements OnInit {
     this.newColumnTitle = '';
   }
 
-  private removeColumn(index: number) {
-    //has to be empty!!!
-    this.columns.splice(index, 1);
-  }
-
   dropTask(event: CdkDragDrop<TaskI[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -124,7 +119,6 @@ export class TasksComponent implements OnInit {
       content: `Are you sure you want to remove this column?`,
     }).subscribe(confirmed => {
       if (confirmed === true) {
-        this.removeColumn(index);
         this.columns.splice(index, 1);
         this.dataService.updateTaskColumns(this.columns).subscribe(t => {
           this.snackbarService.showSnackbar('Tasks Updated');

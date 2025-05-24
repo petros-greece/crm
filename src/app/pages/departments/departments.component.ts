@@ -3,7 +3,7 @@ import { DepartmentsVars } from './departments.vars';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { DialogService } from '../../services/dialog.service';
+import { DialogService } from './../../components/dialog/dialog.service';
 import { FormBuilderComponent } from '../../form-builder/form-builder.component';
 import { FormConfig } from '../../form-builder/form-builder.model';
 import { DataService } from '../../services/data.service';

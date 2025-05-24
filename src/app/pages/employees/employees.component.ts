@@ -2,7 +2,7 @@ import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
 import { TableBuilderComponent, TableConfig, ColumnTemplateDirective } from '../../table-builder/table-builder.component';
 import { MatButtonModule } from '@angular/material/button';
 import { EntityFieldsService } from '../../services/entity-fields.service';
-import { DialogService } from '../../services/dialog.service';
+import { DialogService } from './../../components/dialog/dialog.service';
 import { FormBuilderComponent } from '../../form-builder/form-builder.component';
 import { FormConfig } from '../../form-builder/form-builder.model';
 import { TaskColumnI } from '../tasks/tasks.model';

@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { CompanyComponent } from './company.component';
 import { EntityFieldsService } from '../../services/entity-fields.service';
 import { DataService } from '../../services/data.service';
-import { DialogService } from '../../services/dialog.service';
+import { DialogService } from './../../components/dialog/dialog.service';
 import { SnackbarService } from '../../services/snackbar.service';
 import { ChartService } from '../../components/chart/chart.service';
 
