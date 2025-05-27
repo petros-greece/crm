@@ -25,7 +25,7 @@ describe('BaseFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TestFieldComponent]
+      imports: [TestFieldComponent]
     }).compileComponents();
   });
 

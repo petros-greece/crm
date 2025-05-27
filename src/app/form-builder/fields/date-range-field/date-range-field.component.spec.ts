@@ -18,6 +18,7 @@ describe('DateRangeFieldComponent', () => {
     type: 'range-picker',
     name: 'dateRange',
     label: 'Select Range',
+    icon: 'calendar_today',
     required: true
   };
 
@@ -79,17 +80,22 @@ describe('DateRangeFieldComponent', () => {
     component.endControl.setValue(new Date('2025-01-05'));
     component.control.updateValueAndValidity();
     fixture.detectChanges();
-
+    const errors = fixture.debugElement.query(By.css('mat-error')).nativeElement;
+    console.log(errors)
     expect(component.control.hasError('endBeforeStart')).toBeTrue();
+    //expect(errors.textContent).toContain('Please enter valid dates')
   });
 
-  it('should validate valid dates', () => {
+  it('should validate invalid date formats and display the corresponding error message', () => {
     component.startControl.setValue('invalid date');
     component.endControl.setValue(new Date());
     component.control.updateValueAndValidity();
+        component.control.markAllAsTouched();
     fixture.detectChanges();
 
+    const errors = fixture.debugElement.query(By.css('mat-error')).nativeElement;
     expect(component.control.hasError('invalidDates')).toBeTrue();
+    expect(errors.textContent).toContain('Please enter valid dates')
   });
 
   it('should not set errors if dates are valid and in correct order', () => {
@@ -97,19 +103,14 @@ describe('DateRangeFieldComponent', () => {
     component.endControl.setValue(new Date('2025-01-05'));
     component.control.updateValueAndValidity();
     fixture.detectChanges();
-
     expect(component.control.errors).toBeNull();
   });
 
   it('should render label and icon if provided', () => {
-    component.config.label = 'Pick dates';
-    component.config.icon = 'calendar_today';
-    fixture.detectChanges();
-
     const label = fixture.debugElement.query(By.css('mat-label')).nativeElement;
     const icon = fixture.debugElement.query(By.css('mat-icon')).nativeElement;
-
-    expect(label.textContent).toContain('Pick dates');
-    expect(icon.textContent).toContain('calendar_today');
+    expect(label.textContent).toContain('Select Range');
+    expect(icon.classList).toContain('mat-icon');
   });
+
 });

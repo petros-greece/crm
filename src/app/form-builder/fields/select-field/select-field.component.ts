@@ -5,7 +5,7 @@ import { BaseFieldComponent } from '../base-field/base-field.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-import { Observable, distinctUntilChanged, of, from, isObservable, merge, Subscription, switchMap, takeUntil, Subject } from 'rxjs';
+import { Observable, of, from, isObservable, Subscription } from 'rxjs';
 
 /** option shape */
 interface Option { label: string; value: any; }

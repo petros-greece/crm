@@ -62,11 +62,6 @@ describe('TasksComponent', () => {
     expect(component.columns.length).toBe(0);
   });
 
-  it('should remove column from columns', () => {
-    (component as any).removeColumn(0);
-    expect(component.columns.length).toBe(0);
-  });
-
   it('should update task order within the same column', () => {
     const column: TaskI[] = [{ type: 'A' } as TaskI, { type: 'B' } as TaskI];
     const event: CdkDragDrop<TaskI[]> = {

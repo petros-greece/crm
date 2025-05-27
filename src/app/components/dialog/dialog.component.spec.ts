@@ -3,77 +3,113 @@ import { DialogComponent } from './dialog.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+// Mock host component for testing TemplateRef
 @Component({
   template: `
-    <ng-template #tpl>Template Content</ng-template>
+    <ng-template #customTpl>Custom Template Content</ng-template>
   `
 })
 class TestHostComponent {
-  @ViewChild('tpl', { static: true }) tplRef!: TemplateRef<any>;
+  @ViewChild('customTpl') templateRef!: TemplateRef<any>;
 }
 
 describe('DialogComponent', () => {
-  let component: DialogComponent;
   let fixture: ComponentFixture<DialogComponent>;
-  let dialogRefSpy: jasmine.SpyObj<MatDialogRef<DialogComponent>>;
+  let component: DialogComponent;
 
-  beforeEach(async () => {
-    dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
+  const dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
 
-    await TestBed.configureTestingModule({
-      imports: [DialogComponent],
-      declarations: [TestHostComponent],
-      providers: [
-        { provide: MatDialogRef, useValue: dialogRefSpy },
-        { provide: MAT_DIALOG_DATA, useValue: {
-            cls: 'custom-class',
-            header: 'Test Header',
-            content: 'This is string content.',
-            showButtons: true,
-            confirmText: 'OK',
-            cancelText: 'Cancel',
-            icon: 'info',
-            id: 'dialog1'
-        }}
-      ]
-    }).compileComponents();
-
+  const createComponent = (data: any) => {
+    TestBed.overrideProvider(MAT_DIALOG_DATA, { useValue: data });
     fixture = TestBed.createComponent(DialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [DialogComponent, BrowserAnimationsModule, TestHostComponent],
+      providers: [
+        { provide: MatDialogRef, useValue: dialogRefSpy },
+        { provide: MAT_DIALOG_DATA, useValue: {} }
+      ]
+    }).compileComponents();
   });
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should display header if provided', () => {
+    createComponent({ header: 'Dialog Title' });
 
-  it('should display header and icon', () => {
     const header = fixture.debugElement.query(By.css('[mat-dialog-title]'));
-    expect(header.nativeElement.textContent).toContain('Test Header');
+    expect(header.nativeElement.textContent).toContain('Dialog Title');
+  });
+
+  it('should apply custom class to header if provided', () => {
+    createComponent({ header: 'Header', cls: 'my-class' });
+
+    const header = fixture.debugElement.query(By.css('[mat-dialog-title]'));
+    expect(header.nativeElement.classList).toContain('my-class');
+  });
+
+  it('should display icon in header if provided', () => {
+    createComponent({ header: 'Header', icon: 'info' });
 
     const icon = fixture.debugElement.query(By.css('mat-icon'));
-    expect(icon.nativeElement.textContent).toContain('info');
+    expect(icon.nativeElement.textContent.trim()).toBe('info');
   });
 
-  it('should display string content', () => {
-    const content = fixture.debugElement.query(By.css('mat-dialog-content p'));
-    expect(content.nativeElement.textContent).toContain('This is string content.');
+  it('should render string content', () => {
+    createComponent({ content: 'Hello world' });
+
+    const content = fixture.debugElement.query(By.css('mat-dialog-content'));
+    expect(content.nativeElement.textContent).toContain('Hello world');
   });
 
-  it('should display confirm and cancel buttons', () => {
-    const buttons = fixture.debugElement.queryAll(By.css('mat-dialog-actions button'));
-    expect(buttons.length).toBe(2);
-    expect(buttons[0].nativeElement.textContent).toContain('Cancel');
-    expect(buttons[1].nativeElement.textContent).toContain('OK');
-  });
-
-  it('should identify TemplateRef correctly', () => {
+  it('should render template content', () => {
     const hostFixture = TestBed.createComponent(TestHostComponent);
     hostFixture.detectChanges();
-    const testTplRef = hostFixture.componentInstance.tplRef;
+    const tpl = hostFixture.componentInstance.templateRef;
 
-    expect(component.isTemplateRef(testTplRef)).toBeTrue();
-    expect(component.isTemplateRef('not a template')).toBeFalse();
+    // Re-configure TestBed in this test to inject TemplateRef
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      imports: [DialogComponent, BrowserAnimationsModule],
+      providers: [
+        { provide: MatDialogRef, useValue: dialogRefSpy },
+        { provide: MAT_DIALOG_DATA, useValue: { content: tpl } }
+      ]
+    });
+
+    const dialogFixture = TestBed.createComponent(DialogComponent);
+    const dialogComponent = dialogFixture.componentInstance;
+    dialogFixture.detectChanges();
+
+    const content = dialogFixture.debugElement.query(By.css('mat-dialog-content'));
+    expect(content.nativeElement.textContent).toContain('Custom Template Content');
+  });
+
+
+  it('should show confirm and cancel buttons when showButtons is true', () => {
+    createComponent({
+      showButtons: true,
+      confirmText: 'Yes',
+      cancelText: 'No'
+    });
+
+    const actions = fixture.debugElement.query(By.css('mat-dialog-actions'));
+    expect(actions).toBeTruthy();
+
+    const buttons = actions.queryAll(By.css('button'));
+    expect(buttons.length).toBe(2);
+    expect(buttons[0].nativeElement.textContent).toContain('No');
+    expect(buttons[1].nativeElement.textContent).toContain('Yes');
+  });
+
+  it('should not render actions if showButtons is false or undefined', () => {
+    createComponent({});
+
+    const actions = fixture.debugElement.query(By.css('mat-dialog-actions'));
+    expect(actions).toBeFalsy();
   });
 });
