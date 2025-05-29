@@ -16,6 +16,9 @@ import { SnackbarService } from '../../services/snackbar.service';
 import { map, Subject, takeUntil, tap } from 'rxjs';
 import { PageHeaderComponent } from '../../components/page-header/page-header.component';
 import { CommonModule } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { EmployeesActions } from '../../state/employees/employees.actions';
+import { selectEmployees } from '../../state/employees/employees.selectors';
 
 @Component({
   selector: 'app-employees',
@@ -28,7 +31,7 @@ import { CommonModule } from '@angular/common';
     ColumnTemplateDirective,
     FormBuilderComponent,
     TaskFormComponent,
-    PageHeaderComponent
+    PageHeaderComponent,
   ],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss'
@@ -45,6 +48,7 @@ export class EmployeesComponent {
   dataService = inject(DataService);
   dialogService = inject(DialogService);
   snackbarService = inject(SnackbarService);
+  store = inject(Store);
 
   private originalTaskColumns: TaskColumnI[] = [];
 
@@ -63,7 +67,9 @@ export class EmployeesComponent {
   extraForms: any = [];
 
   ngOnInit() {
-    this.dataService.getEmployees()
+    this.store.dispatch(EmployeesActions.loadEmployees());
+
+    this.store.select(selectEmployees)
       .pipe(takeUntil(this.destroy$))
       .subscribe(employees => this.giveEmployeeTableConfig(employees));
 
@@ -94,7 +100,7 @@ export class EmployeesComponent {
     };
   }
 
-  private onAfterSubmitEmployee(res:any, message:string) {
+  private onAfterSubmitEmployee(res: any, message: string) {
     this.dialogService.closeAll();
     this.giveEmployeeTableConfig(res);
     this.snackbarService.showSnackbar(message);
@@ -133,7 +139,7 @@ export class EmployeesComponent {
   }
 
   updateEmployee(formData: any) {
-    const data = {...this.employeeData, ...formData};
+    const data = { ...this.employeeData, ...formData };
     this.dataService.updateEmployee(data).subscribe(res => {
       this.onAfterSubmitEmployee(res, `Employee Updated succesfully!`);
     })
